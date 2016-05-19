@@ -197,8 +197,7 @@
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "dependsOn":[
-        "[concat('Microsoft.Compute/virtualMachines/', variables('hcVmName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', variables('hcVmName'))]"
       ],
       "properties":{
         "publisher":"Microsoft.OSTCExtensions",
@@ -223,8 +222,10 @@
       "name":"[variables('hcVmName')]",
       "location":"[variables('location')]",
       "dependsOn":[
-        "[concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('hcStorageAccountName')) ) ]",
+        
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')) )]",
+        
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
       "properties":{
