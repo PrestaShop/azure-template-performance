@@ -210,7 +210,7 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(variables('assetsStorageAccountId'),'2015-05-01-preview').key1,' ',parameters('hcUsername'))]",
+          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",  
           "protectedSettings":{
 
           }
