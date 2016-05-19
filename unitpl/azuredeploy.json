@@ -190,10 +190,11 @@
           }
         ]
       }
-    },
+    },   
     {
       "type":"Microsoft.Compute/virtualMachines/extensions",
-      "name":"AnsibleController/installAnsible",
+      "name":"[concat(variables('hcVmName'),'/installAnsible')]",
+      "name"
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "dependsOn":[
@@ -209,7 +210,7 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('hcStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",  
+          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",  
           "protectedSettings":{
 
           }
