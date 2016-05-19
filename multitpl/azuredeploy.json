@@ -1,0 +1,229 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "prefix": {
+      "type": "string",
+      "defaultValue": "pr35745h0p",
+      "metadata": {
+        "description": "Prefix of the components"
+      }
+    },
+    "ansibleVmSize": {
+      "type": "string",
+      "defaultValue": "Basic_A0",
+      "allowedValues": [
+        "Basic_A0",
+        "Standard_A0"
+      ],
+      "metadata": {
+        "description": "Size of the Ansible Control Virtual Machine"
+      }
+    },
+    "ubuntuOSVersion": {
+      "type": "string",
+      "defaultValue": "16.04.0-LTS",
+      "allowedValues": [
+        "16.04.0-LTS",
+        "14.04.4-LTS"
+      ],
+      "metadata": {
+        "description": "The debianOS version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values are: 16.04.0-LTS, 14.04.4-LTS"
+      }
+    },
+    "adminUserName": {
+      "type": "string",
+      "defaultValue": "devops",
+      "metadata": {
+        "description": "Username to log on the VMs"
+      }
+    },
+    "adminPassword": {
+      "type": "string",
+      "defaultValue": "v3l0c1r4p70r#",
+      "metadata": {
+        "description": "Password for on the VMs"
+      }
+    },
+    "sshKeyData": {
+      "type": "string",
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLWadgtcq8rg0HMWlv1/1HQfRayLzGKmHg2ISmAJx+LQCa8SWCwBFGS0vKKwgdwhpMMCl0wI2/eURmxbpOF4Tp10jRikSIlSZyua7FU9VmlLWtYAmRQ42eWvmsCCI/IpgJ4LGODe8xDQtcXOtp3yUhkX5g9HHNwwR35Nnzum1VGMk4ftTA9CC3gfqWcIIKqQ+xE1BzqUNmGpJHghCgG/g8Oh7/sR05CXwASMoGTYuLpPHp2sEfGNm91CmnMa21ifaz4RMAcD2SwqReLgMmi0tZGUGQqLnzX/6ibJvpYSU5iZ/7qEzgDy83dBqaHbI0LEA4H0q59TJ2DWXYu+dloITz hleclerc@HeL.local",
+      "metadata": {
+        "description": "Public key for SSH authentication on Ansible Control VM"
+      }
+    },
+    "fileUris": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/DXFrance/AzureKubernetes/master/Kubernetes-Ansible-Centos-Azure/scripts/first-boot.sh",
+      "metadata": {
+        "description": "Deploy/SetUp script url for Ansible Control vm"
+      }
+    },
+    "commandToExecute": {
+      "type": "string",
+      "defaultValue": "bash first-boot.sh",
+      "metadata": {
+        "description": "The command to execute."
+      }
+    },
+    "templatesBaseURL": {
+      "type": "string",
+      "metadata": {
+        "description": "Templates base url"
+      },
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+    "apiVersion": "2015-01-01",
+    "configuration": {
+      "SharedAvailaibilitySetAndStorageTemplateURL": "[concat(parameters('templatesBaseURL'),'/SharedAvailaibilitySetAndStorage.json')]",
+      "SharedNetworkTemplateURL": "[concat(parameters('templatesBaseURL'),'/SharedNetwork.json')]",
+      "configAnsibleControllerTemplateURL": "[concat(parameters('templatesBaseURL'),'/configAnsibleController.json')]",
+      "SharedPIPandLoadBalancerTemplateURL": "[concat(parameters('templatesBaseURL'),'/SharedPIPandLoadBalancer.json')]"
+    },
+    
+    "ansibleStorageAccountName": "[concat(parameters('prefix'), 'ansible')]",
+    "ansibleIPAddressName": "[concat(parameters('prefix'),'-pip-ansible')]",
+    "ansibleVMName": "[concat(parameters('prefix'), '-ansible')]",
+    
+    "storageAccountType": "Standard_LRS",
+    "virtualNetworkName": "[concat(parameters('prefix'),'-vnet')]",
+    "ansibleNicName": "[concat(parameters('prefix'),'-nic-ansible')]",
+    "subnetAdminPrefix": "10.0.2.0/24"
+    
+
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "SharedAvailaibilitySetAndStorage",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('configuration').SharedAvailaibilitySetAndStorageTemplateURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "apiVersion": {
+            "value": "2015-06-15"
+          },
+          "ansibleStorageAccountName": {
+            "value": "[variables('ansibleStorageAccountName')]"
+          },
+          "storageAccountType": {
+            "value": "[variables('storageAccountType')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "SharedNetwork",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('configuration').SharedNetworkTemplateURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "apiVersion": {
+            "value": "2016-03-30"
+          },
+          "virtualNetworkName": {
+            "value": "[variables('virtualNetworkName')]"
+          },
+          "subnetAdminPrefix": {
+            "value": "[variables('subnetAdminPrefix')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "SharedPIPandLoadBalancer",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('configuration').SharedPIPandLoadBalancerTemplateURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "apiVersion": {
+            "value": "2016-03-30"
+          },
+          "prefix": {
+            "value": "[parameters('prefix')]"
+          },
+          "ansibleIPAddressName": {
+            "value": "[variables('ansibleIPAddressName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "configAnsibleController",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/SharedAvailaibilitySetAndStorage",
+        "Microsoft.Resources/deployments/SharedNetwork",
+        "Microsoft.Resources/deployments/SharedPIPandLoadBalancer"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('configuration').configAnsibleControllerTemplateURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "apiVersion": {
+            "value": "2016-03-30"
+          },
+          "prefix": {
+            "value": "[parameters('prefix')]"
+          },
+          "ansibleNicName": {
+            "value": "[variables('ansibleNicName')]"
+          },
+          "ansibleStorageAccountName": {
+            "value": "[variables('ansibleStorageAccountName')]"
+          },
+          "subnetAdminRef": {
+            "value": "[reference('SharedNetwork').outputs.subnetAdminRef.value]"
+          },
+          "ansibleVmSize": {
+            "value": "[parameters('ansibleVmSize')]"
+          },
+          "subnetAdminPrefix": {
+            "value": "[variables('subnetAdminPrefix')]"
+          },
+          "ansibleIPAddressName": {
+            "value": "[variables('ansibleIPAddressName')]"
+          },
+          "adminUserName": {
+            "value": "[parameters('adminUserName')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "sshKeyData": {
+            "value": "[parameters('sshKeyData')]"
+          },
+          "ubuntuOSVersion": {
+            "value": "[parameters('ubuntuOSVersion')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "result": {
+      "value": "Main Provisioning achieved",
+      "type": "string"
+    }
+  }
+}
