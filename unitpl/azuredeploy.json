@@ -198,9 +198,7 @@
       "location":"[resourceGroup().location]",
       "dependsOn":[
         "[concat('Microsoft.Compute/virtualMachines/', variables('hcVmName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName'))]"
       ],
       "properties":{
         "publisher":"Microsoft.OSTCExtensions",
