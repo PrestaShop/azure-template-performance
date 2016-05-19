@@ -42,7 +42,7 @@
     "keyStorageAccountName":"[concat('key', resourceGroup().name)]",
     "keyStorageAccountType":"Standard_LRS",
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
-    "keyStorageAccountKey":"[listKeys(variables('assetsStorageAccountId'),'2015-05-01-preview').key1]",
+   
     "hcStorageAccountName":"[concat('sa', resourceGroup().name)]",
     "hcStorageAccountType":"Standard_LRS",
     "hcPublicIPAddressName":"hcPublicIP",
@@ -60,7 +60,6 @@
     "customScriptDeployFile":"deploy.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptAnsibleCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
-    "customScriptAnsibleParameters":"[concat(variables('keyStorageAccountName'),' ',variables('keyStorageAccountKey'),' ',parameters('hcUsername'))]",
     "ansiblePlaybookUrl":"[concat(variables('scriptsBaseUrl'),variables('ansiblePlaybookLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
     "apiVersion":{
@@ -195,10 +194,13 @@
     {
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"AnsibleController/installAnsible",
-      "apiVersion":"[variables('apiVersion')]",
+      "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "dependsOn":[
-        "VMExtensionsLoop"
+        "[concat('Microsoft.Compute/virtualMachines/', variables('hcVmName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
       "properties":{
         "publisher":"Microsoft.OSTCExtensions",
@@ -210,7 +212,7 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),variables('customScriptAnsibleParameters'))]",
+          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(variables('assetsStorageAccountId'),'2015-05-01-preview').key1,' ',parameters('hcUsername'))]",
           "protectedSettings":{
 
           }
@@ -233,7 +235,7 @@
         },
         "osProfile":{
           "computerName":"[variables('hcVmName')]",
-          "hcUsername":"[parameters('hcUsername')]",
+          "adminUsername":"[parameters('hcUsername')]",
           "linuxConfiguration":{
             "disablePasswordAuthentication":"true",
             "ssh":{
