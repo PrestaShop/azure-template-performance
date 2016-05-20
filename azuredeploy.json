@@ -293,7 +293,7 @@
       "comments":"Availability Set for Front VMs",
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[variables('frAvailabilitySetName')]",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "[variables('apiVersion').network]",
       "location": "[resourceGroup().location]",
       "properties": {
         "PlatformFaultDomainCount": "[variables('frFaultDomainCount')]",
