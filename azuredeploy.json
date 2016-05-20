@@ -301,7 +301,7 @@
       }
     },
     {
-      "comments":"Network Securrity Group for Ansible Control VM",
+      "comments":"Network Security Group for Ansible Control VM",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('hcNetworkSecurityGroupName')]",
