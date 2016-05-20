@@ -257,9 +257,9 @@
       }
     },
     {
-      "comments":"Custom script extension for the Ansible Control VM",
+      "comments":"Custom script extension for the Front VMs",
       "type":"Microsoft.Compute/virtualMachines/extensions",
-      "name":"[concat(variables('frVmName'),copyindex(),'/installAnsible')]",
+      "name":"[concat(variables('frVmName'),copyindex(),'/installFront')]",
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "copy":{
@@ -286,7 +286,7 @@
       }
     },
     {
-      "comments":"Ansible Contol VM plays the playbook to provision the LAMP cluster",
+      "comments":"VM front provisoned",
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
       "name":"[concat(variables('frVmName'),copyindex())]",
@@ -340,7 +340,7 @@
         "networkProfile":{
           "networkInterfaces":[
             {
-              "id":"[resourceId('Microsoft.Network/networkInterfaces',variables('frNicName'),copyindex())]"
+              "id":"[resourceId('Microsoft.Network/networkInterfaces',concat(variables('frNicName'),copyindex() ) )]"
             }
           ]
         },
