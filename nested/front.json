@@ -128,7 +128,7 @@
             "name":"LoadBalancerFrontend",
             "properties":{
               "publicIPAddress":{
-                "id":"[variables('frPublicIPAddressName')]"
+                "id":"[variables('lbPublicIPAddressID')]"
               }
             }
           }
