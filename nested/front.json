@@ -170,7 +170,7 @@
       }
     },
     {
-      "apiVersion":"[variables('apiVersion')]",
+      "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Network/loadBalancers/inboundNatRules",
       "name":"[concat(variables('frLBName'), '/', 'HTTPS-443', copyIndex())]",
       "location":"[resourceGroup().location]",
