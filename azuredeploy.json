@@ -318,7 +318,7 @@
       }
     },
     {
-      "comments":"Network Securrity Group for front VMs",
+      "comments":"Network Security Group for front VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('frNetworkSecurityGroupName')]",
