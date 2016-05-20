@@ -254,6 +254,12 @@
           "sshKeyData":{
             "value":"[parameters('sshKeyData')]"
           },
+          "ubuntuOSVersion":{
+            "value":"[parameters('ubuntuOSVersion')]"
+          },
+          "frVmSize":{
+            "value":"[parameters('frVmSize')]"
+          },
           "numberOfFront":{
             "value":"[parameters('numberOfFront')]"
           },
@@ -280,9 +286,6 @@
           },
           "vnetID":{
             "value":"[variables('vnetID')]"
-          },
-          "virtualNetworkName":{
-            "value":"[variables('virtualNetworkName')]"
           }
         }
       }
