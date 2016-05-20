@@ -143,7 +143,7 @@
         "Standard_GS5"
       ],
       "metadata":{
-        "description":"Instance size for Web Front VMs"
+        "description":"Instance size for Web Front VMs Minimum Standard_A0"
       }
     },
     "numberOfBack":{
