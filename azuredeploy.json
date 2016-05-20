@@ -233,9 +233,6 @@
       "name":"FrontDeployment",
       "type":"Microsoft.Resources/deployments",
       "apiVersion":"[variables('apiVersion').deployment]",
-      "tags":{
-        "displayName":"FrontDeployment"
-      },
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
