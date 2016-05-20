@@ -165,7 +165,7 @@
     }
   },
   "variables":{
-    "templatesBaseURL":"https://github.com/herveleclerc/arm-lamp/nested",
+    "templatesBaseURL":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/",
     "configuration":{
       "frontTemplateURL":"[concat(variables('templatesBaseURL'),'/front.json')]",
       "backTemplateURL":"[concat(variables('templatesBaseURL'),'/back.json')]"
