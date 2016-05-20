@@ -234,7 +234,7 @@
             "name":"fripconfig",
             "properties":{
               "privateIPAllocationMethod":"Static",
-              "privateIPAddress":"[concat(parameters('frSubnetRoot'), '.',add(copyindex(),3) )]",
+              "privateIPAddress":"[concat(parameters('frSubnetRoot'), '.',add(copyindex(),4) )]",
               "subnet":{
                 "id":"[variables('frSubnetRef')]"
               },
