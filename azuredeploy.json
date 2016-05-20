@@ -170,6 +170,8 @@
       "frontTemplateURL":"[concat(variables('templatesBaseURL'),'/front.json')]",
       "backTemplateURL":"[concat(variables('templatesBaseURL'),'/back.json')]"
     },
+    "frFaultDomainCount":"3",
+    "frUpdateDomainCount":"5",
     "dnsNameForAnsiblePublicIP":"[concat('hc00', resourceGroup().name)]",
     "dnsserver":"8.8.8.8",
     "location":"[resourceGroup().location]",
@@ -285,6 +287,17 @@
             "value":"[variables('vnetID')]"
           }
         }
+      }
+    },
+    {
+      "comments":"Availability Set for Front VMs",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('frAvailabilitySetName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "PlatformFaultDomainCount": "[variables('frFaultDomainCount')]",
+        "PlatformUpdateDomainCount": "[variables('frUpdateDomainCount')]"
       }
     },
     {
