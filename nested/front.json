@@ -20,73 +20,67 @@
         "description":"The Ubuntu version for the VM."
       }
     },
-    "frVmSize": {
-      "type": "string",
-      "metadata": {
-        "description": "Instance size for Web Front VMs"
+    "frVmSize":{
+      "type":"string",
+      "metadata":{
+        "description":"Instance size for Web Front VMs"
       }
     },
-    "numberOfFront": {
-      "type": "int",
-      "metadata": {
-        "description": "Number of Front nodes to create >=2"
+    "numberOfFront":{
+      "type":"int",
+      "metadata":{
+        "description":"Number of Front nodes to create >=2"
       }
     },
-    "frAvailabilitySetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the availability Set"
+    "frAvailabilitySetName":{
+      "type":"string",
+      "metadata":{
+        "description":"Name of the availability Set"
       }
     },
-    "frStorageAccountName": {
-      "type": "string",
-      "metadata": {
-        "description": "Storage Account name"
+    "frStorageAccountName":{
+      "type":"string",
+      "metadata":{
+        "description":"Storage Account name"
       }
     },
-    "frStorageAccountType": {
-      "type": "string",
-      "metadata": {
-        "description": "Account type"
+    "frStorageAccountType":{
+      "type":"string",
+      "metadata":{
+        "description":"Account type"
       }
     },
-    "subnetCIDR": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet Suffix"
+    "subnetCIDR":{
+      "type":"string",
+      "metadata":{
+        "description":"Subnet Suffix"
       }
     },
-    "frSubnetRoot": {
-      "type": "string"
+    "frSubnetRoot":{
+      "type":"string"
     },
-    "frSubnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet Name"
+    "frSubnetName":{
+      "type":"string",
+      "metadata":{
+        "description":"Subnet Name"
       }
     },
-    "frSubnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet IP block"
+    "frSubnetPrefix":{
+      "type":"string",
+      "metadata":{
+        "description":"Subnet IP block"
       }
     },
-    "frAvailabilitySetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Availability Set Name"
+    "vnetID":{
+      "type":"string",
+      "metadata":{
+        "description":"vnet ID"
       }
     },
-    "vnetID": {
-      "type": "string",
-      "metadata": {
-        "description": "vnet ID"
-      }
-    },
-    "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "virtual Network Name"
+    "virtualNetworkName":{
+      "type":"string",
+      "metadata":{
+        "description":"virtual Network Name"
       }
     }
   },
@@ -106,19 +100,15 @@
     "frPublicIPAddressType":"Dynamic",
     "frVmName":"[concat('web', resourceGroup().name)]",
     "frSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('frSubnetName'))]",
-    
     "frLBName":"[concat('lb', resourceGroup().name)]",
-    "lbPublicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',variables('frPublicIPAddressName'))]",
-    "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('frLBName'))]",
-    "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
-    
+    "lbPublicIPAddressID":"[resourceId('Microsoft.Network/publicIPAddresses',variables('frPublicIPAddressName'))]",
+    "lbID":"[resourceId('Microsoft.Network/loadBalancers',variables('frLBName'))]",
+    "frontEndIPConfigID":"[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
     "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
-   
     "customScriptDeployFile":"deploy-front.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptFrontCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'GetSSHToPrivateStorage.py')]",
-    
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
@@ -130,79 +120,79 @@
   },
   "resources":[
     {
-      "comments": "Load Balancer Definition for Front VM",
+      "comments":"Load Balancer Definition for Front VM",
       "apiVersion":"[variables('apiVersion').compute]",
-      "name": "[variables('frLBName')]",
-      "type": "Microsoft.Network/loadBalancers",
-      "location": "[variables('location')]",
-      "dependsOn": [
+      "name":"[variables('frLBName')]",
+      "type":"Microsoft.Network/loadBalancers",
+      "location":"[variables('location')]",
+      "dependsOn":[
         "[concat('Microsoft.Network/publicIPAddresses/', variables('frPublicIPAddressName'))]"
       ],
-      "properties": {
-        "frontendIPConfigurations": [
+      "properties":{
+        "frontendIPConfigurations":[
           {
-            "name": "LoadBalancerFrontend",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[variables('frPublicIPAddressName')]"
+            "name":"LoadBalancerFrontend",
+            "properties":{
+              "publicIPAddress":{
+                "id":"[variables('frPublicIPAddressName')]"
               }
             }
           }
         ],
-        "backendAddressPools": [
+        "backendAddressPools":[
           {
-            "name": "LoadBalancerBackend"
+            "name":"LoadBalancerBackend"
           }
         ]
       }
     },
     {
-      "comments": "HTTP Nat Rule",
+      "comments":"HTTP Nat Rule",
       "apiVersion":"[variables('apiVersion').compute]",
-      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
-      "name": "[concat(variables('frLBName'), '/', 'HTTP-80', copyIndex())]",
-      "location": "[variables('location')]",
-      "copy": {
-        "name": "lbNatLoop",
-        "count": "[parameters('numberOfFront')]"
+      "type":"Microsoft.Network/loadBalancers/inboundNatRules",
+      "name":"[concat(variables('frLBName'), '/', 'HTTP-80', copyIndex())]",
+      "location":"[variables('location')]",
+      "copy":{
+        "name":"lbNatLoop",
+        "count":"[parameters('numberOfFront')]"
       },
-      "dependsOn": [
+      "dependsOn":[
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'))]"
       ],
-      "properties": {
-        "frontendIPConfiguration": {
-          "id": "[variables('frontEndIPConfigID')]"
+      "properties":{
+        "frontendIPConfiguration":{
+          "id":"[variables('frontEndIPConfigID')]"
         },
-        "protocol": "tcp",
-        "frontendPort": "[copyIndex(80)]",
-        "backendPort": 80,
-        "enableFloatingIP": false
+        "protocol":"tcp",
+        "frontendPort":"[copyIndex(80)]",
+        "backendPort":80,
+        "enableFloatingIP":false
       }
     },
     {
-      "apiVersion": "[variables('apiVersion')]",
-      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
-      "name": "[concat(variables('frLBName'), '/', 'HTTPS-443', copyIndex())]",
-      "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "lbNatLoop2",
-        "count": "[parameters('numberOfFront')]"
+      "apiVersion":"[variables('apiVersion')]",
+      "type":"Microsoft.Network/loadBalancers/inboundNatRules",
+      "name":"[concat(variables('frLBName'), '/', 'HTTPS-443', copyIndex())]",
+      "location":"[resourceGroup().location]",
+      "copy":{
+        "name":"lbNatLoop2",
+        "count":"[parameters('numberOfFront')]"
       },
-      "dependsOn": [
+      "dependsOn":[
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'))]"
       ],
-      "properties": {
-        "frontendIPConfiguration": {
-          "id": "[variables('frontEndIPConfigID')]"
+      "properties":{
+        "frontendIPConfiguration":{
+          "id":"[variables('frontEndIPConfigID')]"
         },
-        "protocol": "tcp",
-        "frontendPort": "[copyIndex(443)]",
-        "backendPort": 443,
-        "enableFloatingIP": false
+        "protocol":"tcp",
+        "frontendPort":"[copyIndex(443)]",
+        "backendPort":443,
+        "enableFloatingIP":false
       }
-    }, 
+    },
     {
-      "comments": "Global Storage Account for the front vm",
+      "comments":"Global Storage Account for the front vm",
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(parameters('frStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
@@ -212,7 +202,7 @@
       }
     },
     {
-      "comments": "Public IP for Front LB",
+      "comments":"Public IP for Front LB",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
       "name":"[variables('frPublicIPAddressName')]",
@@ -224,18 +214,17 @@
         }
       }
     },
-    
     {
-      "comments": "LOOP Interface for Front VMs",
+      "comments":"LOOP Interface for Front VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('frNicName'), copyindex())]",
+      "name":"[concat(variables('frNicName'), copyindex())]",
       "location":"[variables('location')]",
-      "copy": {
-        "name": "frNicLoop",
-        "count": "[parameters('numberOfFront')]"
+      "copy":{
+        "name":"frNicLoop",
+        "count":"[parameters('numberOfFront')]"
       },
-      "dependsOn":[ 
+      "dependsOn":[
         "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'))]",
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'), '/inboundNatRules/', 'HTTP-80', copyIndex())]",
@@ -252,37 +241,37 @@
             "name":"fripconfig",
             "properties":{
               "privateIPAllocationMethod":"Static",
-              "privateIPAddress": "[concat(parameters('frSubnetRoot'), '.',add(copyindex(),3) )]",
+              "privateIPAddress":"[concat(parameters('frSubnetRoot'), '.',add(copyindex(),3) )]",
               "subnet":{
                 "id":"[variables('frSubnetRef')]"
               },
-              "loadBalancerBackendAddressPools": [
+              "loadBalancerBackendAddressPools":[
                 {
-                  "id": "[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBackend')]"
+                  "id":"[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBackend')]"
                 }
               ],
-              "loadBalancerInboundNatRules": [
+              "loadBalancerInboundNatRules":[
                 {
-                  "id": "[concat(variables('lbID'),'/inboundNatRules/HTTP-80', copyindex())]"
+                  "id":"[concat(variables('lbID'),'/inboundNatRules/HTTP-80', copyindex())]"
                 },
                 {
-                  "id": "[concat(variables('lbID'),'/inboundNatRules/HTTPS-443', copyindex())]"
+                  "id":"[concat(variables('lbID'),'/inboundNatRules/HTTPS-443', copyindex())]"
                 }
               ]
             }
           }
         ]
       }
-    },   
+    },
     {
-      "comments": "Custom script extension for the Ansible Control VM",
+      "comments":"Custom script extension for the Ansible Control VM",
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"[concat(variables('frVmName'),copyindex(),'/installAnsible')]",
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
-      "copy": {
-        "name": "frExtLoop",
-        "count": "[parameters('numberOfFront')]"
+      "copy":{
+        "name":"frExtLoop",
+        "count":"[parameters('numberOfFront')]"
       },
       "dependsOn":[
         "[concat('Microsoft.Compute/virtualMachines/', variables('frVmName'),copyindex())]"
@@ -296,7 +285,7 @@
             "[variables('customScriptDeployUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptFrontCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'))]",  
+          "commandToExecute":"[concat(variables('customScriptFrontCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'))]",
           "protectedSettings":{
 
           }
@@ -304,14 +293,14 @@
       }
     },
     {
-      "comments": "Ansible Contol VM plays the playbook to provision the LAMP cluster",
+      "comments":"Ansible Contol VM plays the playbook to provision the LAMP cluster",
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
       "name":"[concat(variables('frVmName'),copyindex())]",
       "location":"[variables('location')]",
-      "copy": {
-        "name": "frVmLoop",
-        "count": "[parameters('numberOfFront')]"
+      "copy":{
+        "name":"frVmLoop",
+        "count":"[parameters('numberOfFront')]"
       },
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(parameters('frStorageAccountName')) ) ]",
@@ -319,8 +308,8 @@
         "[concat('Microsoft.Network/networkInterfaces/', variables('frNicName'),copyindex())]"
       ],
       "properties":{
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('frAvailabilitySetName'))]"
+        "availabilitySet":{
+          "id":"[resourceId('Microsoft.Compute/availabilitySets', parameters('frAvailabilitySetName'))]"
         },
         "hardwareProfile":{
           "vmSize":"[parameters('frVmSize')]"
@@ -348,7 +337,7 @@
             "version":"latest"
           },
           "osDisk":{
-            "name": "[concat(variables('frVmName'), copyindex())]",
+            "name":"[concat(variables('frVmName'), copyindex())]",
             "vhd":{
               "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('frStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('frVmStorageAccountContainerName'),'/', variables('frOSDiskName'),copyindex(), '.vhd')]"
             },

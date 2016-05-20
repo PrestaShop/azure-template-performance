@@ -27,52 +27,148 @@
         "description":"The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values:14.04.4-LTS, 16.04.0-LTS ."
       }
     },
-    "frVmSize": {
-      "type": "string",
-      "defaultValue": "Basic_A0",
-      "allowedValues": ["Basic_A0","Basic_A1","Basic_A2","Basic_A3","Basic_A4","Standard_A0","Standard_A1","Standard_A2","Standard_A3","Standard_A4","Standard_A5",
-        "Standard_A6","Standard_A7","Standard_A8","Standard_A9","Standard_A10","Standard_A11","Standard_D1","Standard_D2","Standard_D3","Standard_D4","Standard_D11",
-        "Standard_D12","Standard_D13","Standard_D14","Standard_D1_v2","Standard_D2_v2","Standard_D3_v2","Standard_D4_v2","Standard_D5_v2","Standard_D11_v2","Standard_D12_v2",
-        "Standard_D13_v2","Standard_D14_v2","Standard_DS1","Standard_DS2","Standard_DS3","Standard_DS4","Standard_DS11","Standard_DS12","Standard_DS13","Standard_DS14",
-        "Standard_G1","Standard_G2","Standard_G3","Standard_G4","Standard_G5","Standard_GS1","Standard_GS2","Standard_GS3","Standard_GS4","Standard_GS5"
+    "frVmSize":{
+      "type":"string",
+      "defaultValue":"Basic_A0",
+      "allowedValues":[
+        "Basic_A0",
+        "Basic_A1",
+        "Basic_A2",
+        "Basic_A3",
+        "Basic_A4",
+        "Standard_A0",
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
       ],
-      "metadata": {
-        "description": "Instance size for Web Front VMs"
+      "metadata":{
+        "description":"Instance size for Web Front VMs"
       }
     },
-    "numberOfFront": {
-      "type": "int",
-      "defaultValue": 2,
-      "metadata": {
-        "description": "Number of Front nodes to create >=2"
+    "numberOfFront":{
+      "type":"int",
+      "defaultValue":2,
+      "metadata":{
+        "description":"Number of Front nodes to create >=2"
       }
     },
-    "backVmSize": {
-      "type": "string",
-      "defaultValue": "Basic_A0",
-      "allowedValues": ["Basic_A0","Basic_A1","Basic_A2","Basic_A3","Basic_A4","Standard_A0","Standard_A1","Standard_A2","Standard_A3","Standard_A4","Standard_A5",
-        "Standard_A6","Standard_A7","Standard_A8","Standard_A9","Standard_A10","Standard_A11","Standard_D1","Standard_D2","Standard_D3","Standard_D4","Standard_D11",
-        "Standard_D12","Standard_D13","Standard_D14","Standard_D1_v2","Standard_D2_v2","Standard_D3_v2","Standard_D4_v2","Standard_D5_v2","Standard_D11_v2","Standard_D12_v2",
-        "Standard_D13_v2","Standard_D14_v2","Standard_DS1","Standard_DS2","Standard_DS3","Standard_DS4","Standard_DS11","Standard_DS12","Standard_DS13","Standard_DS14",
-        "Standard_G1","Standard_G2","Standard_G3","Standard_G4","Standard_G5","Standard_GS1","Standard_GS2","Standard_GS3","Standard_GS4","Standard_GS5"
+    "backVmSize":{
+      "type":"string",
+      "defaultValue":"Basic_A0",
+      "allowedValues":[
+        "Basic_A0",
+        "Basic_A1",
+        "Basic_A2",
+        "Basic_A3",
+        "Basic_A4",
+        "Standard_A0",
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
       ],
-      "metadata": {
-        "description": "Instance size for Web Front VMs"
+      "metadata":{
+        "description":"Instance size for Web Front VMs"
       }
     },
-    "numberOfBack": {
-      "type": "int",
-      "defaultValue": 2,
-      "metadata": {
-        "description": "Number of Back nodes to create >=2"
+    "numberOfBack":{
+      "type":"int",
+      "defaultValue":2,
+      "metadata":{
+        "description":"Number of Back nodes to create >=2"
       }
     }
   },
   "variables":{
     "templatesBaseURL":"https://github.com/herveleclerc/arm-lamp/nested",
-    "configuration": {
-      "frontTemplateURL": "[concat(variables('templatesBaseURL'),'/front.json')]",
-      "backTemplateURL": "[concat(variables('templatesBaseURL'),'/back.json')]"
+    "configuration":{
+      "frontTemplateURL":"[concat(variables('templatesBaseURL'),'/front.json')]",
+      "backTemplateURL":"[concat(variables('templatesBaseURL'),'/back.json')]"
     },
     "dnsNameForAnsiblePublicIP":"[concat('hc00', resourceGroup().name)]",
     "dnsserver":"8.8.8.8",
@@ -103,16 +199,16 @@
     "frStorageAccountType":"Standard_LRS",
     "bkStorageAccountName":"[concat('bk', resourceGroup().name)]",
     "bkStorageAccountType":"Standard_LRS",
-    "frAvailabilitySetName": "[concat('frav', resourceGroup().name)]",
-    "bkAvailabilitySetName": "[concat('bkav', resourceGroup().name)]",
+    "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
+    "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
     "hcPublicIPAddressName":"hcPublicIP",
     "hcPublicIPAddressType":"Dynamic",
     "hcVmStorageAccountContainerName":"vhds",
     "hcVmName":"[concat('ans', resourceGroup().name)]",
     "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',variables('hcSubnetName'))]",
     "hcVmSize":"Basic_A0",
-    "hcNetworkSecurityGroupName":"hcSG", 
-    "frNetworkSecurityGroupName":"frSG", 
+    "hcNetworkSecurityGroupName":"hcSG",
+    "frNetworkSecurityGroupName":"frSG",
     "bkNetworkSecurityGroupName":"bkSG",
     "sshKeyPath":"[concat('/home/',parameters('hcUsername'),'/.ssh/authorized_keys')]",
     "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
@@ -133,70 +229,66 @@
   },
   "resources":[
     {
-        "name": "FrontDeployment",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion":"[variables('apiVersion').compute]",
-        "tags": {
-            "displayName": "FrontDeployment"
+      "name":"FrontDeployment",
+      "type":"Microsoft.Resources/deployments",
+      "apiVersion":"[variables('apiVersion').compute]",
+      "tags":{
+        "displayName":"FrontDeployment"
+      },
+      "dependsOn":[
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
+        "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
+        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+      ],
+      "properties":{
+        "mode":"Incremental",
+        "templateLink":{
+          "uri":"[variables('configuration').frontTemplateURL]",
+          "contentVersion":"1.0.0.0"
         },
-        "dependsOn":[
-           "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
-           "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
-           "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
-        ],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-                "uri": "[variables('configuration').frontTemplateURL]",
-                "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "apiVersion":"[variables('apiVersion').compute]",
-              
-              "adminUserName": {
-                "value": "[parameters('hcUsername')]"
-              },
-              "sshKeyData": {
-                "value": "[parameters('sshKeyData')]"
-              },
-              "numberOfFront": {
-                "value": "[parameters('numberOfFront')]"
-              },
-              "frdAvailabilitySetName": {
-                "value": "[variables('frAvailabilitySetName')]"
-              },
-              "frStorageAccountName": {
-                "value": "[variables('frStorageAccountName')]"
-              },
-              "frStorageAccountType": {
-                "value": "[variables('frStorageAccountType')]"
-              },
-              "subnetCIDR": {
-                "value": "[variables('subnetCIDR')]"
-              },
-              "frSubnetRoot": {
-                "value": "[variables('frSubnetRoot')]"
-              },
-              "frSubnetName": {
-                "value": "[variables('frSubnetName')]"
-              },
-              "frSubnetPrefix": {
-                "value": "[variables('frSubnetPrefix')]"
-              },
-              "frAvailabilitySetName": {
-                "value": "[variables('frAvailabilitySetName')]"
-              },
-              "vnetID": {
-                "value": "[variables('vnetID')]"
-              },
-              "virtualNetworkName":{
-                "value": "[variables('virtualNetworkName')]"
-              }
-            }
+        "parameters":{
+          "apiVersion":"[variables('apiVersion').compute]",
+          "adminUserName":{
+            "value":"[parameters('hcUsername')]"
+          },
+          "sshKeyData":{
+            "value":"[parameters('sshKeyData')]"
+          },
+          "numberOfFront":{
+            "value":"[parameters('numberOfFront')]"
+          },
+          "frAvailabilitySetName":{
+            "value":"[variables('frAvailabilitySetName')]"
+          },
+          "frStorageAccountName":{
+            "value":"[variables('frStorageAccountName')]"
+          },
+          "frStorageAccountType":{
+            "value":"[variables('frStorageAccountType')]"
+          },
+          "subnetCIDR":{
+            "value":"[variables('subnetCIDR')]"
+          },
+          "frSubnetRoot":{
+            "value":"[variables('frSubnetRoot')]"
+          },
+          "frSubnetName":{
+            "value":"[variables('frSubnetName')]"
+          },
+          "frSubnetPrefix":{
+            "value":"[variables('frSubnetPrefix')]"
+          },
+          "vnetID":{
+            "value":"[variables('vnetID')]"
+          },
+          "virtualNetworkName":{
+            "value":"[variables('virtualNetworkName')]"
+          }
         }
+      }
     },
     {
-      "comments": "Network Securrity Group for Ansible Control VM",
+      "comments":"Network Securrity Group for Ansible Control VM",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('hcNetworkSecurityGroupName')]",
@@ -223,7 +315,7 @@
       }
     },
     {
-      "comments": "Network Securrity Group for front VMs",
+      "comments":"Network Securrity Group for front VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('frNetworkSecurityGroupName')]",
@@ -250,7 +342,7 @@
       }
     },
     {
-      "comments": "Network Security Group for front VMs",
+      "comments":"Network Security Group for front VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('bkNetworkSecurityGroupName')]",
@@ -277,7 +369,7 @@
       }
     },
     {
-      "comments": "Global Storage Account for the Stack",
+      "comments":"Global Storage Account for the Stack",
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(variables('hcStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
@@ -287,7 +379,7 @@
       }
     },
     {
-      "comments": "Storage Account for Generated SSH keys or secrets",
+      "comments":"Storage Account for Generated SSH keys or secrets",
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(variables('keyStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
@@ -297,7 +389,7 @@
       }
     },
     {
-      "comments": "Public IP for Ansible Control VM",
+      "comments":"Public IP for Ansible Control VM",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
       "name":"[variables('hcPublicIPAddressName')]",
@@ -310,7 +402,7 @@
       }
     },
     {
-      "comments": "Virtual Network with 3 subnets admin, front, back",
+      "comments":"Virtual Network with 3 subnets admin, front, back",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/virtualNetworks",
       "name":"[variables('virtualNetworkName')]",
@@ -363,7 +455,7 @@
       }
     },
     {
-      "comments": "Interface for Ansible Control VM with a public IP attached",
+      "comments":"Interface for Ansible Control VM with a public IP attached",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkInterfaces",
       "name":"[variables('hcNicName')]",
@@ -393,9 +485,9 @@
           }
         ]
       }
-    },   
+    },
     {
-      "comments": "Custom script extension for the Ansible Control VM",
+      "comments":"Custom script extension for the Ansible Control VM",
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"[concat(variables('hcVmName'),'/installAnsible')]",
       "apiVersion":"[variables('apiVersion').compute]",
@@ -413,7 +505,7 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",  
+          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",
           "protectedSettings":{
 
           }
@@ -421,16 +513,14 @@
       }
     },
     {
-      "comments": "Ansible Contol VM plays the playbook to provision the LAMP cluster",
+      "comments":"Ansible Contol VM plays the playbook to provision the LAMP cluster",
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
       "name":"[variables('hcVmName')]",
       "location":"[variables('location')]",
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('hcStorageAccountName')) ) ]",
-        
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')) )]",
-        
         "[concat('Microsoft.Network/networkInterfaces/', variables('hcNicName'))]"
       ],
       "properties":{
