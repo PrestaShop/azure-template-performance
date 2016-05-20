@@ -224,14 +224,15 @@
       },
       "network":"2015-05-01-preview",
       "storage":"2015-05-01-preview",
-      "compute":"2015-06-15"
+      "compute":"2015-06-15",
+      "deployment":"2016-02-01"
     }
   },
   "resources":[
     {
       "name":"FrontDeployment",
       "type":"Microsoft.Resources/deployments",
-      "apiVersion":"[variables('apiVersion').compute]",
+      "apiVersion":"[variables('apiVersion').deployment]",
       "tags":{
         "displayName":"FrontDeployment"
       },
