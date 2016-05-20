@@ -147,6 +147,11 @@
         "tags": {
             "displayName": "FrontDeployment"
         },
+        "dependsOn":[
+           "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
+           "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
+           "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+        ],
         "properties": {
             "mode": "Incremental",
             "templateLink": {
@@ -253,7 +258,7 @@
       }
     },
     {
-      "comments": "Network Securrity Group for front VMs",
+      "comments": "Network Security Group for front VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('bkNetworkSecurityGroupName')]",
@@ -319,7 +324,9 @@
       "name":"[variables('virtualNetworkName')]",
       "location":"[variables('location')]",
       "dependsOn":[
-        "[concat('Microsoft.Network/networkSecurityGroups/', variables('hcNetworkSecurityGroupName'))]"
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('hcNetworkSecurityGroupName'))]",
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('frNetworkSecurityGroupName'))]",
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('bkNetworkSecurityGroupName'))]"
       ],
       "properties":{
         "addressSpace":{
