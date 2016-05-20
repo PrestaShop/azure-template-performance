@@ -247,7 +247,6 @@
           "contentVersion":"1.0.0.0"
         },
         "parameters":{
-          "apiVersion":"[variables('apiVersion').compute]",
           "adminUserName":{
             "value":"[parameters('hcUsername')]"
           },
