@@ -86,32 +86,25 @@
     "virtualNetworkName":"[concat('vNet', resourceGroup().name)]",
     "vnetID":"[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "addressPrefix":"10.0.0.0/24",
-    
     "subnetCIDR":".0/24",
     "hcSubnetRoot":"10.0.0",
     "frSubnetRoot":"10.0.2",
     "bkSubnetRoot":"10.0.4",
-    
     "hcSubnetName":"hcSubnet",
     "hcSubnetPrefix":"[concat(variables('hcSubnetRoot'),variables('subnetCIDR'))]",
     "frSubnetName":"frSubnet",
     "frSubnetPrefix":"[concat(variables('frSubnetRoot'),variables('subnetCIDR'))]",
     "bkSubnetName":"bkSubnet",
     "bkSubnetPrefix":"[concat(variables('bkSubnetRoot'),variables('subnetCIDR'))]",
-    
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
-   
     "hcStorageAccountName":"[concat('hc', resourceGroup().name)]",
     "hcStorageAccountType":"Standard_LRS",
     "frStorageAccountName":"[concat('fr', resourceGroup().name)]",
     "frStorageAccountType":"Standard_LRS",
     "bkStorageAccountName":"[concat('bk', resourceGroup().name)]",
     "bkStorageAccountType":"Standard_LRS",
-    
     "frAvailabilitySetName": "[concat('frav', resourceGroup().name)]",
     "bkAvailabilitySetName": "[concat('bkav', resourceGroup().name)]",
-    
-    
     "hcPublicIPAddressName":"hcPublicIP",
     "hcPublicIPAddressType":"Dynamic",
     "hcVmStorageAccountContainerName":"vhds",
@@ -129,7 +122,6 @@
     "customScriptAnsibleCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "ansiblePlaybookUrl":"[concat(variables('scriptsBaseUrl'),variables('ansiblePlaybookLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
-    
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
