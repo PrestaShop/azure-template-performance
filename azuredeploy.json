@@ -181,7 +181,7 @@
     "hcNicName":"hcVnic",
     "virtualNetworkName":"[concat('vNet', resourceGroup().name)]",
     "vnetID":"[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "addressPrefix":"10.0.0.0/24",
+    "addressPrefix":"10.0.0.0/16",
     "subnetCIDR":".0/24",
     "hcSubnetRoot":"10.0.0",
     "frSubnetRoot":"10.0.2",
