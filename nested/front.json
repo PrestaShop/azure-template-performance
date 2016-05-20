@@ -76,12 +76,6 @@
       "metadata":{
         "description":"vnet ID"
       }
-    },
-    "virtualNetworkName":{
-      "type":"string",
-      "metadata":{
-        "description":"virtual Network Name"
-      }
     }
   },
   "variables":{
@@ -225,7 +219,6 @@
         "count":"[parameters('numberOfFront')]"
       },
       "dependsOn":[
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'))]",
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'), '/inboundNatRules/', 'HTTP-80', copyIndex())]",
         "[concat('Microsoft.Network/loadBalancers/', variables('frLBName'), '/inboundNatRules/', 'HTTPS-443', copyIndex())]"
@@ -304,7 +297,6 @@
       },
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(parameters('frStorageAccountName')) ) ]",
-        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')) )]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('frNicName'),copyindex())]"
       ],
       "properties":{
