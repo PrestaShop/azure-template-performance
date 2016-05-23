@@ -113,10 +113,10 @@ function fix_etc_hosts()
   echo "${IP}" "${HOST}" >> "${HOST_FILE}"
 }
 
-function manage_sshd()
+
+function start_nc()
 {
-  log "${1} service sshd ..."
-  service sshd "${1}"
+  nohup nc -d -l 3333 >/tmp/nohup.log 2>&1
 }
 
 log "Execution of Install Script from CustomScript ..."
@@ -134,13 +134,14 @@ ANSIBLE_USER="${3}"
 
 HOST_FILE="/etc/hosts"
 
-
 ##
-manage_sshd stop
+
 fix_etc_hosts
 install_packages
 get_sshkeys
 ssh_config
-manage_sshd start
+
+# Script Wait for the wait_module from ansible playbook
+start_nc
 
 log "End of Execution of Install Script from CustomScript ..."
