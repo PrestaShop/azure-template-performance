@@ -192,7 +192,7 @@ function add_hosts()
 
 function deploy_cluster()
 {
- nohup ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1& 
+  ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1
 }
 
 
@@ -222,7 +222,6 @@ bkVmName="${11}"
 HOST_FILE="/etc/hosts"
 ANSIBLE_HOST_FILE="/etc/ansible/hosts"
 ANSIBLE_CONFIG_FILE="/etc/ansible/ansible.cfg"
-
 
 ##
 fix_etc_hosts
