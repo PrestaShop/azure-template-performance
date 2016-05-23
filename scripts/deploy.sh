@@ -127,7 +127,9 @@ function put_sshkeys()
     # Push both Private and Public Key
     log "Push ssh keys to Azure Storage"
     python WriteSSHToPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa
+    error_log "Unable to write id_rsa to storage account ${STORAGE_ACCOUNT_NAME}"
     python WriteSSHToPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa.pub
+    error_log "Unable to write id_rsa.pub to storage account ${STORAGE_ACCOUNT_NAME}"
 
 }
 
@@ -193,6 +195,7 @@ function add_hosts()
 function deploy_cluster()
 {
   ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1
+  error_log "Fail to deploy front cluster !"
 }
 
 

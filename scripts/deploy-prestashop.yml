@@ -3,7 +3,7 @@
   gather_facts: False
   tasks:
   - name: "Wait for port 3333 to be ready"
-    local_action: wait_for port=3333 host="{{ ansible_ssh_host }}" state=started connect_timeout=2 timeout=600
+    local_action: wait_for port=3333 host="{{ ansible_ssh_host | default(inventory_hostname) }}" state=started connect_timeout=2 timeout=600
 
 
 - hosts: "{{ target }}"
