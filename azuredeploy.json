@@ -234,8 +234,7 @@
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',variables('hcVmName'),'/extensions/installAnsible')]"
+        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
       ],
       "properties":{
         "mode":"Incremental",

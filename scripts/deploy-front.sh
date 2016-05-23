@@ -95,14 +95,23 @@ function install_packages()
 function get_sshkeys()
  {
    
+    c=0;
     log "Install azure storage python module ..."
     pip install azure-storage
 
     # Push both Private and Public Key
     log "Push ssh keys to Azure Storage"
-    python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa
+    until python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa
+    do
+        log "Fails to Get id_rsa key trying again ..."
+        sleep 60
+        let c=${c}+1
+        if [ "${c}" -gt 4 ]; then
+           log "Timeout to get id_rsa key exiting ..."
+        fi
+    done
     python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa.pub
-
+    error_log "Fails to Get id_rsa.pub key"
 }
 
 function fix_etc_hosts()
@@ -116,7 +125,7 @@ function fix_etc_hosts()
 
 function start_nc()
 {
-  log "Pause script for Control VM"
+  log "Pause script for Control VM..."
   nohup nc -d -l 3333 >/tmp/nohup.log 2>&1
 }
 

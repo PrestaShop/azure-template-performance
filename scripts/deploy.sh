@@ -226,9 +226,9 @@ ANSIBLE_CONFIG_FILE="/etc/ansible/ansible.cfg"
 
 ##
 fix_etc_hosts
-install_ansible
 generate_sshkeys
 ssh_config
+install_ansible
 put_sshkeys
 add_hosts
 configure_ansible
