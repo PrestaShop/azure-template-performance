@@ -146,7 +146,7 @@
       }
     },
     {
-      "comments":"HTTP Nat Rule",
+      "comments":"HTTP NAT Rule",
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Network/loadBalancers/inboundNatRules",
       "name":"[concat(variables('frLBName'), '/', 'HTTP-80', copyIndex())]",
@@ -191,7 +191,7 @@
       }
     },
     {
-      "comments":"Global Storage Account for the front vm",
+      "comments":"Global Storage Account for the front VM",
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(parameters('frStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
@@ -201,7 +201,7 @@
       }
     },
     {
-      "comments":"Public IP for Front LB",
+      "comments":"Public IP for Front Load Balancer",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
       "name":"[variables('frPublicIPAddressName')]",
