@@ -230,9 +230,7 @@
       ],
       "properties":{
         "dnsSettings":{
-          "dnsServers":[
-            "[variables('dnsserver')]"
-          ]
+          "dnsServers": []
         },
         "ipConfigurations":[
           {
