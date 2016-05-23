@@ -192,8 +192,7 @@ function add_hosts()
 
 function deploy_cluster()
 {
-  
-  ansible-playbook deploy-prestashop.yml --extra-vars "target=front"
+ nohup ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1& 
 }
 
 
