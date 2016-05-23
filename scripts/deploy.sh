@@ -160,13 +160,13 @@ function configure_ansible()
   let nBck=${numberOfBack}-1
   # Generate Hostfile for Front and Back
   # All Nodes
-  echo "[cluster]"            >> "${ANSIBLE_HOST_FILE}"
-  echo "${frVmName}[0:$nWeb]" >> "${ANSIBLE_HOST_FILE}"
-  echo "${bkVmName}[0:$nBck]" >> "${ANSIBLE_HOST_FILE}"
-  echo "[front]"              >> "${ANSIBLE_HOST_FILE}"
-  echo "${frVmName}[0:$nWeb]" >> "${ANSIBLE_HOST_FILE}"
-  echo "[back]"               >> "${ANSIBLE_HOST_FILE}"
-  echo "${bkVmName}[0:$nBck]" >> "${ANSIBLE_HOST_FILE}"
+  echo "[cluster]"                                                                                                        >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
+  echo "[front]"                                                                                                          >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
+  echo "[back]"                                                                                                           >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
 }
 
 function add_hosts()
@@ -191,6 +191,12 @@ function add_hosts()
   
 }
 
+
+function deploy_cluster()
+{
+  
+  ansible-playbook deploy-prestashop.yml --extra-vars "target=front"
+}
 
 
 log "Execution of Install Script from CustomScript ..."
