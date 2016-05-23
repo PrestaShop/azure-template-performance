@@ -107,7 +107,7 @@
     "customScriptDeployFile":"deploy-front.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptFrontCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
-    "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'GetSSHToPrivateStorage.py')]",
+    "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'GetSSHFromPrivateStorage.py')]",
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"

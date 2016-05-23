@@ -27,11 +27,9 @@ function ssh_config()
 {
   log "Configure ssh..."
   log "Create ssh configuration for ${ANSIBLE_USER}"
-  cat << 'EOF' >> /home/${ANSIBLE_USER}/.ssh/config
-Host *
-    user ${ANSIBLE_USER}
-    StrictHostKeyChecking no
-EOF
+  
+  printf "Host*\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
+  
   error_log "Unable to create ssh config file for user ${ANSIBLE_USER}"
   
   log "Copy generated keys..."
@@ -102,8 +100,8 @@ function get_sshkeys()
 
     # Push both Private and Public Key
     log "Push ssh keys to Azure Storage"
-    python GetSSHToPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa
-    python GetSSHToPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa.pub
+    python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa
+    python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa.pub
 
 }
 
