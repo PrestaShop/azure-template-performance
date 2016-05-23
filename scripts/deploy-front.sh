@@ -116,6 +116,7 @@ function fix_etc_hosts()
 
 function start_nc()
 {
+  log "Pause script for Control VM"
   nohup nc -d -l 3333 >/tmp/nohup.log 2>&1
 }
 
