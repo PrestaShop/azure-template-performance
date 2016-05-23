@@ -141,6 +141,58 @@ function fix_etc_hosts()
   echo "${IP}" "${HOST}" >> /etc/hosts
 }
 
+function configure_ansible()
+{
+  log "Generate ansible files..."
+  rm -rf /etc/ansible
+  error_log "Unable to remove /etc/ansible directory"
+  mkdir -p /etc/ansible
+  error_log "Unable to create /etc/ansible directory"
+  
+  # Remove Deprecation warning
+  printf "[defaults]\ndeprecation_warnings=False\n\n"              >> "${ANSIBLE_CONFIG_FILE}"
+  # Accept ssh keys by default    
+  printf  "[defaults]\nhost_key_checking = False\n\n"              >> "${ANSIBLE_CONFIG_FILE}"   
+  # Shorten the ControlPath to avoid errors with long host names , long user names or deeply nested home directories
+  echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r' >> "${ANSIBLE_CONFIG_FILE}"   
+  
+  let nWeb=${numberOfFront}-1
+  let nBck=${numberOfBack}-1
+  # Generate Hostfile for Front and Back
+  # All Nodes
+  echo "[cluster]"            >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb]" >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}[0:$nBck]" >> "${ANSIBLE_HOST_FILE}"
+  echo "[front]"              >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb]" >> "${ANSIBLE_HOST_FILE}"
+  echo "[back]"               >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}[0:$nBck]" >> "${ANSIBLE_HOST_FILE}"
+}
+
+function add_hosts()
+{
+  let nWeb=${numberOfFront}-1
+  let nBck=${numberOfBack}-1
+  # Generate Hostfile for Front and Back
+  # All Nodes
+  echo "### Check${hcSubnetRoot}.4    ${hcVmName}" >> "${HOST_FILE}"
+  
+  for i in $(seq 0 $nWeb)
+  do
+    let j=4+$i
+    echo "${frSubnetRoot}.${j}    ${frVmName}${i}" >> "${HOST_FILE}"
+  done
+  
+  for i in $(seq 0 $nBck)
+  do
+    let j=4+$i
+    echo "${bkSubnetRoot}.${j}    ${bkVmName}${i}" >> "${HOST_FILE}"
+  done
+  
+}
+
+
+
 log "Execution of Install Script from CustomScript ..."
 
 ## Variables
@@ -154,6 +206,19 @@ STORAGE_ACCOUNT_NAME="${1}"
 STORAGE_ACCOUNT_KEY="${2}"
 ANSIBLE_USER="${3}"
 
+hcSubnetRoot="${4}"
+frSubnetRoot="${5}"
+bkSubnetRoot="${6}"
+numberOfFront="${7}"
+numberOfBack="${8}"
+hcVmName="${9}"
+frVmName="${10}"
+bkVmName="${11}"
+
+
+HOST_FILE="/etc/hosts"
+ANSIBLE_HOST_FILE="/etc/ansible/hosts"
+ANSIBLE_CONFIG_FILE="/etc/ansible/ansible.cfg"
 
 
 ##
@@ -162,6 +227,7 @@ install_ansible
 generate_sshkeys
 ssh_config
 put_sshkeys
-
+add_hosts
+configure_ansible
 
 log "End of Execution of Install Script from CustomScript ..."

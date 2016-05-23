@@ -197,6 +197,8 @@
     "hcPublicIPAddressType":"Dynamic",
     "hcVmStorageAccountContainerName":"vhds",
     "hcVmName":"[concat('ans', resourceGroup().name)]",
+    "frVmName":"[concat('web', resourceGroup().name)]",
+    "bkVmName":"[concat('bdd', resourceGroup().name)]",
     "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',variables('hcSubnetName'))]",
     "hcVmSize":"Basic_A0",
     "hcNetworkSecurityGroupName":"hcSG",
@@ -210,6 +212,10 @@
     "customScriptAnsibleCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "ansiblePlaybookUrl":"[concat(variables('scriptsBaseUrl'),variables('ansiblePlaybookLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
+    "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'),' ')]",
+    "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
+    "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
+    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'))]",
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
@@ -228,7 +234,8 @@
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/extensions/',variables('hcVmName'),'/installAnsible')]"
       ],
       "properties":{
         "mode":"Incremental",
@@ -275,6 +282,9 @@
           },
           "vnetID":{
             "value":"[variables('vnetID')]"
+          },
+          "frVmName":{
+            "value":"[variables('frVmName')]"
           }
         }
       }
@@ -508,7 +518,7 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('hcUsername'))]",
+          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]",
           "protectedSettings":{
 
           }

@@ -76,6 +76,12 @@
       "metadata":{
         "description":"vnet ID"
       }
+    },
+    "frVmName":{
+      "type":"string",
+      "metadata":{
+        "description":"Basename of front VMs"
+      }
     }
   },
   "variables":{
@@ -92,7 +98,6 @@
     "frNicName":"frVnic",
     "frPublicIPAddressName":"frPublicIP",
     "frPublicIPAddressType":"Dynamic",
-    "frVmName":"[concat('web', resourceGroup().name)]",
     "frSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('frSubnetName'))]",
     "frLBName":"[concat('lb', resourceGroup().name)]",
     "lbPublicIPAddressID":"[resourceId('Microsoft.Network/publicIPAddresses',variables('frPublicIPAddressName'))]",
