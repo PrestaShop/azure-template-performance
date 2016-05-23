@@ -264,7 +264,7 @@
     {
       "comments":"Custom script extension for the Front VMs",
       "type":"Microsoft.Compute/virtualMachines/extensions",
-      "name":"[concat(variables('frVmName'),copyindex(),'/installFront')]",
+      "name":"[concat(parameters('frVmName'),copyindex(),'/installFront')]",
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "copy":{
@@ -272,7 +272,7 @@
         "count":"[parameters('numberOfFront')]"
       },
       "dependsOn":[
-        "[concat('Microsoft.Compute/virtualMachines/', variables('frVmName'),copyindex())]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('frVmName'),copyindex())]"
       ],
       "properties":{
         "publisher":"Microsoft.OSTCExtensions",
@@ -294,7 +294,7 @@
       "comments":"VM front provisoned",
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
-      "name":"[concat(variables('frVmName'),copyindex())]",
+      "name":"[concat(parameters('frVmName'),copyindex())]",
       "location":"[variables('location')]",
       "copy":{
         "name":"frVmLoop",
@@ -312,7 +312,7 @@
           "vmSize":"[parameters('frVmSize')]"
         },
         "osProfile":{
-          "computerName":"[concat(variables('frVmName'),copyindex())]",
+          "computerName":"[concat(parameters('frVmName'),copyindex())]",
           "adminUsername":"[parameters('adminUsername')]",
           "linuxConfiguration":{
             "disablePasswordAuthentication":"true",
@@ -334,7 +334,7 @@
             "version":"latest"
           },
           "osDisk":{
-            "name":"[concat(variables('frVmName'), copyindex())]",
+            "name":"[concat(parameters('frVmName'), copyindex())]",
             "vhd":{
               "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('frStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('frVmStorageAccountContainerName'),'/', variables('frOSDiskName'),copyindex(), '.vhd')]"
             },
