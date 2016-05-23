@@ -28,7 +28,7 @@ function ssh_config()
   log "Configure ssh..."
   log "Create ssh configuration for ${ANSIBLE_USER}"
   
-  printf "Host*\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
+  printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
   
   error_log "Unable to create ssh config file for user ${ANSIBLE_USER}"
   
@@ -233,5 +233,6 @@ ssh_config
 put_sshkeys
 add_hosts
 configure_ansible
+deploy_cluster
 
 log "End of Execution of Install Script from CustomScript ..."

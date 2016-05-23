@@ -28,7 +28,7 @@ function ssh_config()
   log "Configure ssh..."
   log "Create ssh configuration for ${ANSIBLE_USER}"
   
-  printf "Host*\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
+  printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
   
   error_log "Unable to create ssh config file for user ${ANSIBLE_USER}"
   
@@ -113,6 +113,11 @@ function fix_etc_hosts()
   echo "${IP}" "${HOST}" >> "${HOST_FILE}"
 }
 
+function manage_sshd()
+{
+  log "${1} service sshd ..."
+  service sshd "${1}"
+}
 
 log "Execution of Install Script from CustomScript ..."
 
@@ -131,9 +136,11 @@ HOST_FILE="/etc/hosts"
 
 
 ##
+manage_sshd stop
 fix_etc_hosts
 install_packages
 get_sshkeys
 ssh_config
+manage_sshd start
 
 log "End of Execution of Install Script from CustomScript ..."
