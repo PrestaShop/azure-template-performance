@@ -458,12 +458,7 @@
               }
             }
           }
-        ],
-        "dhcpOptions":{
-          "dnsServers":[
-            "[variables('dnsserver')]"
-          ]
-        }
+        ]
       }
     },
     {
