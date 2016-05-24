@@ -162,6 +162,8 @@
     },
     "frFaultDomainCount":"3",
     "frUpdateDomainCount":"5",
+    "bkFaultDomainCount":"3",
+    "bkUpdateDomainCount":"5",
     "dnsNameForAnsiblePublicIP":"[concat('hc00', resourceGroup().name)]",
     "dnsserver":"8.8.8.8",
     "location":"[resourceGroup().location]",
@@ -209,12 +211,18 @@
     "ansiblePlaybookLocation":"deploy-prestashop.yml",
     "ansibleRolesReqLocation":"install_roles.yml",
     "ansibleVarsLocation":"vars/main.yml",
+    "ansibleVarsMasterLocation":"vars/master.yml",
+    "ansibleVarsSlaveLocation":"vars/slave.yml",
+    "ansibleVarsDefaultLocation":"vars/mysql_default.yml",
     "customScriptDeployFile":"deploy.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptAnsibleCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "ansiblePlaybookUrl":"[concat(variables('scriptsBaseUrl'),variables('ansiblePlaybookLocation'))]",
     "ansibleRolesReqUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleRolesReqLocation'))]",
     "ansibleVarsUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsLocation'))]",
+    "ansibleVarsMastersUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsMasterLocation'))]",
+    "ansibleVarsSlavesUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsSlaveLocation'))]",
+    "ansibleVarsDefaultsUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsDefaultLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
     "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'),' ')]",
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
@@ -293,6 +301,67 @@
       }
     },
     {
+      "name":"BackDeployment",
+      "type":"Microsoft.Resources/deployments",
+      "apiVersion":"[variables('apiVersion').deployment]",
+      "dependsOn":[
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
+        "[concat('Microsoft.Network/networkSecurityGroups/',variables('bkNetworkSecurityGroupName'))]",
+        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+      ],
+      "properties":{
+        "mode":"Incremental",
+        "templateLink":{
+          "uri":"[variables('configuration').backTemplateURL]",
+          "contentVersion":"1.0.0.0"
+        },
+        "parameters":{
+          "adminUserName":{
+            "value":"[parameters('hcUsername')]"
+          },
+          "sshKeyData":{
+            "value":"[parameters('sshKeyData')]"
+          },
+          "ubuntuOSVersion":{
+            "value":"[parameters('ubuntuOSVersion')]"
+          },
+          "bkVmSize":{
+            "value":"[parameters('frVmSize')]"
+          },
+          "numberOfBack":{
+            "value":"[parameters('numberOfFront')]"
+          },
+          "bkAvailabilitySetName":{
+            "value":"[variables('bkAvailabilitySetName')]"
+          },
+          "bkStorageAccountName":{
+            "value":"[variables('bkStorageAccountName')]"
+          },
+          "bkStorageAccountType":{
+            "value":"[variables('bkStorageAccountType')]"
+          },
+          "subnetCIDR":{
+            "value":"[variables('subnetCIDR')]"
+          },
+          "bkSubnetRoot":{
+            "value":"[variables('bkSubnetRoot')]"
+          },
+          "bkSubnetName":{
+            "value":"[variables('bkSubnetName')]"
+          },
+          "bkSubnetPrefix":{
+            "value":"[variables('bkSubnetPrefix')]"
+          },
+          "vnetID":{
+            "value":"[variables('vnetID')]"
+          },
+          "bkVmName":{
+            "value":"[variables('bkVmName')]"
+          }
+        }
+      }
+    },
+    {
       "comments":"Availability Set for Front VMs",
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[variables('frAvailabilitySetName')]",
@@ -301,6 +370,17 @@
       "properties": {
         "PlatformFaultDomainCount": "[variables('frFaultDomainCount')]",
         "PlatformUpdateDomainCount": "[variables('frUpdateDomainCount')]"
+      }
+    },
+    {
+      "comments":"Availability Set for Back VMs",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('bkAvailabilitySetName')]",
+      "apiVersion": "[variables('apiVersion').network]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "PlatformFaultDomainCount": "[variables('bkFaultDomainCount')]",
+        "PlatformUpdateDomainCount": "[variables('bkUpdateDomainCount')]"
       }
     },
     {
@@ -358,7 +438,7 @@
       }
     },
     {
-      "comments":"Network Security Group for front VMs",
+      "comments":"Network Security Group for Back VMs",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkSecurityGroups",
       "name":"[variables('bkNetworkSecurityGroupName')]",
@@ -514,7 +594,10 @@
             "[variables('ansiblePlaybookUrl')]",
             "[variables('ansibleRolesReqUrl')]",
             "[variables('ansibleVarsUrl')]",
-            "[variables('pythonAzureScriptUrl')]"
+            "[variables('pythonAzureScriptUrl')]",
+            "[variables('ansibleVarsMastersUrl')]",
+            "[variables('ansibleVarsSlavesUrl')]",
+            "[variables('ansibleVarsDefaultsUrl')]"
           ],
           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]",
           "protectedSettings":{

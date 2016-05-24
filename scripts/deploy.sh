@@ -157,13 +157,18 @@ function configure_ansible()
   let nBck=${numberOfBack}-1
   # Generate Hostfile for Front and Back
   # All Nodes
-  echo "[cluster]"                                                                                                        >> "${ANSIBLE_HOST_FILE}"
-  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
-  echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
-  echo "[front]"                                                                                                          >> "${ANSIBLE_HOST_FILE}"
-  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
-  echo "[back]"                                                                                                           >> "${ANSIBLE_HOST_FILE}"
-  echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
+  echo "[cluster]"                                                                                                                         >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
+  echo "[front]"                                                                                                                           >> "${ANSIBLE_HOST_FILE}"
+  echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
+  echo "[back]"                                                                                                                            >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}0 mysql_role=master ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"        >> "${ANSIBLE_HOST_FILE}"
+  if [ "${numberOfBack}" -gt 2 ]; then
+  echo "${bkVmName}[1:$nBck] mysql_role=slave ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
+  else
+  echo "${bkVmName}1 mysql_role=slave ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}" 
+  fi
 }
 
 function add_hosts()
@@ -200,11 +205,18 @@ function configure_deployment()
   error_log "Fail to create vars directory"
   mv main.yml vars/main.yml
   error_log "Fail to move vars file to directory vars"
+  mv master.yml vars/master.yml
+  error_log "Fail to move master vars file to directory vars"
+  mv slave.yml vars/slave.yml
+  error_log "Fail to move slaves vars file to directory vars"
+  mv mysql_default.yml vars/mysql_default.yml
+  error_log "Fail to move mysql default vars file to directory vars"
+  
 }
 
 function deploy_cluster()
 {
-  ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1
+  ansible-playbook deploy-prestashop.yml --extra-vars "ansistrano_release_version=$(date -u +%Y%m%d%H%M%SZ)" > /tmp/ansible.log 2>&1
   error_log "Fail to deploy front cluster !"
 }
 
