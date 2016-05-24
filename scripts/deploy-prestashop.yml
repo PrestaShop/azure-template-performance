@@ -20,5 +20,4 @@
   - name: "install missing package if needed"
     apt: name={{ item }} update_cache=yes
     with_items:
-      - curl
       - htop
