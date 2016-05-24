@@ -14,7 +14,7 @@
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
     - { role: geerlingguy.apache-php-fpm  }
-    
+
   tasks:
   - name: "install missing package if needed"
     apt: name={{ item }} update_cache=yes
