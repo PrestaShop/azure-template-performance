@@ -16,11 +16,8 @@ error_log()
 
 function log()
 {
-	
   mess="$(hostname): $1"
-
   logger -t "${BASH_SCRIPT}" "${mess}"
-
 }
 
 function ssh_config()
@@ -191,7 +188,6 @@ function add_hosts()
   
 }
 
-
 function deploy_cluster()
 {
   ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1
@@ -236,4 +232,4 @@ add_hosts
 configure_ansible
 deploy_cluster
 
-log "End of Execution of Install Script from CustomScript ..."
+log "Success : End of Execution of Install Script from CustomScript ..."
