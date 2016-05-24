@@ -31,6 +31,12 @@
     - vars/main.yml
     - [ "vars/{{ mysql_role }}.yml", "vars/mysql_default.yml" ]
     
+  roles:
+    - { role: geerlingguy.mysql }  
+
+- hosts: cluster
+  become: True
+  gather_facts: False    
   tasks:
   - name: "install missing package if needed"
     apt: name={{ item }} update_cache=yes
