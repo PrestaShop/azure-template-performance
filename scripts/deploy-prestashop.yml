@@ -10,7 +10,7 @@
   become: True
   vars_files:
     - vars/main.yml
-   pre_tasks:
+  pre_tasks:
     - name: "Create root prestashop directory for archive"
       file: path="{{ documentroot }}" state=directory mode="u=rwx,g=rx,o=rx" owner=www-data group=www-data
     
