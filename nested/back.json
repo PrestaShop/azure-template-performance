@@ -23,7 +23,7 @@
     "bkVmSize":{
       "type":"string",
       "metadata":{
-        "description":"Instance size for Web Front VMs"
+        "description":"Instance size for Web Back VMs"
       }
     },
     "numberOfBack":{
@@ -101,7 +101,7 @@
     "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
     "customScriptDeployFile":"deploy-back.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
-    "customScriptFrontCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
+    "customScriptBackCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'GetSSHFromPrivateStorage.py')]",
     "apiVersion":{
       "resources":{
@@ -154,7 +154,7 @@
       }
     },
     {
-      "comments":"Custom script extension for the Front VMs",
+      "comments":"Custom script extension for the Back VMs",
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"[concat(parameters('bkVmName'),copyindex(),'/installFront')]",
       "apiVersion":"[variables('apiVersion').compute]",
@@ -175,7 +175,7 @@
             "[variables('customScriptDeployUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptFrontCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfBack'))]",
+          "commandToExecute":"[concat(variables('customScriptBackCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfBack'))]",
           "protectedSettings":{
           }
         }
