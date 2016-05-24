@@ -249,3 +249,5 @@ configure_deployment
 deploy_cluster
 
 log "Success : End of Execution of Install Script from CustomScript ..."
+
+exit 0

@@ -14,6 +14,7 @@
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
     - { role: geerlingguy.apache-php-fpm  }
+    - { role: carlosbuenosvinos.ansistrano-deploy }
 
   tasks:
   - name: "install missing package if needed"
