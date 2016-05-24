@@ -175,7 +175,7 @@
             "[variables('customScriptDeployUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
-          "commandToExecute":"[concat(variables('customScriptBackCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfBack'))]",
+          "commandToExecute":"[concat(variables('customScriptBackCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfBack'),' ',parameters('bkSubnetRoot'),' ',parameters('bkVmName'))]",
           "protectedSettings":{
           }
         }

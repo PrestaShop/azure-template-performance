@@ -163,6 +163,8 @@ STORAGE_ACCOUNT_NAME="${1}"
 STORAGE_ACCOUNT_KEY="${2}"
 ANSIBLE_USER="${3}"
 numberOfBack="${4}"
+bkSubnetRoot="${5}"
+bkVmName="${6}"
 
 HOST_FILE="/etc/hosts"
 
