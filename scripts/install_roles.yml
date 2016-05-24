@@ -1,0 +1,7 @@
+# install_roles.yml
+- src: geerlingguy.php
+- src: geerlingguy.apache
+- src: geerlingguy.mysql
+- src: geerlingguy.apache-php-fpm 
+- src: carlosbuenosvinos.ansistrano-deploy 
+- src: carlosbuenosvinos.ansistrano-rollback

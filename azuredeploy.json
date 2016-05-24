@@ -207,10 +207,14 @@
     "sshKeyPath":"[concat('/home/',parameters('hcUsername'),'/.ssh/authorized_keys')]",
     "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
     "ansiblePlaybookLocation":"deploy-prestashop.yml",
+    "ansibleRolesReqLocation":"install_roles.yml",
+    "ansibleVarsLocation":"vars/main.yml",
     "customScriptDeployFile":"deploy.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptAnsibleCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
     "ansiblePlaybookUrl":"[concat(variables('scriptsBaseUrl'),variables('ansiblePlaybookLocation'))]",
+    "ansibleRolesReqUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleRolesReqLocation'))]",
+    "ansibleVarsUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
     "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'),' ')]",
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
@@ -508,6 +512,8 @@
           "fileUris":[
             "[variables('customScriptDeployUrl')]",
             "[variables('ansiblePlaybookUrl')]",
+            "[variables('ansibleRolesReqUrl')]",
+            "[variables('ansibleVarsUrl')]",
             "[variables('pythonAzureScriptUrl')]"
           ],
           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]",

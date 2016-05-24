@@ -188,6 +188,20 @@ function add_hosts()
   
 }
 
+function get_roles()
+{
+  ansible-galaxy install -f -r install_roles.yml
+  error_log "Can't get roles from Galaxy'"
+}
+
+function configure_deployment()
+{
+  mkdir -p vars
+  error_log "Fail to create vars directory"
+  mv main.yml vars/main.yml
+  error_log "Fail to move vars file to directory vars"
+}
+
 function deploy_cluster()
 {
   ansible-playbook deploy-prestashop.yml --extra-vars "target=front" > /tmp/ansible.log 2>&1
@@ -230,6 +244,8 @@ install_ansible
 put_sshkeys
 add_hosts
 configure_ansible
+get_roles
+configure_deployment
 deploy_cluster
 
 log "Success : End of Execution of Install Script from CustomScript ..."
