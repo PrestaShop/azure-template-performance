@@ -29,7 +29,6 @@
   become: True
   vars_files:
     - vars/main.yml
-    - [ "vars/{{ mysql_role }}.yml", "vars/mysql_default.yml" ]
     
   roles:
     - { role: geerlingguy.mysql }  
