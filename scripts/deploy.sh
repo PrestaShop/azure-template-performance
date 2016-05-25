@@ -147,17 +147,18 @@ function configure_ansible()
   error_log "Unable to create /etc/ansible directory"
   
   # Remove Deprecation warning
-  printf "[defaults]\ndeprecation_warnings=False\n\n"              >> "${ANSIBLE_CONFIG_FILE}"
-  # Accept ssh keys by default    
-  printf  "[defaults]\nhost_key_checking = False\n\n"              >> "${ANSIBLE_CONFIG_FILE}"   
+  printf "[defaults]\ndeprecation_warnings = False\nhost_key_checking = False\n\n"    >>  "${ANSIBLE_CONFIG_FILE}"
+  
   # Shorten the ControlPath to avoid errors with long host names , long user names or deeply nested home directories
-  echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r' >> "${ANSIBLE_CONFIG_FILE}"   
+  echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r'                    >> "${ANSIBLE_CONFIG_FILE}"   
+  # fix ansible bug
+  printf "\npipelining = True\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"   
   
   let nWeb=${numberOfFront}-1
   let nBck=${numberOfBack}-1
   # Generate Hostfile for Front and Back
   # All Nodes
-  echo "[cluster]"                                                                                                                         >> "${ANSIBLE_HOST_FILE}"
+  echo "[cluster]"                                                                                                                         >>  "${ANSIBLE_HOST_FILE}"
   echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
   echo "${bkVmName}[0:$nBck] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
   echo "[front]"                                                                                                                           >> "${ANSIBLE_HOST_FILE}"
@@ -260,6 +261,6 @@ get_roles
 configure_deployment
 deploy_cluster
 
-log "Success : End of Execution of Install Script from CustomScript ..."
+log "Success : End of Execution of Install Script from CustomScript"
 
 exit 0

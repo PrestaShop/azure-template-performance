@@ -154,4 +154,6 @@ ssh_config
 # Script Wait for the wait_module from ansible playbook
 start_nc
 
-log "End of Execution of Install Script from CustomScript ..."
+log "Success : End of Execution of Install Script from CustomScript"
+
+exit 0
