@@ -164,12 +164,24 @@ function configure_ansible()
   echo "[front]"                                                                                                                           >> "${ANSIBLE_HOST_FILE}"
   echo "${frVmName}[0:$nWeb] ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"                  >> "${ANSIBLE_HOST_FILE}"
   echo "[back]"                                                                                                                            >> "${ANSIBLE_HOST_FILE}"
-  echo "${bkVmName}0 mysql_role=master ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"        >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}0 ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"        >> "${ANSIBLE_HOST_FILE}"
   if [ "${numberOfBack}" -gt 2 ]; then
   echo "${bkVmName}[1:$nBck] mysql_role=slave ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
   else
-  echo "${bkVmName}1 mysql_role=slave ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}" 
+  echo "${bkVmName}1 ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}" 
   fi
+  
+  echo "[master]"                                                                                                                          >> "${ANSIBLE_HOST_FILE}"
+  echo "${bkVmName}0"                                                                                                                      >> "${ANSIBLE_HOST_FILE}"
+  echo "[slave]"                                                                                                                           >> "${ANSIBLE_HOST_FILE}"
+  if [ "${numberOfBack}" -gt 2 ]; then
+  echo "${bkVmName}[1:$nBck]"                                                                                                              >> "${ANSIBLE_HOST_FILE}"
+  else
+  echo "${bkVmName}1"                                                                                                                      >> "${ANSIBLE_HOST_FILE}" 
+  fi
+  
+  
+  
 }
 
 function add_hosts()
@@ -204,12 +216,14 @@ function configure_deployment()
 {
   mkdir -p vars
   error_log "Fail to create vars directory"
+  mkdir -p group_vars
+  error_log "Fail to create group_vars  directory"
   mv main.yml vars/main.yml
   error_log "Fail to move vars file to directory vars"
-  mv master.yml vars/master.yml
-  error_log "Fail to move master vars file to directory vars"
-  mv slave.yml vars/slave.yml
-  error_log "Fail to move slaves vars file to directory vars"
+  mv master.yml group_vars/master.yml
+  error_log "Fail to move master vars file to directory group_vars"
+  mv slave.yml group_vars/slave.yml
+  error_log "Fail to move slaves vars file to directory group_vars"
   mv mysql_default.yml vars/mysql_default.yml
   error_log "Fail to move mysql default vars file to directory vars"
   

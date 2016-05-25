@@ -60,6 +60,46 @@ function ssh_config()
   
 }
 
+function ssh_config_root()
+{
+  
+  log "Create ssh configuration for root"
+  
+  printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "root"  >> "/root/.ssh/config"
+  
+  error_log "Unable to create ssh config file for user root"
+  
+  log "Copy generated keys..."
+  
+  cp id_rsa "/root/.ssh/id_rsa"
+  error_log "Unable to copy id_rsa key to root .ssh directory"
+
+  cp id_rsa.pub "/root/.ssh/id_rsa.pub"
+  error_log "Unable to copy id_rsa.pub key to root .ssh directory"
+  
+  cat "/root/.ssh/id_rsa.pub" >> "/root/.ssh/authorized_keys"
+  error_log "Unable to copy root id_rsa.pub to authorized_keys "
+
+  chmod 700 "/root/.ssh"
+  error_log "Unable to chmod root .ssh directory"
+
+  chown -R "root:" "/root/.ssh"
+  error_log "Unable to chown to root .ssh directory"
+
+  chmod 400 "/root/.ssh/id_rsa"
+  error_log "Unable to chmod root id_rsa file"
+
+  chmod 644 "/root/.ssh/id_rsa.pub"
+  error_log "Unable to chmod root id_rsa.pub file"
+
+  chmod 400 "/root/.ssh/authorized_keys"
+  error_log "Unable to chmod root authorized_keys file"
+  
+}
+
+
+
+
 function install_packages()
 {
     log "Install software-properties-common ..."
@@ -181,6 +221,7 @@ fix_etc_hosts
 install_packages
 get_sshkeys
 ssh_config
+ssh_config_root
 add_host_entry
 
 # Script Wait for the wait_module from ansible playbook
