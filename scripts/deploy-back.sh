@@ -89,6 +89,13 @@ function install_packages()
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
+    
+    log "Install python-mysqldb ..."
+    until apt-get --yes install python-mysqldb 
+    do
+      log "Lock detected on apt-get while install Try again..."
+      sleep 2
+    done
 }
 
 

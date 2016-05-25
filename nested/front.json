@@ -354,5 +354,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "SHOP FQDN": {
+      "value": "[concat(variables('dnsNameForFrontPublicIP'),'cloudapp.azure.com')]",
+      "type": "string" 
+    }
+  }
 }
