@@ -1,6 +1,10 @@
 documentroot: "/var/www/azureshop"
 prestashop_dir: "{{ documentroot }}/current/prestashop"
 
+prestashop_owner: "www-data"
+prestashop_group: "www-data"
+
+
 apache_listen_port: 80
 apache_vhosts:
   - servername: "www.azureshop.com"

@@ -12,7 +12,7 @@
     - vars/main.yml
   pre_tasks:
     - name: "Create root prestashop directory for archive"
-      file: path="{{ documentroot }}" state=directory mode="u=rwx,g=rx,o=rx" owner=www-data group=www-data
+      file: path="{{ documentroot }}" state=directory mode="u=rwx,g=rx,o=rx" owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
     
     - name: "Install missing package if needed"
       apt: name={{ item }} update_cache=yes
@@ -25,6 +25,12 @@
     - { role: geerlingguy.apache-php-fpm  }
     - { role: carlosbuenosvinos.ansistrano-deploy }
 
+  post_tasks:
+    - name: "Change files permission on {{ documentroot }}" 
+      file: dest="{ documentroot }}" state=directory 
+            owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
+            recurse=yes
+            
 - hosts: back
   become: True
   vars_files:
