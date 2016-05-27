@@ -18,6 +18,11 @@
       apt: name={{ item }} update_cache=yes
       with_items:
         - unzip
+        
+    - name: Create dynamic MySQL variables.
+      set_fact:
+        mysql_replication_master: "{{ groups['master'][0] }}"
+  
       
   roles:
     - { role: geerlingguy.apache }
@@ -43,7 +48,7 @@
   become: True
   gather_facts: False    
   tasks:
-  - name: "install missing package if needed"
+  - name: "Install missing package if needed"
     apt: name={{ item }} update_cache=yes
     with_items:
       - htop

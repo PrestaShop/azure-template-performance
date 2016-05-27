@@ -1,4 +1,2 @@
-mysql_role: slave
 mysql_server_id: "2"
-mysql_replication_role: 'slave'
-mysql_replication_master: "{{ groups['master'][0] }}"
+mysql_replication_role: "slave"

@@ -48,6 +48,10 @@ php_packages:
 mysql_enabled_on_startup: yes
 mysql_root_password: root
 overwrite_global_mycnf: yes
+
+
+mysql_replication_user: {name: 'replicator', password: 'prestashop'}
+
 mysql_databases: 
   - name: prestashop
     encoding: utf8
