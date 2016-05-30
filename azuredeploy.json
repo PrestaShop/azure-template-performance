@@ -152,7 +152,19 @@
       "metadata":{
         "description":"Number of Back nodes to create >=2"
       }
-    }
+    },
+    "tshirtSize": {
+      "type": "string",
+      "defaultValue": "Small",
+      "allowedValues": [
+        "Small",
+        "Medium",
+        "Large"
+      ],
+      "metadata": {
+        "description": "T-shirt size of the PrestaShop cluster"
+      }
+    } 
   },
   "variables":{
     "templatesBaseURL":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/",
@@ -357,6 +369,9 @@
           },
           "bkVmName":{
             "value":"[variables('bkVmName')]"
+          },
+          "tshirtSize":{
+            "value":"[parameters('tshirtSize')]"
           }
         }
       }
