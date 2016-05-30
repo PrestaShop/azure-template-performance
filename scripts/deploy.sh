@@ -180,8 +180,6 @@ function configure_ansible()
   echo "${bkVmName}1"                                                                                                                      >> "${ANSIBLE_HOST_FILE}" 
   fi
   
-  
-  
 }
 
 function add_hosts()
@@ -234,7 +232,6 @@ function deploy_cluster()
   ansible-playbook deploy-prestashop.yml --extra-vars "ansistrano_release_version=$(date -u +%Y%m%d%H%M%SZ)" > /tmp/ansible.log 2>&1
   error_log "Fail to deploy front cluster !"
 }
-
 
 log "Execution of Install Script from CustomScript ..."
 

@@ -29,6 +29,7 @@
     - { role: geerlingguy.php }
     - { role: geerlingguy.apache-php-fpm  }
     - { role: carlosbuenosvinos.ansistrano-deploy }
+    - { role: ansible-csync2-lsyncd } 
 
   post_tasks:
     - name: "Change files permission on {{ documentroot }}" 
@@ -43,7 +44,7 @@
     
   roles:
     - { role: geerlingguy.mysql }  
-
+    
 - hosts: cluster
   become: True
   gather_facts: False    
