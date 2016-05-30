@@ -74,5 +74,7 @@ lsyncd_directories:
   - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/themes"
   - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/cache"
   - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/override"
+  - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/config"
+  
   
   
