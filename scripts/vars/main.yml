@@ -65,7 +65,7 @@ mysql_users:
     priv: "prestashop.*:ALL"
  
 ansistrano_deploy_via: "download_unarchive"    
-ansistrano_get_url: "https://github.com/PrestaShop/PrestaShop/archive/1.6.1.5.tar.gz"
+ansistrano_get_url: "https://filet.alterway.fr/selif/prestashop1615frtar.gz"
 ansistrano_deploy_to: "/var/www/azureshop"
 ansistrano_allow_anonymous_stats: no
 
