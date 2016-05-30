@@ -23,20 +23,28 @@
       set_fact:
         mysql_replication_master: "{{ groups['master'][0] }}"
   
-      
   roles:
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
     - { role: geerlingguy.apache-php-fpm  }
     - { role: carlosbuenosvinos.ansistrano-deploy }
-    - { role: ansible-csync2-lsyncd } 
 
-  post_tasks:
+# Specifics task for sync 
+- hosts: front
+  become: True
+  vars_files:
+    - vars/main.yml
+
+  pre_tasks:
     - name: "Change files permission on {{ documentroot }}" 
-      file: dest="{ documentroot }}" state=directory 
+      file: dest="{{ documentroot }}" state=directory 
             owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
             recurse=yes
             
+  roles:      
+    - { role: ansible-csync2-lsyncd }   
+            
+# Instalation of Mysql Cluster M/S            
 - hosts: back
   become: True
   vars_files:
