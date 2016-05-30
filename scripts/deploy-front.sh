@@ -169,7 +169,7 @@ function add_host_entry()
   for i in $(seq 0 $nFront)
   do
     let j=4+$i
-    echo "$frSubnetRoot}.${j}    ${frVmName}${i}" >> "${HOST_FILE}"
+    echo "${frSubnetRoot}.${j}    ${frVmName}${i}" >> "${HOST_FILE}"
     let k=$i+1
   done
 }
