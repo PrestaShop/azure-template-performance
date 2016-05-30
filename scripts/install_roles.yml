@@ -6,5 +6,5 @@
 - src: geerlingguy.apache-php-fpm 
 - src: carlosbuenosvinos.ansistrano-deploy 
 - src: carlosbuenosvinos.ansistrano-rollback
-- src: git@github.com:herveleclerc/ansible-csync2-lsyncd.git
+- src: https://github.com/herveleclerc/ansible-csync2-lsyncd.git
   scm: git
