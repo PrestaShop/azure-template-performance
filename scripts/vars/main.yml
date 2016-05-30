@@ -71,8 +71,8 @@ ansistrano_allow_anonymous_stats: no
 
 lsyncd_directories: 
   - "{{ documentroot }}/current/prestashop/img"
-  - "{{ documentroot }}/current/prestashop/thmes"
+  - "{{ documentroot }}/current/prestashop/themes"
   - "{{ documentroot }}/current/prestashop/cache"
-  - "{{ documentroot }}/current/prestashop/overrides"
+  - "{{ documentroot }}/current/prestashop/override"
   
   
