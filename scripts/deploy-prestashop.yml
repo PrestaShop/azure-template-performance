@@ -19,10 +19,6 @@
       with_items:
         - unzip
         
-    - name: Create dynamic MySQL variables.
-      set_fact:
-        mysql_replication_master: "{{ groups['master'][0] }}"
-  
   roles:
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
@@ -58,11 +54,25 @@
   roles:
     - { role: geerlingguy.mysql }  
     
-- hosts: cluster
+- hosts: front
   become: True
-  gather_facts: False    
+  gather_facts: True    
   tasks:
-  - name: "Install missing package if needed"
-    apt: name={{ item }} update_cache=yes
-    with_items:
-      - htop
+  - name: "Install prestashop default shop"
+    command: >
+      php {{ prestashop_dir }}/install/index_cli.php 
+      --domain="{{ prestashop_fqdn }}"
+      --db_server="{{ groups['master'][0] }}" 
+      --db_name="{{ prestashop_dbname }}"
+      --db_user="{{ prestashop_user }}" 
+      --db_password="{{ prestashop_password }}" 
+      --firstname="{{ prestashop_firstname }}"
+      --lastname="{{ prestashop_lastname }}"
+      --password="prestashop"
+      --email="{{ prestashop_email }}"
+      --newsletter=0
+      --send_email=0
+    when: "{{ inventory_hostname }}" == "{{ groups['front'][0] }}"
+      
+   
+  

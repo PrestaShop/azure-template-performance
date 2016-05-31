@@ -1,14 +1,23 @@
 documentroot: "/var/www/azureshop"
 prestashop_dir: "{{ documentroot }}/current/prestashop"
 
+
+prestashop_firstname: "herve"
+prestashop_lastname: "leclerc"
+prestashop_email: "herve.leclerc@alterway.fr"
+prestashop_dbname: "prestashop"
+prestashop_user: "prestashop"
+prestashop_password: "prestashop"
+
+prestashop_fqdn: "azureshop.com"
 prestashop_owner: "www-data"
 prestashop_group: "www-data"
 
-
+apache_remove_default_vhost: true
 apache_listen_port: 80
 apache_vhosts:
-  - servername: "www.azureshop.com"
-    serveralias: "azureshop.com"
+  - servername: "{{ prestashop_fqdn }}"
+    serveralias: "www.{{ prestashop_fqdn }}"
     documentroot: "{{ prestashop_dir }}"
     extra_parameters: |
               ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ prestashop_dir }}"
@@ -55,14 +64,16 @@ overwrite_global_mycnf: yes
 mysql_replication_user: {name: 'replicator', password: 'prestashop'}
 
 mysql_databases: 
-  - name: prestashop
+  - name: "{{ prestashop_dbname }}"
     encoding: utf8
     collation: utf8_general_ci
+    replicate: 1
+    
 mysql_users: 
-  - name: prestashop
+  - name: "{{ prestashop_user }}"
     host: "%"
-    password: "prestashop"
-    priv: "prestashop.*:ALL"
+    password: "{{ prestashop_password }}"
+    priv: "{{ prestashop_dbname }}.*:ALL"
  
 ansistrano_deploy_via: "download_unarchive"    
 ansistrano_get_url: "https://filet.alterway.fr/selif/prestashop1615frtar.gz"
