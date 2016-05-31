@@ -81,13 +81,6 @@ ansistrano_deploy_to: "/var/www/azureshop"
 ansistrano_allow_anonymous_stats: no
 
 lsyncd_directories:
-  - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop
-  
-  #- "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/img"
-  #- "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/themes"
-  #- "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/cache"
-  #- "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/override"
-  #- "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop/config"
-  
+  - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop"
   
   
