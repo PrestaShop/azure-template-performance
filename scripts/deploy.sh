@@ -227,9 +227,17 @@ function configure_deployment()
   
 }
 
+function create_extra_vars()
+{
+  d="$(date -u +%Y%m%d%H%M%SZ)"  
+  printf "{\n  \"ansistrano_release_version\": \"%s\",\n" "$d"            > "${EXTRA_VARS}"
+  printf "  \"prestashop_password\": \"%s\"\n}" "${prestashop_password}" >> "${EXTRA_VARS}"
+
+}
+
 function deploy_cluster()
 {
-  ansible-playbook deploy-prestashop.yml --extra-vars "ansistrano_release_version=$(date -u +%Y%m%d%H%M%SZ)" > /tmp/ansible.log 2>&1
+  ansible-playbook deploy-prestashop.yml --extra-vars "@${EXTRA_VARS}" > /tmp/ansible.log 2>&1
   error_log "Fail to deploy front cluster !"
 }
 
@@ -254,11 +262,14 @@ numberOfBack="${8}"
 hcVmName="${9}"
 frVmName="${10}"
 bkVmName="${11}"
+prestashop_password="${12:-prestashop}"
 
 
 HOST_FILE="/etc/hosts"
 ANSIBLE_HOST_FILE="/etc/ansible/hosts"
 ANSIBLE_CONFIG_FILE="/etc/ansible/ansible.cfg"
+
+EXTRA_VARS="${CWD}/extra_vars.json"
 
 ##
 fix_etc_hosts
@@ -270,6 +281,7 @@ add_hosts
 configure_ansible
 get_roles
 configure_deployment
+create_extra_vars
 deploy_cluster
 
 log "Success : End of Execution of Install Script from CustomScript"

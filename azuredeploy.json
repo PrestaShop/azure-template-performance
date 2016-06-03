@@ -164,6 +164,12 @@
       "metadata": {
         "description": "T-shirt size of the PrestaShop cluster"
       }
+    },
+    "prestashop_password":{
+      "type":"securestring",
+      "metadata":{
+        "description":"Prestatshop Admin Password"
+      }
     } 
   },
   "variables":{
@@ -239,7 +245,8 @@
     "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'),' ')]",
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
-    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'))]",
+    "paramsExtra":"[concat(parameters('prestashop_password'),' 15')]",
+    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'))]",
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
