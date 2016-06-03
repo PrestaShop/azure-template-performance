@@ -230,9 +230,12 @@ function configure_deployment()
 function create_extra_vars()
 {
   d="$(date -u +%Y%m%d%H%M%SZ)"  
-  printf "{\n  \"ansistrano_release_version\": \"%s\",\n" "${d}"          > "${EXTRA_VARS}"
-  printf "  \"prestashop_lb_name\": \"%s\",\n" "${lbName}"               >> "${EXTRA_VARS}"
-  printf "  \"prestashop_password\": \"%s\"\n}" "${prestashop_password}" >> "${EXTRA_VARS}"
+  printf "{\n  \"ansistrano_release_version\": \"%s\",\n" "${d}"            > "${EXTRA_VARS}"
+  printf "  \"prestashop_lb_name\": \"%s\",\n" "${lbName}"                 >> "${EXTRA_VARS}"
+  printf "  \"prestashop_firstname\": \"%s\",\n" "${prestashop_firstname}" >> "${EXTRA_VARS}"
+  printf "  \"prestashop_lastname\": \"%s\",\n" "${prestashop_lastname}"   >> "${EXTRA_VARS}"
+  printf "  \"prestashop_email\": \"%s\",\n" "${prestashop_email}"         >> "${EXTRA_VARS}"
+  printf "  \"prestashop_password\": \"%s\"\n}" "${prestashop_password}"   >> "${EXTRA_VARS}"
 }
 
 function deploy_cluster()
@@ -264,6 +267,9 @@ frVmName="${10}"
 bkVmName="${11}"
 prestashop_password="${12:-prestashop}"
 lbName="${13}"
+prestashop_firstname="${14}"
+prestashop_lastname="${15}"
+prestashop_email="${16}"
 
 
 HOST_FILE="/etc/hosts"

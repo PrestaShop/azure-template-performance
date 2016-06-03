@@ -165,13 +165,31 @@
         "description": "T-shirt size of the PrestaShop cluster"
       }
     },
+    "prestashop_firstname":{
+      "type":"string",
+      "metadata":{
+        "description":"Prestatshop Admin Firstname"
+      }
+    },
+    "prestashop_lastname":{
+      "type":"string",
+      "metadata":{
+        "description":"Prestatshop Admin Lastname"
+      }
+    },
+    "prestashop_email":{
+      "type":"string",
+      "metadata":{
+        "description":"Prestatshop Admin email"
+      }
+    },
     "prestashop_password":{
       "type":"securestring",
       "metadata":{
         "description":"Prestatshop Admin Password"
       }
-    } 
-  },
+    }
+  }, 
   "variables":{
     "templatesBaseURL":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/",
     "configuration":{
@@ -247,7 +265,8 @@
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
     "paramsExtra":"[concat(parameters('prestashop_password'),' ',variables('dnsNameForFrontPublicIP'),'.',variables('location'))]",
-    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'))]",
+    "paramsAdmin":"[concat(parameters('prestashop_firstname'),' ',parameters('prestashop_lastname'),'.',parameters('prestashop_email'))]",
+    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'),' ',variables('paramsAdmin'))]",
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
