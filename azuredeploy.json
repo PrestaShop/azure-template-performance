@@ -695,7 +695,7 @@
   ],
   "outputs": {
     "Ansible FQDN": {
-      "value": "[concat(variables('dnsNameForAnsiblePublicIP'),'cloudapp.azure.com')]",
+      "value": "[concat(variables('dnsNameForAnsiblePublicIP'),'.cloudapp.azure.com')]",
       "type": "string" 
     }
   }
