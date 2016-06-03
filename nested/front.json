@@ -82,12 +82,18 @@
       "metadata":{
         "description":"Basename of front VMs"
       }
+    },
+    "dnsNameForFrontPublicIP":{
+      "type":"string",
+      "metadata":{
+        "description":"LB Name"
+      }
     }
   },
   "variables":{
     "frVmStorageAccountContainerName":"vhds",
     "sshKeyPath":"[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-    "dnsNameForFrontPublicIP":"[concat('lb00', resourceGroup().name)]",
+    
     "dnsserver":"8.8.8.8",
     "location":"[resourceGroup().location]",
     "imagePublisher":"Canonical",
@@ -209,7 +215,7 @@
       "properties":{
         "publicIPAllocationMethod":"[variables('frPublicIPAddressType')]",
         "dnsSettings":{
-          "domainNameLabel":"[variables('dnsNameForFrontPublicIP')]"
+          "domainNameLabel":"[parameters('dnsNameForFrontPublicIP')]"
         }
       }
     },
@@ -357,7 +363,7 @@
   ],
   "outputs": {
     "SHOP FQDN": {
-      "value": "[concat(variables('dnsNameForFrontPublicIP'),'cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'cloudapp.azure.com')]",
       "type": "string" 
     }
   }
