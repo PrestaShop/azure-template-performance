@@ -1,7 +1,6 @@
 documentroot: "/var/www/azureshop"
 prestashop_dir: "{{ documentroot }}/current/prestashop"
 
-
 prestashop_firstname: "herve"
 prestashop_lastname: "leclerc"
 prestashop_email: "herve.leclerc@alterway.fr"
