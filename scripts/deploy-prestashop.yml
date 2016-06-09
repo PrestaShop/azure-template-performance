@@ -1,12 +1,16 @@
 - hosts: cluster
   become: True
-  gather_facts: True
-  vars_files:
-    - vars/main.yml
+  gather_facts: false
+
   tasks:
   - name: "Wait for port 3333 to be ready"
     local_action: wait_for port=3333 host="{{ inventory_hostname }}" state=started connect_timeout=2 timeout=600
 
+- hosts: cluster
+  become: True
+  gather_facts: true
+  vars_files:
+    - vars/main.yml
   roles:      
     - { role: ansible-init-raid }   
 
