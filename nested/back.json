@@ -270,7 +270,7 @@
             {
               "name": "datadisk1",
               "diskSizeGB": "[variables('clusterSpec').ddSize]",
-              "lun": 0,
+              "lun": 1,
               "caching": "None",
               "createOption": "Empty",
               "vhd": {
