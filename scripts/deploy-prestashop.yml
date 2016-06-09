@@ -5,6 +5,8 @@
   - name: "Wait for port 3333 to be ready"
     local_action: wait_for port=3333 host="{{ inventory_hostname }}" state=started connect_timeout=2 timeout=600
 
+ roles:      
+    - { role: ansible-init-raid }   
 
 - hosts: front
   become: True

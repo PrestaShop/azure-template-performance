@@ -29,7 +29,7 @@
     },
     "frVmSize":{
       "type":"string",
-      "defaultValue":"Standard_A0",
+      "defaultValue":"Standard_A3",
       "allowedValues":[
         "Standard_A0",
         "Standard_A1",
@@ -92,7 +92,7 @@
     },
     "backVmSize":{
       "type":"string",
-      "defaultValue":"Standard_A1",
+      "defaultValue":"Standard_A3",
       "allowedValues":[
         "Standard_A0",
         "Standard_A1",
@@ -338,6 +338,9 @@
           },
           "dnsNameForFrontPublicIP": {
              "value":"[variables('dnsNameForFrontPublicIP')]"
+          },
+          "tshirtSize":{
+            "value":"[parameters('tshirtSize')]"
           }
         }
       }

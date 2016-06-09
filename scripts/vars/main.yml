@@ -1,4 +1,10 @@
-documentroot: "/var/www/azureshop"
+
+raid_file_system: "xfs"
+raid_mountpoint: "/data"
+raid_device: "/dev/md127"
+system_devices: "/dev/sda|/dev/sdb"
+
+documentroot: "/{{ raid_mountpoint }}/www/azureshop"
 prestashop_dir: "{{ documentroot }}/current/prestashop"
 
 prestashop_firstname: "herve"
@@ -57,6 +63,10 @@ php_packages:
   - php7.0-mysql
   - php7.0-mcrypt 
 
+
+# Localisation
+mysql_datadir: "{{ raid_mountpoint }}/lib/mysql"
+
 # Mysql Default
 mysql_enabled_on_startup: yes
 mysql_root_password: root
@@ -78,7 +88,7 @@ mysql_users:
  
 ansistrano_deploy_via: "download_unarchive"    
 ansistrano_get_url: "https://filet.alterway.fr/selif/prestashop1615frtar.gz"
-ansistrano_deploy_to: "/var/www/azureshop"
+ansistrano_deploy_to: "/{{ raid_mountpoint }}/www/azureshop"
 ansistrano_allow_anonymous_stats: no
 
 lsyncd_directories:

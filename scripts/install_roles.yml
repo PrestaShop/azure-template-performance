@@ -9,3 +9,5 @@
 - src: carlosbuenosvinos.ansistrano-rollback
 - src: https://github.com/herveleclerc/ansible-csync2-lsyncd.git
   scm: git
+- src: https://github.com/herveleclerc/ansible-init-raid.git
+  scm: git

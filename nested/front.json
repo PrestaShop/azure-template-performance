@@ -88,9 +88,31 @@
       "metadata":{
         "description":"LB Name"
       }
+    },
+    "tshirtSize":{
+      "type":"string",
+      "metadata":{
+        "description":"T-shirt size of the PrestaShop cluster"
+      }
     }
   },
   "variables":{
+    "clusterSpec": "[variables(concat('tshirtSize', parameters('tshirtSize')))]",
+    "tshirtSizeSmall": {
+      "front_vm_size": "Standard_A1",
+      "sql_vm_size": "Standard_A1",
+      "ddSize": 512
+    },
+    "tshirtSizeMedium": {
+      "front_vm_size": "Standard_A2",
+      "sql_vm_size": "Standard_D1",
+      "ddSize": 512
+    },
+    "tshirtSizeLarge": {
+      "front_vm_size": "Standard_A3",
+      "sql_vm_size": "Standard_D2",
+      "ddSize": 1023
+    },
     "frVmStorageAccountContainerName":"vhds",
     "sshKeyPath":"[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     
@@ -343,7 +365,29 @@
             },
             "caching":"ReadWrite",
             "createOption":"FromImage"
-          }
+          },
+          "dataDisks": [
+            {
+              "name": "datadisk0",
+              "diskSizeGB": "[variables('clusterSpec').ddSize]",
+              "lun": 0,
+              "caching": "None",
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', parameters('frStorageAccountName'), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data0', copyindex(), '.vhd')]"
+              }
+            },
+            {
+              "name": "datadisk1",
+              "diskSizeGB": "[variables('clusterSpec').ddSize]",
+              "lun": 0,
+              "caching": "None",
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', parameters('frStorageAccountName'), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data1', copyindex(), '.vhd')]"
+              }
+            }
+          ]
         },
         "networkProfile":{
           "networkInterfaces":[
