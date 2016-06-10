@@ -214,7 +214,7 @@
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
     "paramsExtra":"[concat(parameters('prestashop_password'),' ',variables('dnsNameForFrontPublicIP'),'.',variables('location'))]",
-    "paramsAdmin":"[concat(parameters('prestashop_firstname'),' ',parameters('prestashop_lastname'),'.',parameters('prestashop_email'))]",
+    "paramsAdmin":"[concat(parameters('prestashop_firstname'),' ',parameters('prestashop_lastname'),' ',parameters('prestashop_email'))]",
     "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'),' ',variables('paramsAdmin'))]",
     "apiVersion":{
       "resources":{
