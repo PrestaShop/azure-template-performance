@@ -78,7 +78,7 @@
 
 12. [x] [All `imageReferences` for virtual machines or virtual machine scale sets **MUST** use images that are available in the Azure Marketplace or core platform images.]
 13. [x] [All `imageReferences` for virtual machines or virtual machine scale sets that do not belong to the marketplace publisher **MUST** specify `latest` for the `version` property.]
-14. [x][All Linux VMs created that support the use of SSH **MUST** support using public key authentication for any provisioned user.]
+14. [x] [All Linux VMs created that support the use of SSH **MUST** support using public key authentication for any provisioned user.]
 
 ####**Storage**
 
