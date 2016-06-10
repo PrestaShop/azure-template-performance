@@ -4,7 +4,7 @@ raid_mountpoint: "/data"
 raid_device: "/dev/md127"
 system_devices: "/dev/sda|/dev/sdb"
 
-documentroot: "/{{ raid_mountpoint }}/www/azureshop"
+documentroot: "{{ raid_mountpoint }}/www/azureshop"
 prestashop_dir: "{{ documentroot }}/current/prestashop"
 
 prestashop_firstname: "herve"
@@ -65,6 +65,7 @@ php_packages:
 
 
 # Localisation
+#mysql_datadir: "/var/lib/mysql"
 mysql_datadir: "{{ raid_mountpoint }}/lib/mysql"
 
 # Mysql Default

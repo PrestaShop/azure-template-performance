@@ -56,10 +56,17 @@
     - vars/main.yml
   
   pre_tasks:
-    - name: Create dynamic MySQL variables.
+    - name: "Create dynamic MySQL variables."
       set_fact:
         mysql_replication_master: "{{ groups['master'][0] }}"
-    
+
+    - name: "set Alias for new mysql location"
+      command: >
+        echo "alias /var/lib/mysql/ -> {{ mysql_datadir }}/," >> /etc/apparmor.d/tunables/alias
+
+    - name: "Reload apparmor"
+      service: name=apparmor state=reloaded
+       
   roles:
     - { role: ansible-role-mysql }  
     
