@@ -36,11 +36,8 @@
 
 
 
-       # Microsoft Azure Marketplace Solution Templates - Validation Criteria for Virtual Machine based offers
-
-##The following are the Mandatory and Recommended criteria for all solution templates used to provision Virtual Machine based offers from the Azure Marketplace
-
-###**Mandatory** — these are mandatory requirements that VM-based solution templates must meet in order to deploy into the Azure Marketplace.
+### Microsoft Azure Marketplace Solution Templates - Validation Criteria for Virtual Machine based offers
+### Check list fot the project
 
 ####**Templates Parameters**
 
