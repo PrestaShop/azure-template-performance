@@ -2,6 +2,12 @@
   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion":"1.0.0.0",
   "parameters":{
+    "domainNameSuffix":{
+      "type":"string",
+      "metadata":{
+        "description":"Suffix for Public IPs"
+      }
+    },
     "hcUsername":{
       "type":"string",
       "metadata":{
@@ -9,11 +15,25 @@
       },
       "defaultValue":"pr35745h0p"
     },
+    "authenticationType": {
+      "type": "string",
+      "allowedValues": [
+        "password",
+        "sshPublicKey"
+      ]
+    },
+    "hcPassword": {
+      "type": "securestring",
+      "defaultValue": "", 
+      "metadata": {
+        "description": "Password for the Virtual Machine. Not used if authenticationType of sshPublicKey."
+      }
+    },
     "sshKeyData":{
       "type":"string",
       "defaultValue":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4pucOaPkE1/U+TmarD0+0OfBt7zHa0vC+PJlJD0ka59UIm2kzsvFZlIDyHMils/1f4lgvVX/R7jXT8pTXRj79T7u4jyq2o2JAtx2FNuawJyD6GBRzburuwJkdCEYnJWEiiARS6ivnvZUVrHtGd+c29xNuDb6IqYVWkeMGf4RQ3S5M+jG+W3Yf8XK7OcipNYJtExbKY5/M1AykNSggxuwsd443uyr+bCWB2g+YV1HnuUS+DxptZMh5tFT3rQyzshKMjWvZY64aAh+54Yok8aQhWsKFAw1s9ZhxJ9cTg5X4eUgiPP2LYX7MxTagyFdlqd8MbKYQF0qhzgCy2TfH/GhV hleclerc@machl.home",
       "metadata":{
-        "description":"Public key for SSH authentication"
+        "description":"SSH RSA public key file as a string. Not used if authenticationType of password."
       }
     },
     "ubuntuOSVersion":{
@@ -153,6 +173,30 @@
         "description":"Number of Back nodes to create >=2"
       }
     },
+    "frStorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_RAGRS",
+        "Standard_GRS"
+      ],
+      "metadata":{
+        "description":"Storage Account type for Front VMs"
+      }
+    },
+    "bkStorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_RAGRS",
+        "Standard_GRS"
+      ],
+      "metadata":{
+        "description":"Storage Account type for Back VMs"
+      }
+    },
     "tshirtSize": {
       "type": "string",
       "defaultValue": "Small",
@@ -188,19 +232,25 @@
       "metadata":{
         "description":"Prestatshop Admin Password"
       }
+    },
+    "templatesBaseURL":{
+      "type":"string",
+      "metadata": {
+        "description":"Base template URL for nested template"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/"
     }
   }, 
   "variables":{
-    "templatesBaseURL":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/",
     "configuration":{
-      "frontTemplateURL":"[concat(variables('templatesBaseURL'),'/front.json')]",
-      "backTemplateURL":"[concat(variables('templatesBaseURL'),'/back.json')]"
+      "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/front.json')]",
+      "backTemplateURL":"[concat(parameters('templatesBaseURL'),'/back.json')]"
     },
     "frFaultDomainCount":"3",
     "frUpdateDomainCount":"5",
     "bkFaultDomainCount":"3",
     "bkUpdateDomainCount":"5",
-    "dnsNameForAnsiblePublicIP":"[concat('hc00', resourceGroup().name)]",
+    "dnsNameForAnsiblePublicIP":"[concat('hc-',parameters('domainNameSuffix'))]",
     "dnsserver":"8.8.8.8",
     "location":"[resourceGroup().location]",
     "imagePublisher":"Canonical",
@@ -224,12 +274,10 @@
     "bkSubnetPrefix":"[concat(variables('bkSubnetRoot'),variables('subnetCIDR'))]",
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
     "hcStorageAccountName":"[concat('hc', resourceGroup().name)]",
-    "dnsNameForFrontPublicIP":"[concat('lb00', resourceGroup().name)]",
+    "dnsNameForFrontPublicIP":"[concat('lb-',parameters('domainNameSuffix'))]",
     "hcStorageAccountType":"Standard_LRS",
     "frStorageAccountName":"[concat('fr', resourceGroup().name)]",
-    "frStorageAccountType":"Standard_LRS",
     "bkStorageAccountName":"[concat('bk', resourceGroup().name)]",
-    "bkStorageAccountType":"Standard_LRS",
     "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
     "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
     "hcPublicIPAddressName":"hcPublicIP",
@@ -275,6 +323,26 @@
       "storage":"2015-05-01-preview",
       "compute":"2015-06-15",
       "deployment":"2016-02-01"
+    },
+    "osProfile_hc_password": {
+      "computerName": "[variables('hcVmName')]",
+      "adminUsername": "[parameters('hcUsername')]",
+      "adminPassword": "[parameters('hcPassword')]"
+    },
+    "osProfile_hc_sshPublicKey": {
+      "computerName": "[variables('hcVmName')]",
+      "adminUsername": "[parameters('hcUsername')]",
+      "linuxConfiguration": {
+        "disablePasswordAuthentication": "true",
+        "ssh": {
+          "publicKeys": [
+            {
+              "path":"[variables('sshKeyPath')]",
+              "keyData":"[parameters('sshKeyData')]"
+            }
+          ]
+        }
+      }
     }
   },
   "resources":[
@@ -316,7 +384,7 @@
             "value":"[variables('frStorageAccountName')]"
           },
           "frStorageAccountType":{
-            "value":"[variables('frStorageAccountType')]"
+            "value":"[parameters('frStorageAccountType')]"
           },
           "subnetCIDR":{
             "value":"[variables('subnetCIDR')]"
@@ -383,7 +451,7 @@
             "value":"[variables('bkStorageAccountName')]"
           },
           "bkStorageAccountType":{
-            "value":"[variables('bkStorageAccountType')]"
+            "value":"[parameters('bkStorageAccountType')]"
           },
           "subnetCIDR":{
             "value":"[variables('subnetCIDR')]"
@@ -646,10 +714,10 @@
             "[variables('ansibleVarsMastersUrl')]",
             "[variables('ansibleVarsSlavesUrl')]",
             "[variables('ansibleVarsDefaultsUrl')]"
-          ],
-          "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]",
-          "protectedSettings":{
-          }
+          ]
+        },
+        "protectedSettings":{
+           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]"
         }
       }
     },
@@ -668,21 +736,7 @@
         "hardwareProfile":{
           "vmSize":"[variables('hcVmSize')]"
         },
-        "osProfile":{
-          "computerName":"[variables('hcVmName')]",
-          "adminUsername":"[parameters('hcUsername')]",
-          "linuxConfiguration":{
-            "disablePasswordAuthentication":"true",
-            "ssh":{
-              "publicKeys":[
-                {
-                  "path":"[variables('sshKeyPath')]",
-                  "keyData":"[parameters('sshKeyData')]"
-                }
-              ]
-            }
-          }
-        },
+        "osProfile": "[variables(concat('osProfile_front_', parameters('authenticationType')))]",
         "storageProfile":{
           "imageReference":{
             "publisher":"[variables('imagePublisher')]",
@@ -718,6 +772,10 @@
   "outputs": {
     "Ansible FQDN": {
       "value": "[concat(variables('dnsNameForAnsiblePublicIP'),'.',variables('location'),'.cloudapp.azure.com')]",
+      "type": "string" 
+    },
+    "SHOP FQDN": {
+      "value": "[concat(variables('dnsNameForFrontPublicIP'),'.',variables('location'),'cloudapp.azure.com')]",
       "type": "string" 
     }
   }
