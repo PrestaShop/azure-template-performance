@@ -1,0 +1,265 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "tshirtSize",
+        "type": "Microsoft.Common.DropDown",
+        "label": "Topology Size",
+        "defaultValue": "Small",
+        "toolTip": "The size of the virtual machines to use in the cluster.",
+        "constraints": {
+          "allowedValues": [
+            {
+              "label": "Small",
+              "value": "Small"
+            },
+            {
+              "label": "Medium",
+              "value": "Medium"
+            },
+            {
+              "label": "Large",
+              "value": "Large"
+            }
+          ]
+        }
+      },
+      {
+        "name": "section1",
+        "type": "Microsoft.Common.Section",
+        "label": "VM Credentials",
+        "elements": [
+          {
+            "name": "hcUsername",
+            "type": "Microsoft.Compute.UserNameTextBox",
+            "label": "VM username",
+            "toolTip": "Administrative username for the virtual machines.",
+            "osPlatform": "Linux",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "hcPassword",
+            "type": "Microsoft.Compute.CredentialsCombo",
+            "label": {
+              "authenticationType": "Authentication type",
+              "password": "Password",
+              "confirmPassword": "Confirm password",
+              "sshPublicKey": "SSH public key"
+            },
+            "constraints": {
+              "required": true
+            },
+            "options": {
+              "hideConfirmation": false
+            },
+            "osPlatform": "Linux"
+          }
+        ]
+      },
+      {
+        "name": "section2",
+        "type": "Microsoft.Common.Section",
+        "label": "MySQL Credentials",
+        "elements": [
+          {
+            "name": "mySQLPassword",
+            "type": "Microsoft.Common.PasswordBox",
+            "label": {
+              "password": "MySQL password",
+              "confirmPassword": "Confirm MySQL password"
+            },
+            "toolTip": "The password for the MySQL administrator account.",
+            "constraints": {
+              "required": true,
+              "regex": "^.{8,}$",
+              "validationMessage": "Password must contain at least 8 characters."
+            },
+            "options": {
+              "hideConfirmation": false
+            }
+          }
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "name": "deploymentDetails",
+        "label": "Deployment Parameters",
+        "subLabel": {
+          "preValidation": "Required",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Deployment Parameters",
+        "elements": [
+          {
+            "name": "domainNameSuffix",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "Public IP address",
+              "domainNameLabel": "Domain Name Suffix"
+            },
+            "defaultValue": {
+              "domainNameSuffix": "frontEndIp"
+            },
+            "constraints": {
+              "required": {
+                "domainNameLabel": true
+              }
+            },
+            "options": {
+              "hideNone": true,
+              "hideDomainNameLabel": false,
+              "hideExisting": true
+            }
+          },
+          {
+            "name": "vnet",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+              "virtualNetwork": "Virtual Network",
+              "subnets": "Subnets"
+            },
+            "defaultValue": {
+              "name": "vnet-prestashop",
+              "addressPrefixSize": "/16"
+            },
+            "constraints": {
+              "minAddressPrefixSize": "/16"
+            },
+            "subnets": {
+              "subnet1": {
+                "label": "Front subnet",
+                "defaultValue": {
+                  "name": "front-subnet",
+                  "addressPrefixSize": "/24"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/24"
+                }
+              },
+              "subnet2": {
+                "label": "MySQL subnet",
+                "defaultValue": {
+                  "name": "sql-subnet",
+                  "addressPrefixSize": "/24"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/24"
+                }
+              }
+            }
+          },
+          {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "toolTip": "Storage account where the VM disks will be stored.",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            },
+            "constraints": {
+              "required": true,
+              "excludedTypes": [
+                "Premium_LRS"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "prestashopInfo",
+        "label": "PrestaShop Parameters",
+        "subLabel": {
+          "preValidation": "Required",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "PrestaShop Parameters",
+        "elements": [
+          {
+            "name": "adminFirstName",
+            "type": "Microsoft.Common.TextBox",
+            "label": "First name",
+            "defaultValue": "",
+            "toolTip": "PrestaShop administrator first name.",
+            "constraints": {
+              "required": true,
+              "regex": "^.{2,}$",
+              "validationMessage": "First name must contain at least 2 characters."
+            }
+          },
+          {
+            "name": "adminLastName",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Last name",
+            "defaultValue": "",
+            "toolTip": "PrestaShop administrator last name",
+            "constraints": {
+              "required": true,
+              "regex": "^.{2,}$",
+              "validationMessage": "Last name must contain at least 2 characters."
+            }
+          },
+          {
+            "name": "adminEmail",
+            "type": "Microsoft.Common.TextBox",
+            "label": "E-mail",
+            "defaultValue": "",
+            "toolTip": "PrestaShop administrator e-mail",
+            "constraints": {
+              "required": true,
+              "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
+              "validationMessage": "The e-mail address must be correctly formed."
+            }
+          },
+          {
+            "name": "adminPSPassword",
+            "type": "Microsoft.Common.PasswordBox",
+            "label": {
+              "password": "Password",
+              "confirmPassword": "Confirm password"
+            },
+            "toolTip": "PrestaShop administrator password",
+            "constraints": {
+              "required": true,
+              "regex": "^.{8,}$",
+              "validationMessage": "Password must contain at least 8 characters."
+            },
+            "options": {
+              "hideConfirmation": false
+            }
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "tshirtSize": "[basics('tshirtSize')]",
+      "hcUsername": "[basics('section1').hcUsername]",
+      "authenticationType": "[basics('section1').hcPassword.authenticationType]",
+      "adminPassword": "[basics('section1').hcPassword.password]",
+      "sshPublicKey": "[basics('section1').hcPassword.sshPublicKey]",
+      "mySQLPassword": "[basics('section2').mySQLPassword]",
+      "storageAccountNewOrExisting": "[steps('deploymentDetails').storageAccount.newOrExisting]",
+      "storageAccountName": "[steps('deploymentDetails').storageAccount.name]",
+      "storageAccountType": "[steps('deploymentDetails').storageAccount.type]",
+      "dnsNameForPublicIP": "[steps('deploymentDetails').publicIp.domainNameLabel]",
+      "publicIPAddressName": "[steps('deploymentDetails').publicIp.name]",
+       "vnetNewOrExisting": "[steps('deploymentDetails').vnet.newOrExisting]",
+      "vnetName": "[steps('deploymentDetails').vnet.name]",
+      "vnetPrefix": "[steps('deploymentDetails').vnet.addressPrefix]",
+      "vnetRG": "[steps('deploymentDetails').vnet.resourceGroup]",
+      "vnetSubnet1Name": "[steps('deploymentDetails').vnet.subnets.subnet1.name]",
+      "vnetSubnet1Prefix": "[steps('deploymentDetails').vnet.subnets.subnet1.addressPrefix]",
+      "vnetSubnet2Name": "[steps('deploymentDetails').vnet.subnets.subnet2.name]",
+      "vnetSubnet2Prefix": "[steps('deploymentDetails').vnet.subnets.subnet2.addressPrefix]",
+      "adminFirstName": "[steps('prestashopInfo').adminFirstName]",
+      "adminLastName": "[steps('prestashopInfo').adminLastName]",
+      "adminEmail": "[steps('prestashopInfo').adminEmail]",
+      "adminPSPassword": "[steps('prestashopInfo').adminPSPassword]",
+      "location": "[location()]"
+    }
+  }
+}

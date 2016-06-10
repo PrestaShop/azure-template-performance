@@ -23,8 +23,8 @@ azure_suffix: ".cloudapp.azure.com"
 apache_remove_default_vhost: true
 apache_listen_port: 80
 apache_vhosts:
-  - servername: "{{ prestashop_fqdn }}"
-    serveralias: "{{ prestashop_lb_name }}{{ azure_suffix }}"
+  - servername:  "{{ prestashop_lb_name }}{{ azure_suffix }}"
+    serveralias: "{{ prestashop_fqdn }}"
     documentroot: "{{ prestashop_dir }}"
     extra_parameters: |
               ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ prestashop_dir }}"
