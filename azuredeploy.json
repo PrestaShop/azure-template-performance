@@ -157,7 +157,7 @@
     "imagePublisher":"Canonical",
     "imageOffer":"UbuntuServer",
     "hcOSDiskName":"hcosdisk",
-    "keyStorageAccountName":"[concat('key', resourceGroup().name)]",
+    "keyStorageAccountName":"[concat('key', uniquestring(resourceGroup().id, deployment().name))]",
     "keyStorageAccountType":"Standard_LRS",
     "hcNicName":"hcVnic",
     "virtualNetworkName":"[concat('vNet', resourceGroup().name)]",
@@ -174,11 +174,11 @@
     "bkSubnetName":"bkSubnet",
     "bkSubnetPrefix":"[concat(variables('bkSubnetRoot'),variables('subnetCIDR'))]",
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
-    "hcStorageAccountName":"[concat('hc', resourceGroup().name)]",
+    "hcStorageAccountName":"[concat('hc', uniquestring(resourceGroup().id, deployment().name) )]",
     "dnsNameForFrontPublicIP":"[concat('lb-',parameters('domainNameSuffix'))]",
     "hcStorageAccountType":"Standard_LRS",
-    "frStorageAccountName":"[concat('fr', resourceGroup().name)]",
-    "bkStorageAccountName":"[concat('bk', resourceGroup().name)]",
+    "frStorageAccountName":"[concat('fr', uniquestring(resourceGroup().id, deployment().name))]",
+    "bkStorageAccountName":"[concat('bk', uniquestring(resourceGroup().id, deployment().name))]",
     "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
     "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
     "hcPublicIPAddressName":"hcPublicIP",
@@ -637,7 +637,7 @@
         "hardwareProfile":{
           "vmSize":"[variables('hcVmSize')]"
         },
-        "osProfile": "[variables(concat('osProfile_front_', parameters('authenticationType')))]",
+        "osProfile": "[variables(concat('osProfile_hc_', parameters('authenticationType')))]",
         "storageProfile":{
           "imageReference":{
             "publisher":"[variables('imagePublisher')]",
