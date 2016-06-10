@@ -310,6 +310,9 @@
           },
           "tshirtSize":{
             "value":"[parameters('tshirtSize')]"
+          },
+          "keyStorageAccountName":{
+            "value":"[variables('keyStorageAccountName')]"
           }
         }
       }
@@ -374,6 +377,9 @@
           },
           "tshirtSize":{
             "value":"[parameters('tshirtSize')]"
+          },
+          "keyStorageAccountName":{
+            "value":"[variables('keyStorageAccountName')]"
           }
         }
       }
