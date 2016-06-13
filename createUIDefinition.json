@@ -389,7 +389,7 @@
           {
             "name": "bkVmSize",
             "type": "Microsoft.Compute.SizeSelector",
-            "label": "Front VM Size",
+            "label": "Back VM Size",
             "toolTip": "The size of the Back VMs",
             "recommendedSizes": [
               "Standard_DS1",
@@ -533,10 +533,10 @@
       "hcPassword": "[basics('section1').hcPassword.password]",
       "sshKeyData": "[basics('section1').hcPassword.sshPublicKey]",
   
-      "frStorageAccountName": "[steps('deploymentDetails').storageAccountFront.name]",
-      "frStorageAccountType": "[steps('deploymentDetails').storageAccountFront.type]",
-      "bkStorageAccountName": "[steps('deploymentDetails').storageAccountFront.name]",
-      "bkStorageAccountType": "[steps('deploymentDetails').storageAccountFront.type]",
+      "frStorageAccountName": "[steps('clusterinfo').storageAccountFront.name]",
+      "frStorageAccountType": "[steps('clusterinfo').storageAccountFront.type]",
+      "bkStorageAccountName": "[steps('clusterinfo').storageAccountBack.name]",
+      "bkStorageAccountType": "[steps('clusterinfo').storageAccountBack.type]",
       
       "frVmSize":"[steps('clusterinfo').frVmSize",
       "bkVmSize":"[steps('clusterinfo').bkVmSize",
