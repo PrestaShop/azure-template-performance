@@ -203,7 +203,7 @@
           ]
         },
         "protectedSettings":{
-          "commandToExecute":"[concat(variables('customScriptBackCommand'),' ', parameters('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfBack'),' ',parameters('bkSubnetRoot'),' ',parameters('bkVmName'))]"
+          "commandToExecute":"[concat(variables('customScriptBackCommand'),'\"', parameters('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), '2015-05-01-preview').key1,'\" \"',parameters('adminUsername'),'\" \"',parameters('numberOfBack'),'\" \"',parameters('bkSubnetRoot'),'\" \"',parameters('bkVmName'),'\"')]"
         }
       }
     },

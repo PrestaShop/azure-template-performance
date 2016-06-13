@@ -314,7 +314,7 @@
           ]
         },
         "protectedSettings":{
-          "commandToExecute":"[concat(variables('customScriptFrontCommand'),' ', parameters('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), '2015-05-01-preview').key1,' ',parameters('adminUsername'),' ',parameters('numberOfFront'),' ',parameters('frSubnetRoot'),' ',parameters('frVmName'))]"
+          "commandToExecute":"[concat(variables('customScriptFrontCommand'),' \"', parameters('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), '2015-05-01-preview').key1,'\" \"',parameters('adminUsername'),'\" \"',parameters('numberOfFront'),'\" \"',parameters('frSubnetRoot'),'\" \"',parameters('frVmName'),'\"')]"
         }
       }
     },

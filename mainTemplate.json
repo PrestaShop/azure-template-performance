@@ -275,12 +275,12 @@
     "ansibleVarsSlavesUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsSlaveLocation'))]",
     "ansibleVarsDefaultsUrl":"[concat(variables('scriptsBaseUrl'),variables('ansibleVarsDefaultLocation'))]",
     "pythonAzureScriptUrl":"[concat(variables('scriptsBaseUrl'),'WriteSSHToPrivateStorage.py')]",
-    "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'))]",
-    "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
-    "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
-    "paramsExtra":"[concat(parameters('prestashop_password'),' ',parameters('dnsNameForFrontPublicIP'),'.',variables('location'))]",
-    "paramsAdmin":"[concat(parameters('prestashop_firstname'),' ',parameters('prestashop_lastname'),' ',parameters('prestashop_email'))]",
-    "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'),' ',variables('paramsAdmin'))]",
+    "paramsSubnets":"[concat(variables('hcSubnetRoot'),'\" \"',variables('frSubnetRoot'),'\" \"',variables('bkSubnetRoot'))]",
+    "paramsNbHosts":"[concat(parameters('numberOfFront'),'\" \"',parameters('numberOfBack'))]",
+    "paramsNames":"[concat(variables('hcVmName'),'\" \"',variables('frVmName'),'\" \"',variables('bkVmName'))]",
+    "paramsExtra":"[concat(parameters('prestashop_password'),'\" \"',parameters('dnsNameForFrontPublicIP'),'.',variables('location'))]",
+    "paramsAdmin":"[concat(parameters('prestashop_firstname'),'\" \"',parameters('prestashop_lastname'),'\" \"',parameters('prestashop_email'))]",
+    "paramsDeploy":"[concat(parameters('hcUsername'),'\" \"',variables('paramsSubnets'),'\" \"',variables('paramsNbHosts'),'\" \"',variables('paramsNames'),'\" \"',variables('paramsExtra'),'\" \"',variables('paramsAdmin'))]",
     "apiVersion":{
       "resources":{
         "deployments":"2015-01-01"
@@ -690,7 +690,7 @@
           ]
         },
         "protectedSettings":{
-           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' ', variables('keyStorageAccountName'),' ',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,' ',variables('paramsDeploy'))]"
+           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' \"',variables('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,'\" \"',variables('paramsDeploy'),'\"')]"
         }
       }
     },
