@@ -247,7 +247,7 @@
       "storageAccountType": "[steps('deploymentDetails').storageAccount.type]",
       "dnsNameForPublicIP": "[steps('deploymentDetails').publicIp.domainNameLabel]",
       "publicIPAddressName": "[steps('deploymentDetails').publicIp.name]",
-       "vnetNewOrExisting": "[steps('deploymentDetails').vnet.newOrExisting]",
+      "vnetNewOrExisting": "[steps('deploymentDetails').vnet.newOrExisting]",
       "vnetName": "[steps('deploymentDetails').vnet.name]",
       "vnetPrefix": "[steps('deploymentDetails').vnet.addressPrefix]",
       "vnetRG": "[steps('deploymentDetails').vnet.resourceGroup]",
