@@ -257,9 +257,9 @@ STORAGE_ACCOUNT_NAME="${1}"
 STORAGE_ACCOUNT_KEY="${2}"
 ANSIBLE_USER="${3}"
 
-hcSubnetRoot=$(echo "${4}" | cut -f1 -d/ | cut -f1,2,3 -d.)
-frSubnetRoot=$(echo "${5}" | cut -f1 -d/ | cut -f1,2,3 -d.)
-bkSubnetRoot=$(echo "${6}" | cut -f1 -d/ | cut -f1,2,3 -d.)
+hcSubnetRoot="${4}"
+frSubnetRoot="${5}"
+bkSubnetRoot="${6}"
 
 numberOfFront="${7}"
 numberOfBack="${8}"
