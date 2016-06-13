@@ -2,10 +2,16 @@
   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion":"1.0.0.0",
   "parameters":{
-    "domainNameSuffix":{
+    "dnsNameForAnsiblePublicIP":{
       "type":"string",
       "metadata":{
-        "description":"Suffix for Public IPs"
+        "description":"Public IP address for Health and Care VM"
+      }
+    },
+    "dnsNameForFrontPublicIP":{
+      "type":"string",
+      "metadata":{
+        "description":"Public IP address for Health and Care VM"
       }
     },
     "hcUsername":{
@@ -48,7 +54,7 @@
     },
     "frVmSize":{
       "type":"string",
-      "defaultValue":"Standard_A3",
+      "defaultValue":"Standard_DS1",
       "metadata":{
         "description":"Instance size for Web Front VMs"
       }
@@ -62,7 +68,7 @@
     },
     "backVmSize":{
       "type":"string",
-      "defaultValue":"Standard_A3",
+      "defaultValue":"Standard_DS1",
       "metadata":{
         "description":"Instance size for Web Front VMs Minimum Standard_A0"
       }
@@ -76,11 +82,11 @@
     },
     "frStorageAccountType": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
+      "defaultValue": "Premium_LRS",
       "allowedValues": [
-        "Standard_LRS",
-        "Standard_RAGRS",
-        "Standard_GRS"
+        "Premium_LRS",
+        "Premium_RAGRS",
+        "Premium_GRS"
       ],
       "metadata":{
         "description":"Storage Account type for Front VMs"
@@ -88,17 +94,17 @@
     },
     "bkStorageAccountType": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
+      "defaultValue": "Premium_LRS",
       "allowedValues": [
-        "Standard_LRS",
-        "Standard_RAGRS",
-        "Standard_GRS"
+        "Premium_LRS",
+        "Premium_RAGRS",
+        "Premium_GRS"
       ],
       "metadata":{
         "description":"Storage Account type for Back VMs"
       }
     },
-    "tshirtSize": {
+    "shopSize": {
       "type": "string",
       "defaultValue": "Small",
       "allowedValues": [
@@ -140,8 +146,76 @@
         "description":"Base template URL for nested template"
       },
       "defaultValue": "https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/"
+    },
+    "hcSubnetPrefix":{
+      "type":"string",
+      "metadata": {
+        "description":"Control VM Subnet Prefix"
+      },
+      "defaultValue": "10.0.0.0/24"
+    },
+    "frSubnetPrefix":{
+      "type":"string",
+      "metadata": {
+        "description":"Front Subnet Prefix"
+      },
+      "defaultValue": "10.0.2.0/24"
+    },
+    "bkSubnetPrefix":{
+      "type":"string",
+      "metadata": {
+        "description":"Back Subnet Prefix"
+      },
+      "defaultValue": "10.0.4.0/24"
+    },
+    "virtualNetworkName":{
+      "type":"string",
+      "metadata": {
+        "description":"Virtual Network Name"
+      },
+      "defaultValue": "vnet-prestashop"
+    },
+    "addressPrefix":{
+      "type":"string",
+      "metadata": {
+        "description":"Virtual Network address Prefix"
+      },
+      "defaultValue": "10.0.0.0/16"
+    },
+    "hcSubnetName":{
+      "type":"string",
+      "metadata": {
+        "description":"Name of Health and Care subnet"
+      },
+      "defaultValue": "hc-subnet"
+    },
+    "frSubnetName":{
+      "type":"string",
+      "metadata": {
+        "description":"Name of Front subnet"
+      },
+      "defaultValue": "front-subnet"
+    },
+    "bkSubnetName":{
+      "type":"string",
+      "metadata": {
+        "description":"Name of Back subnet"
+      },
+      "defaultValue": "back-subnet"
+    },
+    "frStorageAccountName":{
+      "type":"string",
+      "metadata": {
+        "description":"Storage Account Name for Front VMs"
+      }
+    },
+    "bkStorageAccountName":{
+      "type":"string",
+      "metadata": {
+        "description":"Storage Account Name for Back VMs"
+      }
     }
-  }, 
+  },
   "variables":{
     "configuration":{
       "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/front.json')]",
@@ -151,7 +225,7 @@
     "frUpdateDomainCount":"5",
     "bkFaultDomainCount":"3",
     "bkUpdateDomainCount":"5",
-    "dnsNameForAnsiblePublicIP":"[concat('hc-',parameters('domainNameSuffix'),uniquestring(resourceGroup().id, deployment().name))]",
+    
     "dnsserver":"8.8.8.8",
     "location":"[resourceGroup().location]",
     "imagePublisher":"Canonical",
@@ -160,25 +234,16 @@
     "keyStorageAccountName":"[concat('key', uniquestring(resourceGroup().id, deployment().name))]",
     "keyStorageAccountType":"Standard_LRS",
     "hcNicName":"hcVnic",
-    "virtualNetworkName":"[concat('vNet', resourceGroup().name)]",
-    "vnetID":"[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "addressPrefix":"10.0.0.0/16",
+    "vnetID":"[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+   
     "subnetCIDR":".0/24",
-    "hcSubnetRoot":"10.0.0",
-    "frSubnetRoot":"10.0.2",
-    "bkSubnetRoot":"10.0.4",
-    "hcSubnetName":"hcSubnet",
-    "hcSubnetPrefix":"[concat(variables('hcSubnetRoot'),variables('subnetCIDR'))]",
-    "frSubnetName":"frSubnet",
-    "frSubnetPrefix":"[concat(variables('frSubnetRoot'),variables('subnetCIDR'))]",
-    "bkSubnetName":"bkSubnet",
-    "bkSubnetPrefix":"[concat(variables('bkSubnetRoot'),variables('subnetCIDR'))]",
+    "hcSubnetRoot":"[concat( split(parameters('hcSubnetPrefix'), '.')[0], '.', split(parameters('hcSubnetPrefix'), '.')[1], '.', split(parameters('hcSubnetPrefix'), '.')[2])]",
+    "frSubnetRoot":"[concat( split(parameters('frSubnetPrefix'), '.')[0], '.', split(parameters('frSubnetPrefix'), '.')[1], '.', split(parameters('frSubnetPrefix'), '.')[2])]",
+    "bkSubnetRoot":"[concat( split(parameters('bkSubnetPrefix'), '.')[0], '.', split(parameters('bkSubnetPrefix'), '.')[1], '.', split(parameters('bkSubnetPrefix'), '.')[2])]",
+    
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
     "hcStorageAccountName":"[concat('hc', uniquestring(resourceGroup().id, deployment().name) )]",
-    "dnsNameForFrontPublicIP":"[concat('lb-',parameters('domainNameSuffix'),uniquestring(resourceGroup().id, deployment().name))]",
     "hcStorageAccountType":"Standard_LRS",
-    "frStorageAccountName":"[concat('fr', uniquestring(resourceGroup().id, deployment().name))]",
-    "bkStorageAccountName":"[concat('bk', uniquestring(resourceGroup().id, deployment().name))]",
     "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
     "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
     "hcPublicIPAddressName":"hcPublicIP",
@@ -187,7 +252,7 @@
     "hcVmName":"[concat('ans', resourceGroup().name)]",
     "frVmName":"[concat('web', resourceGroup().name)]",
     "bkVmName":"[concat('bdd', resourceGroup().name)]",
-    "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',variables('hcSubnetName'))]",
+    "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',parameters('hcSubnetName'))]",
     "hcVmSize":"Basic_A0",
     "hcNetworkSecurityGroupName":"hcSecurityGroup",
     "frNetworkSecurityGroupName":"frSecurityGroup",
@@ -213,7 +278,7 @@
     "paramsSubnets":"[concat(variables('hcSubnetRoot'),' ',variables('frSubnetRoot'),' ',variables('bkSubnetRoot'),' ')]",
     "paramsNbHosts":"[concat(parameters('numberOfFront'),' ',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),' ',variables('frVmName'),' ',variables('bkVmName'))]",
-    "paramsExtra":"[concat(parameters('prestashop_password'),' ',variables('dnsNameForFrontPublicIP'),'.',variables('location'))]",
+    "paramsExtra":"[concat(parameters('prestashop_password'),' ',parameters('dnsNameForFrontPublicIP'),'.',variables('location'))]",
     "paramsAdmin":"[concat(parameters('prestashop_firstname'),' ',parameters('prestashop_lastname'),' ',parameters('prestashop_email'))]",
     "paramsDeploy":"[concat(parameters('hcUsername'),' ',variables('paramsSubnets'),' ',variables('paramsNbHosts'),' ',variables('paramsNames'),' ',variables('paramsExtra'),' ',variables('paramsAdmin'))]",
     "apiVersion":{
@@ -254,7 +319,7 @@
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]"
       ],
       "properties":{
         "mode":"Incremental",
@@ -282,7 +347,7 @@
             "value":"[variables('frAvailabilitySetName')]"
           },
           "frStorageAccountName":{
-            "value":"[variables('frStorageAccountName')]"
+            "value":"[parameters('frStorageAccountName')]"
           },
           "frStorageAccountType":{
             "value":"[parameters('frStorageAccountType')]"
@@ -294,10 +359,10 @@
             "value":"[variables('frSubnetRoot')]"
           },
           "frSubnetName":{
-            "value":"[variables('frSubnetName')]"
+            "value":"[parameters('frSubnetName')]"
           },
           "frSubnetPrefix":{
-            "value":"[variables('frSubnetPrefix')]"
+            "value":"[parameters('frSubnetPrefix')]"
           },
           "vnetID":{
             "value":"[variables('vnetID')]"
@@ -306,10 +371,10 @@
             "value":"[variables('frVmName')]"
           },
           "dnsNameForFrontPublicIP": {
-             "value":"[variables('dnsNameForFrontPublicIP')]"
+             "value":"[parameters('dnsNameForFrontPublicIP')]"
           },
-          "tshirtSize":{
-            "value":"[parameters('tshirtSize')]"
+          "shopSize":{
+            "value":"[parameters('shopSize')]"
           },
           "keyStorageAccountName":{
             "value":"[variables('keyStorageAccountName')]"
@@ -324,7 +389,7 @@
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('bkNetworkSecurityGroupName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]"
       ],
       "properties":{
         "mode":"Incremental",
@@ -352,7 +417,7 @@
             "value":"[variables('bkAvailabilitySetName')]"
           },
           "bkStorageAccountName":{
-            "value":"[variables('bkStorageAccountName')]"
+            "value":"[parameters('bkStorageAccountName')]"
           },
           "bkStorageAccountType":{
             "value":"[parameters('bkStorageAccountType')]"
@@ -364,10 +429,10 @@
             "value":"[variables('bkSubnetRoot')]"
           },
           "bkSubnetName":{
-            "value":"[variables('bkSubnetName')]"
+            "value":"[parameters('bkSubnetName')]"
           },
           "bkSubnetPrefix":{
-            "value":"[variables('bkSubnetPrefix')]"
+            "value":"[parameters('bkSubnetPrefix')]"
           },
           "vnetID":{
             "value":"[variables('vnetID')]"
@@ -375,8 +440,8 @@
           "bkVmName":{
             "value":"[variables('bkVmName')]"
           },
-          "tshirtSize":{
-            "value":"[parameters('tshirtSize')]"
+          "shopSize":{
+            "value":"[parameters('shopSize')]"
           },
           "keyStorageAccountName":{
             "value":"[variables('keyStorageAccountName')]"
@@ -516,7 +581,7 @@
       "properties":{
         "publicIPAllocationMethod":"[variables('hcPublicIPAddressType')]",
         "dnsSettings":{
-          "domainNameLabel":"[variables('dnsNameForAnsiblePublicIP')]"
+          "domainNameLabel":"[parameters('dnsNameForAnsiblePublicIP')]"
         }
       }
     },
@@ -524,7 +589,7 @@
       "comments":"Virtual Network with 3 subnets admin, front, back",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/virtualNetworks",
-      "name":"[variables('virtualNetworkName')]",
+      "name":"[parameters('virtualNetworkName')]",
       "location":"[variables('location')]",
       "dependsOn":[
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('hcNetworkSecurityGroupName'))]",
@@ -534,32 +599,32 @@
       "properties":{
         "addressSpace":{
           "addressPrefixes":[
-            "[variables('addressPrefix')]"
+            "[parameters('addressPrefix')]"
           ]
         },
         "subnets":[
           {
-            "name":"[variables('hcSubnetName')]",
+            "name":"[parameters('hcSubnetName')]",
             "properties":{
-              "addressPrefix":"[variables('hcSubnetPrefix')]",
+              "addressPrefix":"[parameters('hcSubnetPrefix')]",
               "networkSecurityGroup":{
                 "id":"[resourceId('Microsoft.Network/networkSecurityGroups', variables('hcNetworkSecurityGroupName'))]"
               }
             }
           },
           {
-            "name":"[variables('frSubnetName')]",
+            "name":"[parameters('frSubnetName')]",
             "properties":{
-              "addressPrefix":"[variables('frSubnetPrefix')]",
+              "addressPrefix":"[parameters('frSubnetPrefix')]",
               "networkSecurityGroup":{
                 "id":"[resourceId('Microsoft.Network/networkSecurityGroups', variables('frNetworkSecurityGroupName'))]"
               }
             }
           },
           {
-            "name":"[variables('bkSubnetName')]",
+            "name":"[parameters('bkSubnetName')]",
             "properties":{
-              "addressPrefix":"[variables('bkSubnetPrefix')]",
+              "addressPrefix":"[parameters('bkSubnetPrefix')]",
               "networkSecurityGroup":{
                 "id":"[resourceId('Microsoft.Network/networkSecurityGroups', variables('bkNetworkSecurityGroupName'))]"
               }
@@ -576,7 +641,7 @@
       "location":"[variables('location')]",
       "dependsOn":[
         "[concat('Microsoft.Network/publicIPAddresses/', variables('hcPublicIPAddressName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
       ],
       "properties":{
         "dnsSettings":{
@@ -679,11 +744,11 @@
   ],
   "outputs": {
     "Ansible FQDN": {
-      "value": "[concat(variables('dnsNameForAnsiblePublicIP'),'.',variables('location'),'.cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForAnsiblePublicIP'),'.',variables('location'),'.cloudapp.azure.com')]",
       "type": "string" 
     },
     "SHOP FQDN": {
-      "value": "[concat(variables('dnsNameForFrontPublicIP'),'.',variables('location'),'cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'.',variables('location'),'cloudapp.azure.com')]",
       "type": "string" 
     }
   }

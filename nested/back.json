@@ -83,7 +83,7 @@
         "description":"Basename of back VMs"
       }
     },
-    "tshirtSize":{
+    "shopSize":{
       "type":"string",
       "metadata":{
         "description":"T-shirt size of the PrestaShop cluster"
@@ -123,22 +123,19 @@
       "storage":"2015-05-01-preview",
       "compute":"2015-06-15"
     },
-    "tshirtSizeSmall": {
-      "front_vm_size": "Standard_A1",
-      "sql_vm_size": "Standard_A1",
-      "ddSize": 512
+    "shopSizeSmall": {
+      "ddSizeFront": 127,
+      "ddSizeBack": 127
     },
-    "tshirtSizeMedium": {
-      "front_vm_size": "Standard_A2",
-      "sql_vm_size": "Standard_D1",
-      "ddSize": 512
+    "shopSizeMedium": {
+      "ddSizeFront": 127,
+      "ddSizeBack": 511
     },
-    "tshirtSizeLarge": {
-      "front_vm_size": "Standard_A3",
-      "sql_vm_size": "Standard_D2",
-      "ddSize": 1023
+    "shopSizeLarge": {
+      "ddSizeFront": 127,
+      "ddSizeBack": 1023
     },
-    "clusterSpec": "[variables(concat('tshirtSize', parameters('tshirtSize')))]"
+    "clusterSpec": "[variables(concat('shopSize', parameters('shopSize')))]"
   },
   "resources":[
     {
@@ -265,7 +262,7 @@
           "dataDisks": [
             {
               "name": "datadisk0",
-              "diskSizeGB": "[variables('clusterSpec').ddSize]",
+              "diskSizeGB": "[variables('clusterSpec').ddSizeBack]",
               "lun": 0,
               "caching": "None",
               "createOption": "Empty",
@@ -275,7 +272,7 @@
             },
             {
               "name": "datadisk1",
-              "diskSizeGB": "[variables('clusterSpec').ddSize]",
+              "diskSizeGB": "[variables('clusterSpec').ddSizeBack]",
               "lun": 1,
               "caching": "None",
               "createOption": "Empty",

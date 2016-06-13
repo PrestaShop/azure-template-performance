@@ -4,23 +4,23 @@
   "parameters": {
     "basics": [
       {
-        "name": "tshirtSize",
+        "name": "shopSize",
         "type": "Microsoft.Common.DropDown",
         "label": "Topology Size",
         "defaultValue": "Small",
-        "toolTip": "The size of the virtual machines to use in the cluster.",
+        "toolTip": "The size of Disk virtual machines to use in the cluster.",
         "constraints": {
           "allowedValues": [
             {
-              "label": "Small",
+              "label": "Small (Front 128Go*2 - Back 128Go*2)",
               "value": "Small"
             },
             {
-              "label": "Medium",
+              "label": "Medium (Front 128Go*2 - Back 512Go*2)",
               "value": "Medium"
             },
             {
-              "label": "Large",
+              "label": "Large (Front 128Go*2 - Back 1023Go*2)",
               "value": "Large"
             }
           ]
@@ -54,33 +54,10 @@
               "required": true
             },
             "options": {
-              "hideConfirmation": false
+              "hideConfirmation": false,
+              "hidePassword": true
             },
             "osPlatform": "Linux"
-          }
-        ]
-      },
-      {
-        "name": "section2",
-        "type": "Microsoft.Common.Section",
-        "label": "MySQL Credentials",
-        "elements": [
-          {
-            "name": "mySQLPassword",
-            "type": "Microsoft.Common.PasswordBox",
-            "label": {
-              "password": "MySQL password",
-              "confirmPassword": "Confirm MySQL password"
-            },
-            "toolTip": "The password for the MySQL administrator account.",
-            "constraints": {
-              "required": true,
-              "regex": "^.{8,}$",
-              "validationMessage": "Password must contain at least 8 characters."
-            },
-            "options": {
-              "hideConfirmation": false
-            }
           }
         ]
       }
@@ -96,14 +73,14 @@
         "bladeTitle": "Deployment Parameters",
         "elements": [
           {
-            "name": "domainNameSuffix",
+            "name": "hcPublicIP",
             "type": "Microsoft.Network.PublicIpAddressCombo",
             "label": {
-              "publicIpAddress": "Public IP address",
+              "publicIpAddress": "Public IP address for Health and Care VM",
               "domainNameLabel": "Domain Name Suffix"
             },
             "defaultValue": {
-              "domainNameSuffix": "frontEndIp"
+              "domainNameSuffix": "hcPublicIP"
             },
             "constraints": {
               "required": {
@@ -117,7 +94,28 @@
             }
           },
           {
-            "name": "vnet",
+            "name": "frPublicIP",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "Public IP address for From VM",
+              "domainNameLabel": "Domain Name Suffix"
+            },
+            "defaultValue": {
+              "domainNameSuffix": "frPublicIP"
+            },
+            "constraints": {
+              "required": {
+                "domainNameLabel": true
+              }
+            },
+            "options": {
+              "hideNone": true,
+              "hideDomainNameLabel": false,
+              "hideExisting": true
+            }
+          },
+          {
+            "name": "virtualNetworkName",
             "type": "Microsoft.Network.VirtualNetworkCombo",
             "label": {
               "virtualNetwork": "Virtual Network",
@@ -130,8 +128,21 @@
             "constraints": {
               "minAddressPrefixSize": "/16"
             },
+            "options": {
+              "hideExisting": true
+            },
             "subnets": {
               "subnet1": {
+                "label": "Health And Care subnet",
+                "defaultValue": {
+                  "name": "hc-subnet",
+                  "addressPrefixSize": "/24"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/24"
+                }
+              },
+              "subnet2": {
                 "label": "Front subnet",
                 "defaultValue": {
                   "name": "front-subnet",
@@ -141,10 +152,10 @@
                   "minAddressPrefixSize": "/24"
                 }
               },
-              "subnet2": {
-                "label": "MySQL subnet",
+              "subnet3": {
+                "label": "Back subnet",
                 "defaultValue": {
-                  "name": "sql-subnet",
+                  "name": "back-subnet",
                   "addressPrefixSize": "/24"
                 },
                 "constraints": {
@@ -152,22 +163,300 @@
                 }
               }
             }
+          }
+        ]
+      },
+      {
+      "name": "clusterinfo",
+        "label": "Virtual Machines Parameters",
+        "subLabel": {
+          "preValidation": "Required",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Virtual Machines Parameters",
+        "elements": [
+        {
+            "name": "numberOfFront",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Number of Front VMs",
+            "defaultValue": "2",
+            "toolTip": "Specify the number of Front for this cluster.",
+            "visible": false,
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "1",
+                  "value": 1
+                },
+                {
+                  "label": "2",
+                  "value": 2
+                },
+                {
+                  "label": "3",
+                  "value": 3
+                },
+                {
+                  "label": "4",
+                  "value": 4
+                },
+                {
+                  "label": "5",
+                  "value": 5
+                },
+                {
+                  "label": "6",
+                  "value": 6
+                },
+                {
+                  "label": "7",
+                  "value": 7
+                },
+                {
+                  "label": "8",
+                  "value": 8
+                },
+                {
+                  "label": "9",
+                  "value": 9
+                },
+                {
+                  "label": "10",
+                  "value": 10
+                },
+                {
+                  "label": "11",
+                  "value": 11
+                },
+                {
+                  "label": "12",
+                  "value": 12
+                },
+                {
+                  "label": "15",
+                  "value": 15
+                },
+                {
+                  "label": "20",
+                  "value": 20
+                }
+              ]
+            }
           },
           {
-            "name": "storageAccount",
+            "name": "frVmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Front VM Size",
+            "toolTip": "The size of the front VMs",
+            "recommendedSizes": [
+              "Standard_DS1",
+              "Standard_DS2",
+              "Standard_DS3"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS5",
+                "Standard_DS6",
+                "Standard_DS7",
+                "Standard_DS8",
+                "Standard_DS9",
+                "Standard_DS10",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS6_v2",
+                "Standard_DS7_v2",
+                "Standard_DS8_v2",
+                "Standard_DS9_v2",
+                "Standard_DS10_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2"
+              ],
+              "excludedSizes": []
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "Canonical",
+              "offer": "UbuntuServer",
+              "sku": "16.04.0-LTS"
+           },
+           "count": 2,
+           "visible": true
+          },
+          {
+            "name": "storageAccountFront",
             "type": "Microsoft.Storage.StorageAccountSelector",
             "label": "Storage account",
-            "toolTip": "Storage account where the VM disks will be stored.",
+            "toolTip": "Storage account where the Front VM disks will be stored.",
             "defaultValue": {
-              "type": "Standard_LRS"
+              "type": "Premium_LRS"
+            },
+            "options": {
+              "hideExisting": true
             },
             "constraints": {
               "required": true,
               "excludedTypes": [
-                "Premium_LRS"
+                "Standard_LRS",
+                "Standard_RAGRS",
+                "Standard_RAGRS"
               ]
             }
-          }
+          },
+        {
+            "name": "numberOfBack",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Number of Back VMs",
+            "defaultValue": "2",
+            "toolTip": "Specify the number of Back for this cluster.",
+            "visible": false,
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "1",
+                  "value": 1
+                },
+                {
+                  "label": "2",
+                  "value": 2
+                },
+                {
+                  "label": "3",
+                  "value": 3
+                },
+                {
+                  "label": "4",
+                  "value": 4
+                },
+                {
+                  "label": "5",
+                  "value": 5
+                },
+                {
+                  "label": "6",
+                  "value": 6
+                },
+                {
+                  "label": "7",
+                  "value": 7
+                },
+                {
+                  "label": "8",
+                  "value": 8
+                },
+                {
+                  "label": "9",
+                  "value": 9
+                },
+                {
+                  "label": "10",
+                  "value": 10
+                },
+                {
+                  "label": "11",
+                  "value": 11
+                },
+                {
+                  "label": "12",
+                  "value": 12
+                },
+                {
+                  "label": "15",
+                  "value": 15
+                },
+                {
+                  "label": "20",
+                  "value": 20
+                }
+              ]
+            }
+          },
+          {
+            "name": "bkVmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Front VM Size",
+            "toolTip": "The size of the Back VMs",
+            "recommendedSizes": [
+              "Standard_DS1",
+              "Standard_DS2",
+              "Standard_DS3"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS5",
+                "Standard_DS6",
+                "Standard_DS7",
+                "Standard_DS8",
+                "Standard_DS9",
+                "Standard_DS10",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS6_v2",
+                "Standard_DS7_v2",
+                "Standard_DS8_v2",
+                "Standard_DS9_v2",
+                "Standard_DS10_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2"
+              ],
+              "excludedSizes": []
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "Canonical",
+              "offer": "UbuntuServer",
+              "sku": "16.04.0-LTS"
+           },
+           "count": 2,
+           "visible": true
+          },
+          {
+            "name": "storageAccountBack",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "toolTip": "Storage account where the Back VM disks will be stored.",
+            "defaultValue": {
+              "type": "Premium_LRS"
+            },
+            "options": {
+              "hideExisting": true
+            },
+            "constraints": {
+              "required": true,
+              "excludedTypes": [
+                "Standard_LRS",
+                "Standard_RAGRS",
+                "Standard_RAGRS"
+              ]
+            }
+          } 
         ]
       },
       {
@@ -180,7 +469,7 @@
         "bladeTitle": "PrestaShop Parameters",
         "elements": [
           {
-            "name": "adminFirstName",
+            "name": "prestashop_firstname",
             "type": "Microsoft.Common.TextBox",
             "label": "First name",
             "defaultValue": "",
@@ -192,7 +481,7 @@
             }
           },
           {
-            "name": "adminLastName",
+            "name": "prestashop_lastname",
             "type": "Microsoft.Common.TextBox",
             "label": "Last name",
             "defaultValue": "",
@@ -204,7 +493,7 @@
             }
           },
           {
-            "name": "adminEmail",
+            "name": "prestashop_email",
             "type": "Microsoft.Common.TextBox",
             "label": "E-mail",
             "defaultValue": "",
@@ -216,7 +505,7 @@
             }
           },
           {
-            "name": "adminPSPassword",
+            "name": "prestashop_password",
             "type": "Microsoft.Common.PasswordBox",
             "label": {
               "password": "Password",
@@ -236,29 +525,41 @@
       }
     ],
     "outputs": {
-      "tshirtSize": "[basics('tshirtSize')]",
+      "shopSize": "[basics('shopSize')]",
       "hcUsername": "[basics('section1').hcUsername]",
       "authenticationType": "[basics('section1').hcPassword.authenticationType]",
-      "adminPassword": "[basics('section1').hcPassword.password]",
-      "sshPublicKey": "[basics('section1').hcPassword.sshPublicKey]",
-      "mySQLPassword": "[basics('section2').mySQLPassword]",
-      "storageAccountNewOrExisting": "[steps('deploymentDetails').storageAccount.newOrExisting]",
-      "storageAccountName": "[steps('deploymentDetails').storageAccount.name]",
-      "storageAccountType": "[steps('deploymentDetails').storageAccount.type]",
-      "dnsNameForPublicIP": "[steps('deploymentDetails').publicIp.domainNameLabel]",
-      "publicIPAddressName": "[steps('deploymentDetails').publicIp.name]",
-      "vnetNewOrExisting": "[steps('deploymentDetails').vnet.newOrExisting]",
-      "vnetName": "[steps('deploymentDetails').vnet.name]",
-      "vnetPrefix": "[steps('deploymentDetails').vnet.addressPrefix]",
-      "vnetRG": "[steps('deploymentDetails').vnet.resourceGroup]",
-      "vnetSubnet1Name": "[steps('deploymentDetails').vnet.subnets.subnet1.name]",
-      "vnetSubnet1Prefix": "[steps('deploymentDetails').vnet.subnets.subnet1.addressPrefix]",
-      "vnetSubnet2Name": "[steps('deploymentDetails').vnet.subnets.subnet2.name]",
-      "vnetSubnet2Prefix": "[steps('deploymentDetails').vnet.subnets.subnet2.addressPrefix]",
-      "adminFirstName": "[steps('prestashopInfo').adminFirstName]",
-      "adminLastName": "[steps('prestashopInfo').adminLastName]",
-      "adminEmail": "[steps('prestashopInfo').adminEmail]",
-      "adminPSPassword": "[steps('prestashopInfo').adminPSPassword]",
+      "hcPassword": "[basics('section1').hcPassword.password]",
+      "sshKeyData": "[basics('section1').hcPassword.sshPublicKey]",
+  
+      "frStorageAccountName": "[steps('deploymentDetails').storageAccountFront.name]",
+      "frStorageAccountType": "[steps('deploymentDetails').storageAccountFront.type]",
+      "bkStorageAccountName": "[steps('deploymentDetails').storageAccountFront.name]",
+      "bkStorageAccountType": "[steps('deploymentDetails').storageAccountFront.type]",
+      
+      "frVmSize":"[steps('clusterinfo').frVmSize",
+      "bkVmSize":"[steps('clusterinfo').bkVmSize",
+      "numberOfFront": "[steps('clusterinfo').numberOfFront",
+      "numberOfBack": "[steps('clusterinfo').numberOfBack",
+      
+      "dnsNameForAnsiblePublicIP": "[steps('deploymentDetails').hcPublicIP.domainNameLabel]",
+      "hcPublicIPAddressName": "[steps('deploymentDetails').hcPublicIP.name]",
+
+      "dnsNameForFrontPublicIP": "[steps('deploymentDetails').frPublicIP.domainNameLabel]",
+      "frPublicIPAddressName": "[steps('deploymentDetails').frPublicIP.name]",
+      
+      "virtualNetworkName": "[steps('deploymentDetails').virtualNetworkName.name]",
+      "addressPrefix": "[steps('deploymentDetails').vnet.addressPrefix]",
+      "hcSubnetName": "[steps('deploymentDetails').vnet.subnets.subnet1.name]",
+      "hcSubnetPrefix": "[steps('deploymentDetails').vnet.subnets.subnet1.addressPrefix]",
+      "frSubnetName": "[steps('deploymentDetails').vnet.subnets.subnet2.name]",
+      "frSubnetPrefix": "[steps('deploymentDetails').vnet.subnets.subnet2.addressPrefix]",
+      "bkSubnetName": "[steps('deploymentDetails').vnet.subnets.subnet3.name]",
+      "bkSubnetPrefix": "[steps('deploymentDetails').vnet.subnets.subnet3.addressPrefix]",
+
+      "prestashop_firstname": "[steps('prestashopInfo').prestashop_firstname]",
+      "prestashop_lastname": "[steps('prestashopInfo').prestashop_lastname]",
+      "prestashop_email": "[steps('prestashopInfo').prestashop_email]",
+      "prestashop_password": "[steps('prestashopInfo').prestashop_password]",
       "location": "[location()]"
     }
   }
