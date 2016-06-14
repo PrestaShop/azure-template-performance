@@ -233,7 +233,7 @@
     "frVmName":"[concat('web', resourceGroup().name)]",
     "bkVmName":"[concat('bdd', resourceGroup().name)]",
     "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',parameters('hcSubnetName'))]",
-    "hcVmSize":"Basic_A0",
+    "hcVmSize":"Standard_A0",
     "hcNetworkSecurityGroupName":"hcSecurityGroup",
     "frNetworkSecurityGroupName":"frSecurityGroup",
     "bkNetworkSecurityGroupName":"bkSecurityGroup",
