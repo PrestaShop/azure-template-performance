@@ -232,6 +232,7 @@ function create_extra_vars()
   d="$(date -u +%Y%m%d%H%M%SZ)"  
   printf "{\n  \"ansistrano_release_version\": \"%s\",\n" "${d}"            > "${EXTRA_VARS}"
   printf "  \"prestashop_lb_name\": \"%s\",\n" "${lbName}"                 >> "${EXTRA_VARS}"
+  printf "  \"gabarit\": \"%s\",\n" "${gabarit}"                           >> "${EXTRA_VARS}"
   printf "  \"prestashop_firstname\": \"%s\",\n" "${prestashop_firstname}" >> "${EXTRA_VARS}"
   printf "  \"prestashop_lastname\": \"%s\",\n" "${prestashop_lastname}"   >> "${EXTRA_VARS}"
   printf "  \"prestashop_email\": \"%s\",\n" "${prestashop_email}"         >> "${EXTRA_VARS}"
@@ -272,7 +273,12 @@ lbName="${13}"
 prestashop_firstname="${14}"
 prestashop_lastname="${15}"
 prestashop_email="${16}"
+gabarit=$(echo "${17}" | cut -f2 -d_)
 
+case "${gabarit}" in
+    ds1|ds2|ds3|ds4|ds11|ds12|ds13|ds14|d15) isok=true;;
+    *)             gabarit="ds1";;
+esac
 
 HOST_FILE="/etc/hosts"
 ANSIBLE_HOST_FILE="/etc/ansible/hosts"
