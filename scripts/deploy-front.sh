@@ -145,6 +145,7 @@ function get_sshkeys()
         let c=${c}+1
         if [ "${c}" -gt 4 ]; then
            log "Timeout to get id_rsa key exiting ..."
+           exit 1
         fi
     done
     python GetSSHFromPrivateStorage.py "${STORAGE_ACCOUNT_NAME}" "${STORAGE_ACCOUNT_KEY}" id_rsa.pub
