@@ -181,7 +181,7 @@
     {
       "comments":"Custom script extension for the Back VMs",
       "type":"Microsoft.Compute/virtualMachines/extensions",
-      "name":"[concat(parameters('bkVmName'),copyindex(),'/installFront')]",
+      "name":"[concat(parameters('bkVmName'),copyindex(),'/installBack')]",
       "apiVersion":"[variables('apiVersion').compute]",
       "location":"[resourceGroup().location]",
       "copy":{
