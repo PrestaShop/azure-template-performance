@@ -41,17 +41,6 @@
         "description":"SSH RSA public key file as a string. Not used if authenticationType of password."
       }
     },
-    "ubuntuOSVersion":{
-      "type":"string",
-      "defaultValue":"16.04.0-LTS",
-      "allowedValues":[
-        "16.04.0-LTS",
-        "14.04.4-LTS"
-      ],
-      "metadata":{
-        "description":"The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values:14.04.4-LTS, 16.04.0-LTS ."
-      }
-    },
     "frVmSize":{
       "type":"string",
       "defaultValue":"Standard_DS1",
@@ -230,6 +219,7 @@
     "location":"[resourceGroup().location]",
     "imagePublisher":"Canonical",
     "imageOffer":"UbuntuServer",
+    "ubuntuOSVersion":"16.04.0-LTS",
     "hcOSDiskName":"hcosdisk",
     "keyStorageAccountName":"[concat('key', uniquestring(resourceGroup().id, deployment().name))]",
     "keyStorageAccountType":"Standard_LRS",
@@ -335,7 +325,7 @@
             "value":"[parameters('sshKeyData')]"
           },
           "ubuntuOSVersion":{
-            "value":"[parameters('ubuntuOSVersion')]"
+            "value":"[variables('ubuntuOSVersion')]"
           },
           "frVmSize":{
             "value":"[parameters('frVmSize')]"
@@ -405,7 +395,7 @@
             "value":"[parameters('sshKeyData')]"
           },
           "ubuntuOSVersion":{
-            "value":"[parameters('ubuntuOSVersion')]"
+            "value":"[variables('ubuntuOSVersion')]"
           },
           "bkVmSize":{
             "value":"[parameters('frVmSize')]"
@@ -714,7 +704,7 @@
           "imageReference":{
             "publisher":"[variables('imagePublisher')]",
             "offer":"[variables('imageOffer')]",
-            "sku":"[parameters('ubuntuOSVersion')]",
+            "sku":"[variables('ubuntuOSVersion')]",
             "version":"latest"
           },
           "osDisk":{
