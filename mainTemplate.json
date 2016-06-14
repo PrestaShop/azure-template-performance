@@ -72,11 +72,6 @@
     "frStorageAccountType": {
       "type": "string",
       "defaultValue": "Premium_LRS",
-      "allowedValues": [
-        "Premium_LRS",
-        "Premium_RAGRS",
-        "Premium_GRS"
-      ],
       "metadata":{
         "description":"Storage Account type for Front VMs"
       }
@@ -84,11 +79,6 @@
     "bkStorageAccountType": {
       "type": "string",
       "defaultValue": "Premium_LRS",
-      "allowedValues": [
-        "Premium_LRS",
-        "Premium_RAGRS",
-        "Premium_GRS"
-      ],
       "metadata":{
         "description":"Storage Account type for Back VMs"
       }
