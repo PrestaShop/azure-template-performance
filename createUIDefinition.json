@@ -530,10 +530,10 @@
       "bkStorageAccountName": "[steps('clusterinfo').storageAccountBack.name]",
       "bkStorageAccountType": "[steps('clusterinfo').storageAccountBack.type]",
       
-      "frVmSize":"[steps('clusterinfo').frVmSize",
-      "bkVmSize":"[steps('clusterinfo').bkVmSize",
-      "numberOfFront": "[steps('clusterinfo').numberOfFront",
-      "numberOfBack": "[steps('clusterinfo').numberOfBack",
+      "frVmSize":"[steps('clusterinfo').frVmSize]",
+      "bkVmSize":"[steps('clusterinfo').bkVmSize]",
+      "numberOfFront": "[steps('clusterinfo').numberOfFront]",
+      "numberOfBack": "[steps('clusterinfo').numberOfBack]",
       
       "dnsNameForAnsiblePublicIP": "[steps('deploymentDetails').hcPublicIP.domainNameLabel]",
       "hcPublicIPAddressName": "[steps('deploymentDetails').hcPublicIP.name]",
