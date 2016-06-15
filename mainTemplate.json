@@ -122,9 +122,10 @@
     "templatesBaseURL":{
       "type":"string",
       "metadata": {
-        "description":"Base template URL for nested template"
+        "description":"Base template URL for nested template",
+        "artifactsBaseUrl": ""
       },
-      "defaultValue": "https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/nested/"
+      "defaultValue": "https://raw.githubusercontent.com/herveleclerc/arm-lamp/master"
     },
     "hcSubnetPrefix":{
       "type":"string",
@@ -197,8 +198,8 @@
   },
   "variables":{
     "configuration":{
-      "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/front.json')]",
-      "backTemplateURL":"[concat(parameters('templatesBaseURL'),'/back.json')]"
+      "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/front.json')]",
+      "backTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/back.json')]"
     },
     "frFaultDomainCount":"3",
     "frUpdateDomainCount":"5",
