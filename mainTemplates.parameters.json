@@ -1,0 +1,83 @@
+{
+  "shopSize": {
+    "value": "Small"
+  },
+  "hcUsername": {
+    "value": "devops"
+  },
+  "authenticationType": {
+    "value": "sshPublicKey"
+  },
+  "sshKeyData": {
+    "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4pucOaPkE1/U+TmarD0+0OfBt7zHa0vC+PJlJD0ka59UIm2kzsvFZlIDyHMils/1f4lgvVX/R7jXT8pTXRj79T7u4jyq2o2JAtx2FNuawJyD6GBRzburuwJkdCEYnJWEiiARS6ivnvZUVrHtGd+c29xNuDb6IqYVWkeMGf4RQ3S5M+jG+W3Yf8XK7OcipNYJtExbKY5/M1AykNSggxuwsd443uyr+bCWB2g+YV1HnuUS+DxptZMh5tFT3rQyzshKMjWvZY64aAh+54Yok8aQhWsKFAw1s9ZhxJ9cTg5X4eUgiPP2LYX7MxTagyFdlqd8MbKYQF0qhzgCy2TfH/GhV"
+  },
+  "frStorageAccountName": {
+    "value": "frontpresta01"
+  },
+  "frStorageAccountType": {
+    "value": "Premium_LRS"
+  },
+  "bkStorageAccountName": {
+    "value": "backprest01"
+  },
+  "bkStorageAccountType": {
+    "value": "Premium_LRS"
+  },
+  "frVmSize": {
+    "value": "Standard_DS1"
+  },
+  "bkVmSize": {
+    "value": "Standard_DS1"
+  },
+  "dnsNameForAnsiblePublicIP": {
+    "value": "jumppresta01"
+  },
+  "hcPublicIPAddressName": {
+    "value": "hcpubip"
+  },
+  "dnsNameForFrontPublicIP": {
+    "value": "lbpresta01"
+  },
+  "frPublicIPAddressName": {
+    "value": "frpubip"
+  },
+  "virtualNetworkName": {
+    "value": "vnet-prestashop"
+  },
+  "addressPrefix": {
+    "value": "10.0.0.0/16"
+  },
+  "hcSubnetName": {
+    "value": "hc-subnet"
+  },
+  "hcSubnetPrefix": {
+    "value": "10.0.0.0/24"
+  },
+  "frSubnetName": {
+    "value": "front-subnet"
+  },
+  "frSubnetPrefix": {
+    "value": "10.0.1.0/24"
+  },
+  "bkSubnetName": {
+    "value": "back-subnet"
+  },
+  "bkSubnetPrefix": {
+    "value": "10.0.2.0/24"
+  },
+  "prestashop_firstname": {
+    "value": "herve"
+  },
+  "prestashop_lastname": {
+    "value": "leclerc"
+  },
+  "prestashop_email": {
+    "value": "herve.leclerc@alterway.fr"
+  },
+  "prestashop_password": {
+    "value": "=Muffet01="
+  },
+  "location": {
+    "value": "northeurope"
+  }
+}
