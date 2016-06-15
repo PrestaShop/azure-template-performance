@@ -6,21 +6,21 @@
       {
         "name": "shopSize",
         "type": "Microsoft.Common.DropDown",
-        "label": "Topology Size",
+        "label": "Databse Shop Size",
         "defaultValue": "Small",
         "toolTip": "The size of Disk virtual machines to use in the cluster.",
         "constraints": {
           "allowedValues": [
             {
-              "label": "Small (Front 128Go*2 - Back 128Go*2)",
+              "label": "Small (Web front-end 128Go*2 - Databases 128Go*2)",
               "value": "Small"
             },
             {
-              "label": "Medium (Front 128Go*2 - Back 512Go*2)",
+              "label": "Medium (Web front-end 128Go*2 - Databases 512Go*2)",
               "value": "Medium"
             },
             {
-              "label": "Large (Front 128Go*2 - Back 1023Go*2)",
+              "label": "Large (Web front-end  128Go*2 - Databases 1023Go*2)",
               "value": "Large"
             }
           ]
@@ -76,8 +76,8 @@
             "name": "hcPublicIP",
             "type": "Microsoft.Network.PublicIpAddressCombo",
             "label": {
-              "publicIpAddress": "Public IP address for Health and Care VM",
-              "domainNameLabel": "Domain Name Suffix for Health and Care VM"
+              "publicIpAddress": "Public IP address for Jumbox VM",
+              "domainNameLabel": "Domain Name Suffix for Jumpbox VM"
             },
             "defaultValue": {
               "publicIpAddressName": "hcpubip"
@@ -132,7 +132,7 @@
             },
             "subnets": {
               "subnet1": {
-                "label": "Health And Care subnet",
+                "label": "Jumbox subnet",
                 "defaultValue": {
                   "name": "hc-subnet",
                   "addressPrefixSize": "/24",
@@ -143,7 +143,7 @@
                 }
               },
               "subnet2": {
-                "label": "Front subnet",
+                "label": "Web front-end subnet",
                 "defaultValue": {
                   "name": "front-subnet",
                   "addressPrefixSize": "/24",
@@ -180,16 +180,12 @@
         {
             "name": "numberOfFront",
             "type": "Microsoft.Common.DropDown",
-            "label": "Number of Front VMs",
+            "label": "Number of Web front-end VMs",
             "defaultValue": "2",
-            "toolTip": "Specify the number of Front for this cluster.",
+            "toolTip": "Specify the number of Web front-end for this cluster.",
             "visible": false,
             "constraints": {
               "allowedValues": [
-                {
-                  "label": "1",
-                  "value": 1
-                },
                 {
                   "label": "2",
                   "value": 2
@@ -248,7 +244,7 @@
           {
             "name": "frVmSize",
             "type": "Microsoft.Compute.SizeSelector",
-            "label": "Front VM Size",
+            "label": "Web front-end VM Size",
             "toolTip": "The size of the front VMs",
             "recommendedSizes": [
               "Standard_DS1",
@@ -302,7 +298,7 @@
             "name": "storageAccountFront",
             "type": "Microsoft.Storage.StorageAccountSelector",
             "label": "Storage account",
-            "toolTip": "Storage account where the Front VM disks will be stored.",
+            "toolTip": "Storage account where the Web front-end VM disks will be stored.",
             "defaultValue": {
               "type": "Premium_LRS"
             },
@@ -327,10 +323,6 @@
             "visible": false,
             "constraints": {
               "allowedValues": [
-                {
-                  "label": "1",
-                  "value": 1
-                },
                 {
                   "label": "2",
                   "value": 2
@@ -432,9 +424,9 @@
             },
             "osPlatform": "Linux",
             "imageReference": {
-              "publisher": "Canonical",
-              "offer": "UbuntuServer",
-              "sku": "16.04.0-LTS"
+              "publisher": "prestashop",
+              "offer": "ubuntu-base-for-prestashop",
+              "sku": "ubuntu_base_16_04"
            },
            "count": 2,
            "visible": true
