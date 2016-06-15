@@ -245,7 +245,7 @@
             "name": "frVmSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Web front-end VM Size",
-            "toolTip": "The size of the front VMs",
+            "toolTip": "The size of the web front-end VMs",
             "recommendedSizes": [
               "Standard_DS1",
               "Standard_DS2",
