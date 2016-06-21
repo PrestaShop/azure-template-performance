@@ -139,7 +139,7 @@
         "description":"Base template URL for nested template",
         "artifactsBaseUrl": ""
       },
-      "defaultValue": "https://raw.githubusercontent.com/herveleclerc/arm-lamp/master"
+      "defaultValue": "https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master"
     },
     "hcSubnetPrefix":{
       "type":"string",
@@ -252,7 +252,7 @@
     "frNetworkSecurityGroupName":"frSecurityGroup",
     "bkNetworkSecurityGroupName":"bkSecurityGroup",
     "sshKeyPath":"[concat('/home/',parameters('hcUsername'),'/.ssh/authorized_keys')]",
-    "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
+    "scriptsBaseUrl":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master/scripts/",
     "ansiblePlaybookLocation":"deploy-prestashop.yml",
     "ansibleRolesReqLocation":"install_roles.yml",
     "ansibleVarsLocation":"vars/main.yml",

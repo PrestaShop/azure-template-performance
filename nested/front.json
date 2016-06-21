@@ -140,7 +140,7 @@
     "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
     "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/LoadBalancerBackend')]",
     "frontEndIPConfigID":"[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
-    "scriptsBaseUrl":"https://raw.githubusercontent.com/herveleclerc/arm-lamp/master/scripts/",
+    "scriptsBaseUrl":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master/scripts/",
     "customScriptDeployFile":"deploy-front.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptFrontCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
