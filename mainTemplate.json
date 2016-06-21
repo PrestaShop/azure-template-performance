@@ -5,13 +5,27 @@
     "dnsNameForAnsiblePublicIP":{
       "type":"string",
       "metadata":{
-        "description":"Public IP address for Health and Care VM"
+        "description":"Public IP address for Jumpbox VM"
       }
     },
     "dnsNameForFrontPublicIP":{
       "type":"string",
       "metadata":{
-        "description":"Public IP address for Health and Care VM"
+        "description":"Public IP address for Jumpbox VM"
+      }
+    },
+    "hcPublicIPAddressName":{
+      "type":"string",
+      "defaultValue": "hcPublicIP", 
+      "metadata":{
+        "description":"Public IP address Name for Jumpbox VM"
+      }
+    },
+    "frPublicIPAddressName":{
+      "type":"string",
+      "defaultValue": "hcPublicIP", 
+      "metadata":{
+        "description":"Public IP address Name for web-front load balancer VM"
       }
     },
     "hcUsername":{
@@ -55,11 +69,11 @@
         "description":"Number of Front nodes to create >=2"
       }
     },
-    "backVmSize":{
+    "bkVmSize":{
       "type":"string",
       "defaultValue":"Standard_DS1",
       "metadata":{
-        "description":"Instance size for Web Front VMs Minimum Standard_A0"
+        "description":"Instance size for Web Front VMs Minimum Standard_A2"
       }
     },
     "numberOfBack":{
@@ -165,7 +179,7 @@
     "hcSubnetName":{
       "type":"string",
       "metadata": {
-        "description":"Name of Health and Care subnet"
+        "description":"Name of Jumpbox subnet"
       },
       "defaultValue": "hc-subnet"
     },
@@ -227,7 +241,6 @@
     "hcStorageAccountType":"Standard_LRS",
     "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
     "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
-    "hcPublicIPAddressName":"hcPublicIP",
     "hcPublicIPAddressType":"Dynamic",
     "hcVmStorageAccountContainerName":"vhds",
     "hcVmName":"[concat('ans', resourceGroup().name)]",
@@ -260,7 +273,7 @@
     "paramsNbHosts":"[concat(parameters('numberOfFront'),'\" \"',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),'\" \"',variables('frVmName'),'\" \"',variables('bkVmName'))]",
     "paramsExtra":"[concat(parameters('prestashop_password'),'\" \"',parameters('dnsNameForFrontPublicIP'),'.',variables('location'))]",
-    "paramsAdmin":"[concat(parameters('prestashop_firstname'),'\" \"',parameters('prestashop_lastname'),'\" \"',parameters('prestashop_email'),'\" \"',toLower(parameters('backVmSize')))]",
+    "paramsAdmin":"[concat(parameters('prestashop_firstname'),'\" \"',parameters('prestashop_lastname'),'\" \"',parameters('prestashop_email'),'\" \"',toLower(parameters('bkVmSize')))]",
     "paramsDeploy":"[concat(parameters('hcUsername'),'\" \"',variables('paramsSubnets'),'\" \"',variables('paramsNbHosts'),'\" \"',variables('paramsNames'),'\" \"',variables('paramsExtra'),'\" \"',variables('paramsAdmin'))]",
     "apiVersion":{
       "resources":{
@@ -354,6 +367,9 @@
           "dnsNameForFrontPublicIP": {
              "value":"[parameters('dnsNameForFrontPublicIP')]"
           },
+          "frPublicIPAddressName": {
+            "value":"[parameters('frPublicIPAddressName')]"
+          },
           "shopSize":{
             "value":"[parameters('shopSize')]"
           },
@@ -389,7 +405,7 @@
             "value":"[variables('ubuntuOSVersion')]"
           },
           "bkVmSize":{
-            "value":"[parameters('frVmSize')]"
+            "value":"[parameters('bkVmSize')]"
           },
           "numberOfBack":{
             "value":"[parameters('numberOfFront')]"
@@ -557,7 +573,7 @@
       "comments":"Public IP for Ansible Control VM",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
-      "name":"[variables('hcPublicIPAddressName')]",
+      "name":"[parameters('hcPublicIPAddressName')]",
       "location":"[variables('location')]",
       "properties":{
         "publicIPAllocationMethod":"[variables('hcPublicIPAddressType')]",
@@ -621,7 +637,7 @@
       "name":"[variables('hcNicName')]",
       "location":"[variables('location')]",
       "dependsOn":[
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('hcPublicIPAddressName'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('hcPublicIPAddressName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
       ],
       "properties":{
@@ -634,7 +650,7 @@
             "properties":{
               "privateIPAllocationMethod":"Dynamic",
               "publicIPAddress":{
-                "id":"[resourceId('Microsoft.Network/publicIPAddresses',variables('hcPublicIPAddressName'))]"
+                "id":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('hcPublicIPAddressName'))]"
               },
               "subnet":{
                 "id":"[variables('hcSubnetRef')]"

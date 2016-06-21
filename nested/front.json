@@ -89,6 +89,12 @@
         "description":"LB Name"
       }
     },
+    "frPublicIPAddressName":{
+      "type":"string",
+      "metadata":{
+        "description":"frPublicIP"
+      }
+    },
     "shopSize":{
       "type":"string",
       "metadata":{
@@ -126,11 +132,10 @@
     "frOSDiskName":"frosdisk",
     "keyStorageAccountType":"Standard_LRS",
     "frNicName":"frVnic",
-    "frPublicIPAddressName":"frPublicIP",
     "frPublicIPAddressType":"Dynamic",
     "frSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('frSubnetName'))]",
     "frLBName":"[concat('lb', resourceGroup().name)]",
-    "lbPublicIPAddressID":"[resourceId('Microsoft.Network/publicIPAddresses',variables('frPublicIPAddressName'))]",
+    "lbPublicIPAddressID":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('frPublicIPAddressName'))]",
     "lbID":"[resourceId('Microsoft.Network/loadBalancers',variables('frLBName'))]",
     "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
     "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/LoadBalancerBackend')]",
@@ -157,7 +162,7 @@
       "type":"Microsoft.Network/loadBalancers",
       "location":"[variables('location')]",
       "dependsOn":[
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('frPublicIPAddressName'))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('frPublicIPAddressName'))]"
       ],
       "properties":{
         "frontendIPConfigurations":[
@@ -244,7 +249,7 @@
       "comments":"Public IP for Front Load Balancer",
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
-      "name":"[variables('frPublicIPAddressName')]",
+      "name":"[parameters('frPublicIPAddressName')]",
       "location":"[variables('location')]",
       "properties":{
         "publicIPAllocationMethod":"[variables('frPublicIPAddressType')]",
