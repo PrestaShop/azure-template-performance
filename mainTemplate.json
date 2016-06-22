@@ -11,7 +11,7 @@
     "dnsNameForFrontPublicIP":{
       "type":"string",
       "metadata":{
-        "description":"Public IP address for Jumpbox VM"
+        "description":"Public IP address for web-front VM"
       }
     },
     "hcPublicIPAddressName":{
@@ -23,7 +23,7 @@
     },
     "frPublicIPAddressName":{
       "type":"string",
-      "defaultValue": "hcPublicIP", 
+      "defaultValue": "frPublicIP", 
       "metadata":{
         "description":"Public IP address Name for web-front load balancer VM"
       }
