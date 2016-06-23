@@ -408,7 +408,7 @@
             "value":"[parameters('bkVmSize')]"
           },
           "numberOfBack":{
-            "value":"[parameters('numberOfFront')]"
+            "value":"[parameters('numberOfBack')]"
           },
           "bkAvailabilitySetName":{
             "value":"[variables('bkAvailabilitySetName')]"
