@@ -5,7 +5,7 @@
     "dnsNameForAnsiblePublicIP":{
       "type":"string",
       "metadata":{
-        "description":"Public IP address for Jumpbox VM"
+        "description":"DNS Name address for Jumpbox VM"
       }
     },
     "dnsNameForFrontPublicIP":{
