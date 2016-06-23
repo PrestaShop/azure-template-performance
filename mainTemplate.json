@@ -217,6 +217,8 @@
     }
   },
   "variables":{
+    "diagnosticsStorageAccountName": "[concat(uniqueString(resourceGroup().id),'diag')]",
+    "diagnosticsStorageAccountType": "Standard_LRS",
     "configuration":{
       "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/front.json')]",
       "backTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/back.json')]"
@@ -277,7 +279,7 @@
     "paramsSubnets":"[concat(variables('hcSubnetRoot'),'\" \"',variables('frSubnetRoot'),'\" \"',variables('bkSubnetRoot'))]",
     "paramsNbHosts":"[concat(parameters('numberOfFront'),'\" \"',parameters('numberOfBack'))]",
     "paramsNames":"[concat(variables('hcVmName'),'\" \"',variables('frVmName'),'\" \"',variables('bkVmName'))]",
-    "paramsExtra":"[concat(parameters('prestashop_password'),'\" \"',parameters('dnsNameForFrontPublicIP'),'.',variables('location'))]",
+    "paramsExtra":"[concat(parameters('prestashop_password'),'\" \"',parameters('dnsNameForFrontPublicIP'),'.',resourceGroup().location)]",
     "paramsAdmin":"[concat(parameters('prestashop_firstname'),'\" \"',parameters('prestashop_lastname'),'\" \"',parameters('prestashop_email'),'\" \"',toLower(parameters('bkVmSize')))]",
     "paramsDeploy":"[concat(parameters('hcUsername'),'\" \"',variables('paramsSubnets'),'\" \"',variables('paramsNbHosts'),'\" \"',variables('paramsNames'),'\" \"',variables('paramsExtra'),'\" \"',variables('paramsAdmin'))]",
     "apiVersion":{
@@ -317,6 +319,7 @@
       "apiVersion":"[variables('apiVersion').deployment]",
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('diagnosticsStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
         "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]"
       ],
@@ -380,6 +383,9 @@
           },
           "keyStorageAccountName":{
             "value":"[variables('keyStorageAccountName')]"
+          },
+          "diagnosticsStorageAccountName":{
+            "value":"[variables('diagnosticsStorageAccountName')]"
           }
         }
       }
@@ -390,6 +396,7 @@
       "apiVersion":"[variables('apiVersion').deployment]",
       "dependsOn":[
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
+        "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('diagnosticsStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('bkNetworkSecurityGroupName'))]",
         "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]"
       ],
@@ -447,6 +454,9 @@
           },
           "keyStorageAccountName":{
             "value":"[variables('keyStorageAccountName')]"
+          },
+          "diagnosticsStorageAccountName":{
+            "value":"[variables('diagnosticsStorageAccountName')]"
           }
         }
       }
@@ -552,6 +562,15 @@
             }
           }
         ]
+      }
+    },
+    { "comments":"OK: Global Storage Account for Diags",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('diagnosticsStorageAccountName')]",
+      "apiVersion":"[variables('apiVersion').storage]",
+      "location":"[resourceGroup().location]",
+      "properties": {
+        "accountType": "[variables('diagnosticsStorageAccountType')]"
       }
     },
     {
@@ -746,11 +765,11 @@
   ],
   "outputs": {
     "Ansible FQDN": {
-      "value": "[concat(parameters('dnsNameForAnsiblePublicIP'),'.',variables('location'),'.cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForAnsiblePublicIP'),'.',resourceGroup().location,'.cloudapp.azure.com')]",
       "type": "string" 
     },
     "SHOP FQDN": {
-      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'.',variables('location'),'cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'.',resourceGroup().location,'cloudapp.azure.com')]",
       "type": "string" 
     }
   }
