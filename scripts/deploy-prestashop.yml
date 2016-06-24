@@ -66,6 +66,8 @@
 - hosts: front
   become: True
   gather_facts: True
+  vars:
+    domain: "{{ prestashop_lb_name }}{{ azure_suffix }}"
   vars_files:
     - vars/main.yml
 
@@ -74,17 +76,17 @@
       service: name=lsyncd state=restarted
 
     - name: "Install prestashop default shop"
-      command: >
+      shell: >
         php {{ prestashop_dir }}/install/index_cli.php
-        --domain="{{ prestashop_lb_name }}{{ azure_suffix }}"
-        --db_server="{{ groups['master'][0] }}"
-        --db_name="{{ prestashop_dbname }}"
-        --db_user="{{ prestashop_user }}"
-        --db_password="{{ prestashop_password }}"
-        --firstname="{{ prestashop_firstname }}"
-        --lastname="{{ prestashop_lastname }}"
-        --password="{{ prestashop_password }}"
-        --email="{{ prestashop_email }}"
+        --domain="{{ domain | quote }}"
+        --db_server="{{ groups['master'][0] | quote }}"
+        --db_name="{{ prestashop_dbname | quote }}"
+        --db_user="{{ prestashop_user | quote }}"
+        --db_password="{{ prestashop_password | quote }}"
+        --firstname="{{ prestashop_firstname | quote }}"
+        --lastname="{{ prestashop_lastname | quote }}"
+        --password="{{ prestashop_password | quote }}"
+        --email="{{ prestashop_email | quote }}"
         --newsletter=0
         --send_email=0
       when: inventory_hostname == "{{ groups['front'][0] }}"
