@@ -768,7 +768,7 @@
       "type": "string" 
     },
     "SHOP FQDN": {
-      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'.',resourceGroup().location,'cloudapp.azure.com')]",
+      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'.',resourceGroup().location,'.cloudapp.azure.com')]",
       "type": "string" 
     }
   }
