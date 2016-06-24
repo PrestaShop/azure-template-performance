@@ -97,8 +97,8 @@
             "name": "frPublicIP",
             "type": "Microsoft.Network.PublicIpAddressCombo",
             "label": {
-              "publicIpAddress": "Public IP address for FRONT VMs",
-              "domainNameLabel": "Domain Name Suffix for FRONT VMs"
+              "publicIpAddress": "Public IP address for web-front VMs",
+              "domainNameLabel": "Domain Name Suffix for web-front VMs"
             },
             "defaultValue": {
               "publicIpAddressName": "frpubip"
