@@ -227,7 +227,6 @@
     "frUpdateDomainCount":"5",
     "bkFaultDomainCount":"3",
     "bkUpdateDomainCount":"5",
-    
     "dnsserver":"8.8.8.8",
     "imagePublisher":"Canonical",
     "imageOffer":"UbuntuServer",
