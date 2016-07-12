@@ -16,7 +16,7 @@ error_log()
 
 function log()
 {
-	
+
   mess="$(hostname): $1"
 
   logger -t "${BASH_SCRIPT}" "${mess}"
@@ -27,19 +27,19 @@ function ssh_config()
 {
   log "Configure ssh..."
   log "Create ssh configuration for ${ANSIBLE_USER}"
-  
+
   printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
-  
+
   error_log "Unable to create ssh config file for user ${ANSIBLE_USER}"
-  
+
   log "Copy generated keys..."
-  
+
   cp id_rsa "/home/${ANSIBLE_USER}/.ssh/id_rsa"
   error_log "Unable to copy id_rsa key to $ANSIBLE_USER .ssh directory"
 
   cp id_rsa.pub "/home/${ANSIBLE_USER}/.ssh/id_rsa.pub"
   error_log "Unable to copy id_rsa.pub key to $ANSIBLE_USER .ssh directory"
-  
+
   cat "/home/${ANSIBLE_USER}/.ssh/id_rsa.pub" >> "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
   error_log "Unable to copy $ANSIBLE_USER id_rsa.pub to authorized_keys "
 
@@ -57,26 +57,25 @@ function ssh_config()
 
   chmod 400 "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
   error_log "Unable to chmod $ANSIBLE_USER authorized_keys file"
-  
 }
 
 function ssh_config_root()
 {
-  
+
   log "Create ssh configuration for root"
-  
+
   printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "root"  >> "/root/.ssh/config"
-  
+
   error_log "Unable to create ssh config file for user root"
-  
+
   log "Copy generated keys..."
-  
+
   cp id_rsa "/root/.ssh/id_rsa"
   error_log "Unable to copy id_rsa key to root .ssh directory"
 
   cp id_rsa.pub "/root/.ssh/id_rsa.pub"
   error_log "Unable to copy id_rsa.pub key to root .ssh directory"
-  
+
   cat "/root/.ssh/id_rsa.pub" >> "/root/.ssh/authorized_keys"
   error_log "Unable to copy root id_rsa.pub to authorized_keys "
 
@@ -94,7 +93,6 @@ function ssh_config_root()
 
   chmod 400 "/root/.ssh/authorized_keys"
   error_log "Unable to chmod root authorized_keys file"
-  
 }
 
 
@@ -108,30 +106,30 @@ function install_packages()
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Update System ..."
     until apt-get --yes update
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install git ..."
     until apt-get --yes install git
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install pip ..."
     until apt-get --yes install python-pip
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install python-mysqldb ..."
-    until apt-get --yes install python-mysqldb 
+    until apt-get --yes install python-mysqldb
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
@@ -141,7 +139,7 @@ function install_packages()
 
 function get_sshkeys()
  {
-   
+
     c=0;
     log "Install azure storage python module ..."
     pip install azure-storage
@@ -173,14 +171,14 @@ function fix_etc_hosts()
 
 function add_host_entry()
 {
-  
+
   log "Add Host entry (master/slave) ..."
-  
+
   let nBck=${numberOfBack}-1
-  
+
   tname="master"
   k=""
-   
+
   for i in $(seq 0 $nBck)
   do
     let j=4+$i
@@ -189,7 +187,7 @@ function add_host_entry()
     tname="slave"
     let k=$i+1
   done
-  
+
 }
 
 function start_nc()

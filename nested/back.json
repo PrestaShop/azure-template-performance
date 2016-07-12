@@ -99,7 +99,7 @@
       "type":"string",
       "metadata":{
         "description":"Storage Account Name for diags"
-      }      
+      }
     }
   },
   "variables":{
@@ -265,7 +265,6 @@
             "caching":"ReadWrite",
             "createOption":"FromImage"
           },
-          
           "dataDisks": [
             {
               "name": "datadisk0",

@@ -11,9 +11,9 @@
   gather_facts: true
   vars_files:
     - vars/main.yml
-    
-  roles:      
-    - { role: ansible-init-raid }   
+
+  roles:
+    - { role: ansible-init-raid }
 
 - hosts: front
   become: True
@@ -22,47 +22,47 @@
   pre_tasks:
     - name: "Create root prestashop directory for archive"
       file: path="{{ documentroot }}" state=directory mode="u=rwx,g=rx,o=rx" owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
-    
+
     - name: "Install missing package if needed"
       apt: name={{ item }} update_cache=yes
       with_items:
         - unzip
-        
+
   roles:
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
     - { role: geerlingguy.apache-php-fpm  }
     - { role: carlosbuenosvinos.ansistrano-deploy }
 
-# Specifics task for sync 
+# Specifics task for sync
 - hosts: front
   become: True
   vars_files:
     - vars/main.yml
 
   pre_tasks:
-    - name: "Change files permission on {{ documentroot }}" 
-      file: dest="{{ documentroot }}" state=directory 
+    - name: "Change files permission on {{ documentroot }}"
+      file: dest="{{ documentroot }}" state=directory
             owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
             recurse=yes
-            
-  roles:      
-    - { role: ansible-csync2-lsyncd }   
-            
-# Instalation of Mysql Cluster M/S   
+
+  roles:
+    - { role: ansible-csync2-lsyncd }
+
+# Instalation of Mysql Cluster M/S
 - hosts: back
   become: True
   vars_files:
     - vars/main.yml
-  
+
   pre_tasks:
     - name: "Create dynamic MySQL variables."
       set_fact:
         mysql_replication_master: "{{ groups['master'][0] }}"
 
   roles:
-    - { role: ansible-role-mysql }  
-    
+    - { role: ansible-role-mysql }
+
 - hosts: front
   become: True
   gather_facts: True
@@ -91,13 +91,12 @@
         --send_email=0
       when: inventory_hostname == "{{ groups['front'][0] }}"
       register: php_result
-        
+
     - name: "Remove Install Directory"
       file: path="{{ prestashop_dir }}/install" state=absent
       when: php_result is defined and ( inventory_hostname == "{{ groups['front'][0] }}" and php_result.rc == 0 )
-      
-    - name: "Finalize files permission on {{ documentroot }}" 
-      file: dest="{{ documentroot }}" state=directory 
+
+    - name: "Finalize files permission on {{ documentroot }}"
+      file: dest="{{ documentroot }}" state=directory
             owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
-            recurse=yes 
-      
+            recurse=yes
