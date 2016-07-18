@@ -16,14 +16,14 @@
     },
     "hcPublicIPAddressName":{
       "type":"string",
-      "defaultValue": "hcPublicIP", 
+      "defaultValue": "hcPublicIP",
       "metadata":{
         "description":"Public IP address Name for Jumpbox VM"
       }
     },
     "frPublicIPAddressName":{
       "type":"string",
-      "defaultValue": "frPublicIP", 
+      "defaultValue": "frPublicIP",
       "metadata":{
         "description":"Public IP address Name for web-front load balancer VM"
       }
@@ -44,7 +44,7 @@
     },
     "hcPassword": {
       "type": "securestring",
-      "defaultValue": "", 
+      "defaultValue": "",
       "metadata": {
         "description": "Password for the Virtual Machine. Not used if authenticationType of sshPublicKey."
       }
@@ -243,13 +243,14 @@
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
     "hcStorageAccountName":"[concat('hc', uniquestring(resourceGroup().id, deployment().name) )]",
     "hcStorageAccountType":"Standard_LRS",
-    "frAvailabilitySetName":"[concat('frav', resourceGroup().name)]",
-    "bkAvailabilitySetName":"[concat('bkav', resourceGroup().name)]",
+    "cleanRGP":"[replace(resourceGroup().name,'_','')]",
+    "frAvailabilitySetName":"[concat('frav', variables('cleanRGP'))]",
+    "bkAvailabilitySetName":"[concat('bkav', variables('cleanRGP'))]",
     "hcPublicIPAddressType":"Dynamic",
     "hcVmStorageAccountContainerName":"vhds",
-    "hcVmName":"[concat('ans', resourceGroup().name)]",
-    "frVmName":"[concat('web', resourceGroup().name)]",
-    "bkVmName":"[concat('bdd', resourceGroup().name)]",
+    "hcVmName":"[concat('ans', variables('cleanRGP'))]",
+    "frVmName":"[concat('web', variables('cleanRGP'))]",
+    "bkVmName":"[concat('bdd', variables('cleanRGP'))]",
     "hcSubnetRef":"[concat(variables('vnetID'),'/subnets/',parameters('hcSubnetName'))]",
     "hcVmSize":"Standard_A0",
     "hcNetworkSecurityGroupName":"hcSecurityGroup",

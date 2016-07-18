@@ -450,7 +450,7 @@
                 "Standard_RAGRS"
               ]
             }
-          } 
+          }
         ]
       },
       {
@@ -524,23 +524,18 @@
       "authenticationType": "[basics('section1').hcPassword.authenticationType]",
       "hcPassword": "[basics('section1').hcPassword.password]",
       "sshKeyData": "[basics('section1').hcPassword.sshPublicKey]",
-  
       "frStorageAccountName": "[steps('clusterinfo').storageAccountFront.name]",
       "frStorageAccountType": "[steps('clusterinfo').storageAccountFront.type]",
       "bkStorageAccountName": "[steps('clusterinfo').storageAccountBack.name]",
       "bkStorageAccountType": "[steps('clusterinfo').storageAccountBack.type]",
-      
       "frVmSize":"[steps('clusterinfo').frVmSize]",
       "bkVmSize":"[steps('clusterinfo').bkVmSize]",
       "numberOfFront": "[steps('clusterinfo').numberOfFront]",
       "numberOfBack": "[steps('clusterinfo').numberOfBack]",
-      
       "dnsNameForAnsiblePublicIP": "[steps('deploymentDetails').hcPublicIP.domainNameLabel]",
       "hcPublicIPAddressName": "[steps('deploymentDetails').hcPublicIP.name]",
-
       "dnsNameForFrontPublicIP": "[steps('deploymentDetails').frPublicIP.domainNameLabel]",
       "frPublicIPAddressName": "[steps('deploymentDetails').frPublicIP.name]",
-      
       "virtualNetworkName": "[steps('deploymentDetails').virtualNetworkName.name]",
       "addressPrefix": "[steps('deploymentDetails').virtualNetworkName.addressPrefix]",
       "hcSubnetName": "[steps('deploymentDetails').virtualNetworkName.subnets.subnet1.name]",
@@ -549,7 +544,6 @@
       "frSubnetPrefix": "[steps('deploymentDetails').virtualNetworkName.subnets.subnet2.addressPrefix]",
       "bkSubnetName": "[steps('deploymentDetails').virtualNetworkName.subnets.subnet3.name]",
       "bkSubnetPrefix": "[steps('deploymentDetails').virtualNetworkName.subnets.subnet3.addressPrefix]",
-
       "prestashop_firstname": "[steps('prestashopInfo').prestashop_firstname]",
       "prestashop_lastname": "[steps('prestashopInfo').prestashop_lastname]",
       "prestashop_email": "[steps('prestashopInfo').prestashop_email]",
