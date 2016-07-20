@@ -345,6 +345,11 @@
         "[concat('Microsoft.Storage/storageAccounts/', toLower(parameters('frStorageAccountName')) ) ]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('frNicName'),copyindex())]"
       ],
+      "plan": {
+        "publisher": "[variables('imagePublisher')]",
+        "product": "[variables('imageOffer')]",
+        "name": "[variables('sku')]"
+      },
       "properties":{
         "availabilitySet":{
           "id":"[resourceId('Microsoft.Compute/availabilitySets', parameters('frAvailabilitySetName'))]"

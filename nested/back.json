@@ -228,6 +228,11 @@
         "[concat('Microsoft.Storage/storageAccounts/', toLower(parameters('bkStorageAccountName')) ) ]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('bkNicName'),copyindex())]"
       ],
+      "plan": {
+        "publisher": "[variables('imagePublisher')]",
+        "product": "[variables('imageOffer')]",
+        "name": "[variables('sku')]"
+      },
       "properties":{
         "availabilitySet":{
           "id":"[resourceId('Microsoft.Compute/availabilitySets', parameters('bkAvailabilitySetName'))]"
