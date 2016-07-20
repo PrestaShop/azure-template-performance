@@ -111,7 +111,7 @@
       "type":"string",
       "metadata":{
         "description":"Storage Account Name for diags"
-      }      
+      }
     }
   },
   "variables":{
