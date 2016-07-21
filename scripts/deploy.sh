@@ -24,19 +24,19 @@ function ssh_config()
 {
   log "Configure ssh..."
   log "Create ssh configuration for ${ANSIBLE_USER}"
-  
+
   printf "Host *\n  user %s\n  StrictHostKeyChecking no\n" "${ANSIBLE_USER}"  >> "/home/${ANSIBLE_USER}/.ssh/config"
-  
+
   error_log "Unable to create ssh config file for user ${ANSIBLE_USER}"
-  
+
   log "Copy generated keys..."
-  
+
   cp id_rsa "/home/${ANSIBLE_USER}/.ssh/id_rsa"
   error_log "Unable to copy id_rsa key to $ANSIBLE_USER .ssh directory"
 
   cp id_rsa.pub "/home/${ANSIBLE_USER}/.ssh/id_rsa.pub"
   error_log "Unable to copy id_rsa.pub key to $ANSIBLE_USER .ssh directory"
-  
+
   cat "/home/${ANSIBLE_USER}/.ssh/id_rsa.pub" >> "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
   error_log "Unable to copy $ANSIBLE_USER id_rsa.pub to authorized_keys "
 
@@ -54,7 +54,7 @@ function ssh_config()
 
   chmod 400 "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
   error_log "Unable to chmod $ANSIBLE_USER authorized_keys file"
-  
+
 }
 
 function install_ansible()
@@ -65,42 +65,42 @@ function install_ansible()
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install ppa:ansible/ansible ..."
     until apt-add-repository ppa:ansible/ansible
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Update System ..."
     until apt-get --yes update
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install Ansible ..."
     until apt-get --yes install ansible
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install sshpass"
     until apt-get --yes install sshpass
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-   
+
     log "Install git ..."
     until apt-get --yes install git
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
-    
+
     log "Install pip ..."
     until apt-get --yes install python-pip
     do
@@ -117,7 +117,6 @@ function generate_sshkeys()
 
 function put_sshkeys()
  {
-   
     log "Install azure storage python module ..."
     pip install azure-storage
 
@@ -145,15 +144,15 @@ function configure_ansible()
   error_log "Unable to remove /etc/ansible directory"
   mkdir -p /etc/ansible
   error_log "Unable to create /etc/ansible directory"
-  
+
   # Remove Deprecation warning
   printf "[defaults]\ndeprecation_warnings = False\nhost_key_checking = False\n\n"    >>  "${ANSIBLE_CONFIG_FILE}"
-  
+
   # Shorten the ControlPath to avoid errors with long host names , long user names or deeply nested home directories
   echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r'                    >> "${ANSIBLE_CONFIG_FILE}"   
   # fix ansible bug
   printf "\npipelining = True\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"   
-  
+
   let nWeb=${numberOfFront}-1
   let nBck=${numberOfBack}-1
   # Generate Hostfile for Front and Back
@@ -170,7 +169,7 @@ function configure_ansible()
   else
   echo "${bkVmName}1 ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}" 
   fi
-  
+
   echo "[master]"                                                                                                                          >> "${ANSIBLE_HOST_FILE}"
   echo "${bkVmName}0"                                                                                                                      >> "${ANSIBLE_HOST_FILE}"
   echo "[slave]"                                                                                                                           >> "${ANSIBLE_HOST_FILE}"
@@ -179,7 +178,6 @@ function configure_ansible()
   else
   echo "${bkVmName}1"                                                                                                                      >> "${ANSIBLE_HOST_FILE}" 
   fi
-  
 }
 
 function add_hosts()
@@ -189,19 +187,19 @@ function add_hosts()
   # Generate Hostfile for Front and Back
   # All Nodes
   echo "### Check${hcSubnetRoot}.4    ${hcVmName}" >> "${HOST_FILE}"
-  
+
   for i in $(seq 0 $nWeb)
   do
     let j=4+$i
     echo "${frSubnetRoot}.${j}    ${frVmName}${i}" >> "${HOST_FILE}"
   done
-  
+
   for i in $(seq 0 $nBck)
   do
     let j=4+$i
     echo "${bkSubnetRoot}.${j}    ${bkVmName}${i}" >> "${HOST_FILE}"
   done
-  
+
 }
 
 function get_roles()
@@ -224,12 +222,11 @@ function configure_deployment()
   error_log "Fail to move slaves vars file to directory group_vars"
   mv mysql_default.yml vars/mysql_default.yml
   error_log "Fail to move mysql default vars file to directory vars"
-  
 }
 
 function create_extra_vars()
 {
-  d="$(date -u +%Y%m%d%H%M%SZ)"  
+  d="$(date -u +%Y%m%d%H%M%SZ)"
   printf "{\n  \"ansistrano_release_version\": \"%s\",\n" "${d}"            > "${EXTRA_VARS}"
   printf "  \"prestashop_lb_name\": \"%s\",\n" "${lbName}"                 >> "${EXTRA_VARS}"
   printf "  \"gabarit\": \"%s\",\n" "${gabarit}"                           >> "${EXTRA_VARS}"
@@ -241,6 +238,7 @@ function create_extra_vars()
 
 function deploy_cluster()
 {
+  sleep 60
   ansible-playbook deploy-prestashop.yml --extra-vars "@${EXTRA_VARS}" > /tmp/ansible.log 2>&1
   error_log "Fail to deploy front cluster !"
 }
