@@ -243,7 +243,7 @@
     "assetsStorageAccountId":"[resourceId(variables('keyStorageAccountName'),'Microsoft.Storage/storageAccounts', variables('keyStorageAccountName'))]",
     "hcStorageAccountName":"[concat('hc', uniquestring(resourceGroup().id, deployment().name) )]",
     "hcStorageAccountType":"Standard_LRS",
-    "cleanRGP":"[ replace(replace(resourceGroup().name,'_',''), '-','')]",
+    "cleanRGP":"[replace(replace(replace(replace(replace(resourceGroup().name,'_',''), '-',''),'.',''),')',''),'()','')]",
     "frAvailabilitySetName":"[concat('frav', variables('cleanRGP'))]",
     "bkAvailabilitySetName":"[concat('bkav', variables('cleanRGP'))]",
     "hcPublicIPAddressType":"Dynamic",
