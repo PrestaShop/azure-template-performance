@@ -141,7 +141,7 @@
     "frNicName":"frVnic",
     "frPublicIPAddressType":"Dynamic",
     "frSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('frSubnetName'))]",
-    "cleanRGP":"[replace(resourceGroup().name,'_','')]",
+    "cleanRGP":"[uniqueString(resourceGroup().id, deployment().name)]",
     "frLBName":"[concat('lb', variables('cleanRGP'))]",
     "lbPublicIPAddressID":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('frPublicIPAddressName'))]",
     "lbID":"[resourceId('Microsoft.Network/loadBalancers',variables('frLBName'))]",
