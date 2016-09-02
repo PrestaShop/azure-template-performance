@@ -2,6 +2,14 @@
   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion":"1.0.0.0",
   "parameters":{
+    "templatesBaseURL":{
+      "type":"string",
+      "metadata":{
+        "description":"Base template URL for nested template",
+        "artifactsBaseUrl":""
+      },
+      "defaultValue":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master"
+    },
     "adminUsername":{
       "type":"string",
       "metadata":{
@@ -112,6 +120,12 @@
       "metadata":{
         "description":"Storage Account Name for diags"
       }
+    },
+    "location":{
+      "type":"string",
+      "metadata":{
+        "description":"Deployment location"
+      }
     }
   },
   "variables":{
@@ -130,9 +144,6 @@
     },
     "frVmStorageAccountContainerName":"vhds",
     "sshKeyPath":"[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-
-    "dnsserver":"8.8.8.8",
-    "location":"[resourceGroup().location]",
     "imagePublisher":"prestashop",
     "imageOffer":"ubuntu-base-for-prestashop",
     "sku":"ubuntu_base_16_04",
@@ -148,7 +159,7 @@
     "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
     "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/LoadBalancerBackend')]",
     "frontEndIPConfigID":"[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
-    "scriptsBaseUrl":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master/scripts/",
+    "scriptsBaseUrl":"[concat(parameters('templatesBaseURL'),'/scripts/')]",
     "customScriptDeployFile":"deploy-front.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptFrontCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
@@ -157,8 +168,8 @@
       "resources":{
         "deployments":"2015-01-01"
       },
-      "network":"2015-05-01-preview",
-      "storage":"2015-05-01-preview",
+      "network":"2016-08-01",
+      "storage":"2016-01-01",
       "compute":"2015-06-15"
     }
   },
@@ -168,7 +179,7 @@
       "apiVersion":"[variables('apiVersion').compute]",
       "name":"[variables('frLBName')]",
       "type":"Microsoft.Network/loadBalancers",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "dependsOn":[
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('frPublicIPAddressName'))]"
       ],
@@ -248,7 +259,7 @@
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(parameters('frStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "properties":{
         "accountType":"[parameters('frStorageAccountType')]"
       }
@@ -258,7 +269,7 @@
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/publicIPAddresses",
       "name":"[parameters('frPublicIPAddressName')]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "properties":{
         "publicIPAllocationMethod":"[variables('frPublicIPAddressType')]",
         "dnsSettings":{
@@ -271,7 +282,7 @@
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkInterfaces",
       "name":"[concat(variables('frNicName'), copyindex())]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"frNicLoop",
         "count":"[parameters('numberOfFront')]"
@@ -307,7 +318,7 @@
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"[concat(parameters('frVmName'),copyindex(),'/installFront')]",
       "apiVersion":"[variables('apiVersion').compute]",
-      "location":"[resourceGroup().location]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"frExtLoop",
         "count":"[parameters('numberOfFront')]"
@@ -336,7 +347,7 @@
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
       "name":"[concat(parameters('frVmName'),copyindex())]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"frVmLoop",
         "count":"[parameters('numberOfFront')]"
@@ -382,7 +393,7 @@
           "osDisk":{
             "name":"[concat(parameters('frVmName'), copyindex())]",
             "vhd":{
-              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('frStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('frVmStorageAccountContainerName'),'/', variables('frOSDiskName'),copyindex(), '.vhd')]"
+              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', toLower(parameters('frStorageAccountName'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('frVmStorageAccountContainerName'),'/', variables('frOSDiskName'),copyindex(), '.vhd')]"
             },
             "caching":"ReadWrite",
             "createOption":"FromImage"
@@ -395,7 +406,7 @@
               "caching": "None",
               "createOption": "Empty",
               "vhd": {
-                "uri": "[concat('http://', parameters('frStorageAccountName'), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data0', copyindex(), '.vhd')]"
+                "uri": "[concat('http://', toLower(parameters('frStorageAccountName')), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data0', copyindex(), '.vhd')]"
               }
             },
             {
@@ -405,7 +416,7 @@
               "caching": "None",
               "createOption": "Empty",
               "vhd": {
-                "uri": "[concat('http://', parameters('frStorageAccountName'), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data1', copyindex(), '.vhd')]"
+                "uri": "[concat('http://', toLower(parameters('frStorageAccountName')), '.blob.core.windows.net/', variables('frVmStorageAccountContainerName'), '/', parameters('frVmName'), '-data1', copyindex(), '.vhd')]"
               }
             }
           ]
@@ -428,8 +439,8 @@
   ],
   "outputs": {
     "SHOP FQDN": {
-      "value": "[concat(parameters('dnsNameForFrontPublicIP'),'cloudapp.azure.com')]",
-      "type": "string" 
+      "value":"[reference(parameters('dnsNameForFrontPublicIP')).dnsSettings.fqdn]",
+      "type": "string"
     }
   }
 }

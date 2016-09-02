@@ -2,6 +2,14 @@
   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion":"1.0.0.0",
   "parameters":{
+    "templatesBaseURL":{
+      "type":"string",
+      "metadata":{
+        "description":"Base template URL for nested template",
+        "artifactsBaseUrl":""
+      },
+      "defaultValue":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master"
+    },
     "adminUsername":{
       "type":"string",
       "metadata":{
@@ -100,13 +108,17 @@
       "metadata":{
         "description":"Storage Account Name for diags"
       }
+    },
+    "location":{
+      "type":"string",
+      "metadata":{
+        "description":"Deployment location"
+      }
     }
   },
   "variables":{
     "bkVmStorageAccountContainerName":"vhds",
     "sshKeyPath":"[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-    "dnsserver":"8.8.8.8",
-    "location":"[resourceGroup().location]",
     "imagePublisher":"prestashop",
     "imageOffer":"ubuntu-base-for-prestashop",
     "sku":"ubuntu_base_16_04",
@@ -117,7 +129,7 @@
     "bkPublicIPAddressName":"bkPublicIP",
     "bkPublicIPAddressType":"Dynamic",
     "bkSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('bkSubnetName'))]",
-    "scriptsBaseUrl":"https://raw.githubusercontent.com/PrestaShop/azure-template-performance/master/scripts/",
+    "scriptsBaseUrl":"[concat(parameters('templatesBaseURL'),'/scripts/')]",
     "customScriptDeployFile":"deploy-back.sh",
     "customScriptDeployUrl":"[concat(variables('scriptsBaseUrl'),variables('customScriptDeployFile'))]",
     "customScriptBackCommand":"[concat('bash ',variables('customScriptDeployFile'))]",
@@ -126,8 +138,8 @@
       "resources":{
         "deployments":"2015-01-01"
       },
-      "network":"2015-05-01-preview",
-      "storage":"2015-05-01-preview",
+      "network":"2016-08-01",
+      "storage":"2016-01-01",
       "compute":"2015-06-15"
     },
     "shopSizeSmall": {
@@ -150,7 +162,7 @@
       "type":"Microsoft.Storage/storageAccounts",
       "name":"[toLower(parameters('bkStorageAccountName'))]",
       "apiVersion":"[variables('apiVersion').storage]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "properties":{
         "accountType":"[parameters('bkStorageAccountType')]"
       }
@@ -160,7 +172,7 @@
       "apiVersion":"[variables('apiVersion').network]",
       "type":"Microsoft.Network/networkInterfaces",
       "name":"[concat(variables('bkNicName'), copyindex())]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"bkNicLoop",
         "count":"[parameters('numberOfBack')]"
@@ -190,7 +202,7 @@
       "type":"Microsoft.Compute/virtualMachines/extensions",
       "name":"[concat(parameters('bkVmName'),copyindex(),'/installBack')]",
       "apiVersion":"[variables('apiVersion').compute]",
-      "location":"[resourceGroup().location]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"bkExtLoop",
         "count":"[parameters('numberOfBack')]"
@@ -219,7 +231,7 @@
       "apiVersion":"[variables('apiVersion').compute]",
       "type":"Microsoft.Compute/virtualMachines",
       "name":"[concat(parameters('bkVmName'),copyindex())]",
-      "location":"[variables('location')]",
+      "location":"[parameters('location')]",
       "copy":{
         "name":"bkVmLoop",
         "count":"[parameters('numberOfBack')]"
