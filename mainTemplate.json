@@ -285,7 +285,7 @@
         "deployments":"2015-01-01"
       },
       "network":"2016-08-01",
-      "storage":"2016-01-01",
+      "storage":"2015-06-15",
       "compute":"2015-06-15",
       "deployment":"2016-02-01"
     },
@@ -801,11 +801,11 @@
   ],
   "outputs": {
     "Ansible FQDN": {
-      "value":"[reference(parameters('dnsNameForAnsiblePublicIP')).dnsSettings.fqdn]",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('hcPublicIPAddressName')), variables('apiVersion').network).dnsSettings.fqdn]",
       "type": "string"
     },
     "SHOP FQDN": {
-      "value":"[reference(parameters('dnsNameForFrontPublicIP')).dnsSettings.fqdn]",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('frPublicIPAddressName')), variables('apiVersion').network).dnsSettings.fqdn]",
       "type": "string"
     }
   }
