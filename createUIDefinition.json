@@ -8,7 +8,7 @@
         "type": "Microsoft.Common.DropDown",
         "label": "Database Shop Size",
         "defaultValue": "Small",
-        "toolTip": "The size of Disk virtual machines to use in the cluster. Template version 1.7.5",
+        "toolTip": "The size of Disk virtual machines to use in the cluster. Template version 1.7.7",
         "constraints": {
           "allowedValues": [
             {
@@ -42,22 +42,21 @@
             }
           },
           {
-            "name": "hcPassword",
-            "type": "Microsoft.Compute.CredentialsCombo",
-            "label": {
-              "authenticationType": "Authentication type",
-              "password": "Password",
-              "confirmPassword": "Confirm password",
-              "sshPublicKey": "SSH public key"
+            "name":"hcPassword",
+            "type":"Microsoft.Compute.CredentialsCombo",
+            "label":{
+              "authenticationType":"Authentication type",
+              "password":"Password",
+              "confirmPassword":"Confirm password",
+              "sshPublicKey":"SSH public key"
             },
-            "constraints": {
-              "required": true
+            "constraints":{
+              "required":true
             },
-            "options": {
-              "hideConfirmation": false,
-              "hidePassword": true
+            "options":{
+              "hideConfirmation":false
             },
-            "osPlatform": "Linux"
+            "osPlatform":"Linux"
           }
         ]
       }
