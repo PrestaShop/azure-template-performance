@@ -223,6 +223,7 @@
       "frontTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/front.json')]",
       "backTemplateURL":"[concat(parameters('templatesBaseURL'),'/nested/back.json')]"
     },
+    "frPublicIPAddressType":"Dynamic",
     "frFaultDomainCount":"3",
     "frUpdateDomainCount":"5",
     "bkFaultDomainCount":"3",
@@ -319,7 +320,8 @@
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('keyStorageAccountName')))]",
         "[concat('Microsoft.Storage/storageAccounts/', toLower(variables('diagnosticsStorageAccountName')))]",
         "[concat('Microsoft.Network/networkSecurityGroups/',variables('frNetworkSecurityGroupName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/virtualNetworks/',parameters('virtualNetworkName'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('frPublicIPAddressName'))]"
       ],
       "properties":{
         "mode":"Incremental",
@@ -627,6 +629,19 @@
       "location":"[parameters('location')]",
       "properties":{
         "accountType":"[variables('keyStorageAccountType')]"
+      }
+    },
+    {
+      "comments":"Public IP for Front Load Balancer",
+      "apiVersion":"[variables('apiVersion').network]",
+      "type":"Microsoft.Network/publicIPAddresses",
+      "name":"[parameters('frPublicIPAddressName')]",
+      "location":"[parameters('location')]",
+      "properties":{
+        "publicIPAllocationMethod":"[variables('frPublicIPAddressType')]",
+        "dnsSettings":{
+          "domainNameLabel":"[parameters('dnsNameForFrontPublicIP')]"
+        }
       }
     },
     {

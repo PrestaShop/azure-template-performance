@@ -150,7 +150,6 @@
     "frOSDiskName":"frosdisk",
     "keyStorageAccountType":"Standard_LRS",
     "frNicName":"frVnic",
-    "frPublicIPAddressType":"Dynamic",
     "frSubnetRef":"[concat(parameters('vnetID'),'/subnets/',parameters('frSubnetName'))]",
     "cleanRGP":"[uniqueString(resourceGroup().id, deployment().name)]",
     "frLBName":"[concat('lb', variables('cleanRGP'))]",
@@ -181,7 +180,6 @@
       "type":"Microsoft.Network/loadBalancers",
       "location":"[parameters('location')]",
       "dependsOn":[
-        "[concat('Microsoft.Network/publicIPAddresses/', parameters('frPublicIPAddressName'))]"
       ],
       "properties":{
         "frontendIPConfigurations":[
@@ -262,19 +260,6 @@
       "location":"[parameters('location')]",
       "properties":{
         "accountType":"[parameters('frStorageAccountType')]"
-      }
-    },
-    {
-      "comments":"Public IP for Front Load Balancer",
-      "apiVersion":"[variables('apiVersion').network]",
-      "type":"Microsoft.Network/publicIPAddresses",
-      "name":"[parameters('frPublicIPAddressName')]",
-      "location":"[parameters('location')]",
-      "properties":{
-        "publicIPAllocationMethod":"[variables('frPublicIPAddressType')]",
-        "dnsSettings":{
-          "domainNameLabel":"[parameters('dnsNameForFrontPublicIP')]"
-        }
       }
     },
     {
