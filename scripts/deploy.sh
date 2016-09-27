@@ -60,7 +60,7 @@ function ssh_config()
 function install_ansible()
 {
     log "Install software-properties-common ..."
-    until apt-get --yes install software-properties-common
+    until apt-get --yes install software-properties-common build-essential libssl-dev libffi-dev python-dev
     do
       log "Lock detected on apt-get while install Try again..."
       sleep 2
@@ -149,9 +149,9 @@ function configure_ansible()
   printf "[defaults]\ndeprecation_warnings = False\nhost_key_checking = False\n\n"    >>  "${ANSIBLE_CONFIG_FILE}"
 
   # Shorten the ControlPath to avoid errors with long host names , long user names or deeply nested home directories
-  echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r'                    >> "${ANSIBLE_CONFIG_FILE}"   
+  echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r'                    >> "${ANSIBLE_CONFIG_FILE}"
   # fix ansible bug
-  printf "\npipelining = True\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"   
+  printf "\npipelining = True\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"
 
   let nWeb=${numberOfFront}-1
   let nBck=${numberOfBack}-1
