@@ -105,6 +105,7 @@ function install_packages()
       log "Lock detected on apt-get while install Try again..."
       sleep 2
     done
+
     log "Install software-properties-common ..."
     until apt-get --yes install software-properties-common build-essential libssl-dev libffi-dev python-dev
     do
@@ -149,7 +150,7 @@ function get_sshkeys()
         log "Fails to Get id_rsa key trying again ..."
         sleep 60
         let c=${c}+1
-        if [ "${c}" -gt 4 ]; then
+        if [ "${c}" -gt 9 ]; then
            log "Timeout to get id_rsa key exiting ..."
            exit 1
         fi
