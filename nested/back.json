@@ -283,6 +283,7 @@
         },
         "osProfile": {
           "computerName":"[concat(parameters('bkVmName'),copyindex())]",
+          "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"
         },
