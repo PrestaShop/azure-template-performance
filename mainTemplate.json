@@ -339,6 +339,9 @@
           "adminUserName":{
             "value":"[parameters('hcUsername')]"
           },
+          "adminPassword":{
+            "value":"[parameters('hcPassword')]"
+          },
           "sshKeyData":{
             "value":"[parameters('sshKeyData')]"
           },
@@ -392,6 +395,9 @@
           },
           "diagnosticsStorageAccountName":{
             "value":"[variables('diagnosticsStorageAccountName')]"
+          },
+          "authenticationType":{
+            "value":"[parameters('authenticationType')]"
           }
         }
       }
@@ -421,6 +427,9 @@
           },
           "adminUserName":{
             "value":"[parameters('hcUsername')]"
+          },
+          "adminPassword":{
+            "value":"[parameters('hcPassword')]"
           },
           "sshKeyData":{
             "value":"[parameters('sshKeyData')]"
@@ -469,6 +478,9 @@
           },
           "diagnosticsStorageAccountName":{
             "value":"[variables('diagnosticsStorageAccountName')]"
+          },
+          "authenticationType":{
+            "value":"[parameters('authenticationType')]"
           }
         }
       }

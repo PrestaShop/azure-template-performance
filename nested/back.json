@@ -16,6 +16,13 @@
         "description":"Username for the Ansible Control Virtual Machine and provisoning"
       }
     },
+    "adminPassword":{
+      "type":"string",
+      "metadata":{
+        "description":"Admin Password for the Vms"
+      },
+      "defaultValue":"pr35745h0p"
+    },
     "sshKeyData":{
       "type":"string",
       "metadata":{
@@ -109,6 +116,13 @@
         "description":"Storage Account Name for diags"
       }
     },
+    "authenticationType":{
+      "type":"string",
+      "allowedValues":[
+        "password",
+        "sshPublicKey"
+      ]
+    },
     "location":{
       "type":"string",
       "metadata":{
@@ -117,6 +131,21 @@
     }
   },
   "variables":{
+    "linuxConfiguration_sshPublicKey": {
+      "disablePasswordAuthentication": "true",
+      "ssh": {
+        "publicKeys": [
+          {
+            "path": "[variables('sshKeyPath')]",
+            "keyData": "[parameters('sshKeyData')]"
+          }
+        ]
+      }
+    },
+    "linuxConfiguration_password": {},
+    "linuxConfiguration": "[variables(concat('linuxConfiguration_', parameters('authenticationType')))]",
+
+
     "bkVmStorageAccountContainerName":"vhds",
     "sshKeyPath":"[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "imagePublisher":"prestashop",
@@ -252,20 +281,10 @@
         "hardwareProfile":{
           "vmSize":"[parameters('bkVmSize')]"
         },
-        "osProfile":{
+        "osProfile": {
           "computerName":"[concat(parameters('bkVmName'),copyindex())]",
-          "adminUsername":"[parameters('adminUsername')]",
-          "linuxConfiguration":{
-            "disablePasswordAuthentication":"true",
-            "ssh":{
-              "publicKeys":[
-                {
-                  "path":"[variables('sshKeyPath')]",
-                  "keyData":"[parameters('sshKeyData')]"
-                }
-              ]
-            }
-          }
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
         },
         "storageProfile":{
           "imageReference":{
