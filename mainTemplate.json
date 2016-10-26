@@ -286,9 +286,10 @@
       "resources":{
         "deployments":"2015-01-01"
       },
-      "network":"2015-06-15",
+      "network":"2016-09-01",
       "storage":"2015-06-15",
       "compute":"2015-06-15",
+      "publicIPAddresses":"2016-09-01",
       "deployment":"2016-02-01"
     },
     "osProfile_hc_password": {
@@ -775,7 +776,7 @@
           ]
         },
         "protectedSettings":{
-           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' \"',variables('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), '2015-05-01-preview').key1,'\" \"',variables('paramsDeploy'),'\"')]"
+           "commandToExecute":"[concat(variables('customScriptAnsibleCommand'),' \"',variables('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', variables('keyStorageAccountName')), variables('apiVersion').storage).key1,'\" \"',variables('paramsDeploy'),'\"')]"
         }
       }
     },
@@ -805,7 +806,7 @@
           "osDisk":{
             "name":"osdisk",
             "vhd":{
-              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('hcVmStorageAccountContainerName'),'/', variables('hcOSDiskName'), '.vhd')]"
+              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').stockage).primaryEndpoints.blob, variables('hcVmStorageAccountContainerName'),'/', variables('hcOSDiskName'), '.vhd')]"
             },
             "caching":"ReadWrite",
             "createOption":"FromImage"
@@ -821,7 +822,7 @@
         "diagnosticsProfile":{
           "bootDiagnostics":{
             "enabled":"true",
-            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob)]"
+            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').stockage).primaryEndpoints.blob)]"
           }
         }
       }
@@ -829,11 +830,11 @@
   ],
   "outputs": {
     "Ansible_FQDN": {
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('hcPublicIPAddressName')),providers('Microsoft.Network', 'publicIPAddresses').apiVersions[0]).dnsSettings.fqdn]",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('hcPublicIPAddressName')), variables('apiVersion').publicIPAddresses).dnsSettings.fqdn]",
       "type": "string"
     },
     "SHOP_FQDN": {
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('frPublicIPAddressName')),providers('Microsoft.Network', 'publicIPAddresses').apiVersions[0]).dnsSettings.fqdn]",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('frPublicIPAddressName')), variables('apiVersion').publicIPAddresses).dnsSettings.fqdn]",
       "type": "string"
     }
   }
