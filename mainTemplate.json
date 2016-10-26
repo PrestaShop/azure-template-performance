@@ -286,7 +286,7 @@
       "resources":{
         "deployments":"2015-01-01"
       },
-      "network":"2016-09-01",
+      "network":"2015-06-15",
       "storage":"2015-06-15",
       "compute":"2015-06-15",
       "publicIPAddresses":"2016-09-01",
