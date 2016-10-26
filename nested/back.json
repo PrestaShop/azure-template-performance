@@ -251,7 +251,7 @@
           ]
         },
         "protectedSettings":{
-          "commandToExecute":"[concat(variables('customScriptBackCommand'),' \"', parameters('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), '2015-05-01-preview').key1,'\" \"',parameters('adminUsername'),'\" \"',parameters('numberOfBack'),'\" \"',parameters('bkSubnetRoot'),'\" \"',parameters('bkVmName'),'\"')]"
+          "commandToExecute":"[concat(variables('customScriptBackCommand'),' \"', parameters('keyStorageAccountName'),'\" \"',listKeys(concat('Microsoft.Storage/storageAccounts/', parameters('keyStorageAccountName')), variables('apiVersion').stockage).key1,'\" \"',parameters('adminUsername'),'\" \"',parameters('numberOfBack'),'\" \"',parameters('bkSubnetRoot'),'\" \"',parameters('bkVmName'),'\"')]"
         }
       }
     },
@@ -297,7 +297,7 @@
           "osDisk":{
             "name":"[concat(parameters('bkVmName'), copyindex())]",
             "vhd":{
-              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('bkStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, variables('bkVmStorageAccountContainerName'),'/', variables('bkOSDiskName'),copyindex(), '.vhd')]"
+              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('bkStorageAccountName')), providers('Microsoft.Storage', variables('apiVersion').stockage).primaryEndpoints.blob, variables('bkVmStorageAccountContainerName'),'/', variables('bkOSDiskName'),copyindex(), '.vhd')]"
             },
             "caching":"ReadWrite",
             "createOption":"FromImage"
@@ -335,7 +335,7 @@
         "diagnosticsProfile":{
           "bootDiagnostics":{
             "enabled":"true",
-            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob)]"
+            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName')), variables('apiVersion').stockage).primaryEndpoints.blob)]"
           }
         }
       }
