@@ -806,7 +806,7 @@
           "osDisk":{
             "name":"osdisk",
             "vhd":{
-              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').stockage).primaryEndpoints.blob, variables('hcVmStorageAccountContainerName'),'/', variables('hcOSDiskName'), '.vhd')]"
+              "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').storage).primaryEndpoints.blob, variables('hcVmStorageAccountContainerName'),'/', variables('hcOSDiskName'), '.vhd')]"
             },
             "caching":"ReadWrite",
             "createOption":"FromImage"
@@ -822,7 +822,7 @@
         "diagnosticsProfile":{
           "bootDiagnostics":{
             "enabled":"true",
-            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').stockage).primaryEndpoints.blob)]"
+            "storageUri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('hcStorageAccountName')), variables('apiVersion').storage).primaryEndpoints.blob)]"
           }
         }
       }
