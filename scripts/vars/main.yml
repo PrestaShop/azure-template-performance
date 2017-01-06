@@ -183,11 +183,9 @@ mysql_users:
     priv: "{{ prestashop_dbname }}.*:ALL"
 
 ansistrano_deploy_via: "download_unarchive"
-ansistrano_get_url: "https://github.com/PrestaShop/azure-template-performance/releases/download/1615/prestashop1615frtar.gz"
+ansistrano_get_url: "https://www.prestashop.com/download/latest#.zip"
 ansistrano_deploy_to: "/{{ raid_mountpoint }}/www/azureshop"
 ansistrano_allow_anonymous_stats: no
 
 lsyncd_directories:
   - "{{ documentroot }}/releases/{{ ansistrano_release_version }}/prestashop"
-
-
