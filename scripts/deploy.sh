@@ -182,7 +182,7 @@ function configure_ansible()
   if [ "${numberOfBack}" -gt 2 ]; then
   echo "${bkVmName}[1:$nBck] mysql_role=slave ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa" >> "${ANSIBLE_HOST_FILE}"
   else
-  echo "${bkVmName}1 ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}" 
+  echo "${bkVmName}1 ansible_user=${ANSIBLE_USER} ansible_ssh_private_key_file=/home/${ANSIBLE_USER}/.ssh/id_rsa"         >> "${ANSIBLE_HOST_FILE}"
   fi
 
   echo "[master]"                                                                                                                          >> "${ANSIBLE_HOST_FILE}"
@@ -191,7 +191,7 @@ function configure_ansible()
   if [ "${numberOfBack}" -gt 2 ]; then
   echo "${bkVmName}[1:$nBck]"                                                                                                              >> "${ANSIBLE_HOST_FILE}"
   else
-  echo "${bkVmName}1"                                                                                                                      >> "${ANSIBLE_HOST_FILE}" 
+  echo "${bkVmName}1"                                                                                                                      >> "${ANSIBLE_HOST_FILE}"
   fi
 }
 
@@ -254,7 +254,7 @@ function create_extra_vars()
 function deploy_cluster()
 {
   sleep 60
-  ansible-playbook deploy-prestashop.yml --extra-vars "@${EXTRA_VARS}" > /tmp/ansible.log 2>&1
+  ansible-playbook deploy-prestashop.yml --extra-vars "@${EXTRA_VARS}" > /var/log/ansible.log 2>&1
   error_log "Fail to deploy front cluster !"
 }
 
