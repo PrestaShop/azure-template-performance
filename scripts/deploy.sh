@@ -166,7 +166,10 @@ function configure_ansible()
   # Shorten the ControlPath to avoid errors with long host names , long user names or deeply nested home directories
   echo  $'[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r'                    >> "${ANSIBLE_CONFIG_FILE}"
   # fix ansible bug
-  printf "\npipelining = True\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"
+  printf "\npipelining = True"                                                      >> "${ANSIBLE_CONFIG_FILE}"
+
+  # Handle SSH failures with retry
+  printf "\nretries = 10\n"                                                      >> "${ANSIBLE_CONFIG_FILE}"
 
   let nWeb=${numberOfFront}-1
   let nBck=${numberOfBack}-1
