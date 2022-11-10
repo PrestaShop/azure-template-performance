@@ -100,3 +100,4 @@
       file: dest="{{ documentroot }}" state=directory
             owner="{{ prestashop_owner }}" group="{{ prestashop_group }}"
             recurse=yes
+
